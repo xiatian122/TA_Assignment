@@ -1,2 +1,2 @@
 # TA_Assignment
-Projec
+Project of CSCE 606
