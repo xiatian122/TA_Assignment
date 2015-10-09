@@ -1,0 +1,53 @@
+﻿@import "../base";
+@import "../fasids-editor";
+body {
+  .qa-slider{
+      height:300px;
+      background-color: @very-light-grey;
+  }
+  .qa-post-titles{
+    .qa-post-title-row{
+      padding: 15px 0px;
+    }
+
+    .even-numbered-post-row{
+      background-color: darken(@very-light-grey, 3%);;
+    }
+  }
+  #filter-go-btn{
+    margin-left: 10px;
+  }
+
+  /*modifying post page*/
+
+  .row.final-buttons{
+    a.btn{
+      margin-right: 10px;
+    }
+  }
+
+  /*modifying one post, one can see this in specific question*/
+  .post-row{
+    // padding: 10px;
+    .one-post-author-info-col{
+      border-right: 1px solid darken(@very-light-grey, 10%);
+      // height: 100%;
+    }
+    margin-top: 15px;
+    border: 1px solid darken(@very-light-grey, 10%);
+    .one-post-content-col{
+      padding-bottom: 20px;
+    }
+  } 
+
+  /*modifying the reply input editor*/
+  .reply-editor-row{
+    .reply-buttons-row{
+      .btn{
+        + .btn{
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
