@@ -1,0 +1,12 @@
+%table#courses
+  %thead
+    %tr
+      %th Couse ID
+      %th Course-Name 
+      %th Lecturer
+  %tbody
+    - @courses.each do |course|
+      %tr
+        %td= course.cid
+        %td= course.name
+        %td= course.lecturer
