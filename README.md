@@ -8,10 +8,15 @@ preq: ruby: ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-linux]
 start command:
 cd to parent folder you would like to hold TA assignment 
 $ cd (...parent folder..)
+
 $ git clone https://github.com/TAMUBazinga/TA_Assignment.git
+
 $ git checkout develop
+
 $ bundle install --without production
+
 $ rake db:migrate
+
 $ rails server
 
 (under unbuntu condition, some OS might need to check http://0.0.0.0/students )
