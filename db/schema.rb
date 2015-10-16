@@ -30,7 +30,6 @@ ActiveRecord::Schema.define(version: 20151016041921) do
     t.string   "uin"
     t.string   "first_name"
     t.string   "last_name"
-<<<<<<< HEAD:taassign/db/schema.rb
     t.string   "advisor"
     t.integer  "degree"
     t.string   "start_semester"
@@ -44,10 +43,6 @@ ActiveRecord::Schema.define(version: 20151016041921) do
     t.integer  "active_term"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-=======
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
->>>>>>> 23fcf5fe8d09cbae828944288aad5f702727189e:db/schema.rb
   end
 
 end
