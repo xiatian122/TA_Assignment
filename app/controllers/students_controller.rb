@@ -13,4 +13,13 @@ class StudentsController < ApplicationController
         flash[:notice] = "#{@student.uin} was successfully created."
         redirect_to students_path
     end
+    
+    def show
+        id = params[:id]
+        @student = Student.find(id)
+    end
+    
+    def edit
+        @student = Student.find params[:id]
+    end
 end

@@ -1,0 +1,14 @@
+%h2 Your Application
+
+%table#details
+  %thead
+    %tr
+      %th Semester
+      %th Due Date
+      %th Action
+  %tbody
+    %tr
+      %td Fall 2015 
+      %td 10/25/2015
+      %td= link_to 'Apply', new_student_path 
+      %td= link_to 'Edit', edit_student_path(@student)

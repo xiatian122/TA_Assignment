@@ -1,14 +1,1 @@
-%table#students
-  %thead
-    %tr
-      %th 'UIN'
-      %th 'FIRST NAME' 
-      %th 'LASR NAME'
-  %tbody
-    - @students.each do |student|
-      %tr
-        %td= student.uin
-        %td= student.first_name
-        %td= student.last_name
-
-= link_to 'Add new student', new_student_path
+= link_to 'Application', student_path(1)
