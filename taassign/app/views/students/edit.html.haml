@@ -1,0 +1,34 @@
+%table#students
+  %thead
+    %tr
+      %th 'UIN'
+      %th 'FIRST NAME' 
+      %th 'LAST NAME'
+      %th 'ADVISOR'
+      %th 'DEGREE' 
+      %th 'START SEMESTER' 
+      %th 'GPA'
+      %th 'POSITION' 
+      %th 'COURSE TAKEN'
+      %th 'COURSE TAED'
+      %th 'PREFERED AREA' 
+      %th 'PREFERED COURSE'
+      %th 'STATUS' 
+      %th 'ACTIVE TERM'
+  %tbody
+    %tr
+      %td= @student.uin
+      %td= @student.first_name
+      %td= @student.last_name
+      %td= @student.advisor
+      %td= @student.degree
+      %td= @student.start_semester
+      %td= @student.gpa
+      %td= @student.position
+      %td= @student.course_taken
+      %td= @student.course_taed
+      %td= @student.preferred_area
+      %td= @student.preferred_course
+      %td= @student.status
+      %td= @student.active_term
+        

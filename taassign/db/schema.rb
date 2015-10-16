@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20151015230618) do
     t.string   "uin"
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "adivsor"
+    t.string   "advisor"
     t.integer  "degree"
     t.string   "start_semester"
     t.float    "gpa"
