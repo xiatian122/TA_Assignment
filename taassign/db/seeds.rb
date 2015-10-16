@@ -15,3 +15,12 @@ students = [{:uin => '922003095', :first_name => 'Ha', :last_name => 'waka' #,
 students.each do |student|
   Student.create!(student)
 end
+
+courses = [{:cid => 'CSCE629', :name => 'Introduction to Algorithms', :lecturer => 'ABC',
+             :insemail => 'test@test.com', :area => 'Theory', :description => '2015 Fall', 
+             :ta => 'N/A', :notes => ''
+            }]
+
+courses.each do |course|
+  Course.create!(course)
+end
