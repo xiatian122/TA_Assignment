@@ -1,0 +1,18 @@
+%h2 Your Application
+
+%table#details
+  %thead
+    %tr
+      %th Semester
+      %th Due Date
+      %th Status
+      %th Action
+  %tbody
+    %tr
+      %td Fall 2015 
+      %td 10/25/2015
+      %td= @status
+      %td= link_to 'Apply', edit_student_path(@student)
+      %td= link_to 'Edit', edit_student_path(@student)
+      %td= link_to 'Withdraw', withdraw_application_path(@student)
+      
