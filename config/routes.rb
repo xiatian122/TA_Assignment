@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :students
   resources :courses
+  
+  get '/students/(:id)/withdraw_application' => 'students#withdraw_application', :as => :withdraw_application
   #root :to => redirect('/students')
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
