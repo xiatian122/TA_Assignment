@@ -17,6 +17,8 @@ $ bundle install --without production
 
 $ rake db:migrate
 
+$ rake db:seed
+
 $ rails server
 
 (under unbuntu condition, some OS might need to check http://0.0.0.0/students )
