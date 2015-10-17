@@ -5,6 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+Student.delete_all()
+Course.delete_all()
+
 students = [{:uin => '922003095', :first_name => 'Ha', :last_name => 'waka' , 
              :advisor => 'Miamia', :degree => '2', :start_semester => '2015 Fall', 
              :gpa => '4.0', :position => '1', :course_taken => 'CSCE 606', 
