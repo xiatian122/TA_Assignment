@@ -34,18 +34,10 @@ class StudentsController < ApplicationController
     end
     
     def update
-       @student = Student.find params[:id]
-       @withdraw = params[:active_term]
-       
-       if @withdraw.nil?
-           @student.update_attributes!(params[:student])
-           flash[:notice] = "#{@student.first_name} was successfully updated."
-           redirect_to student_path(@student)
-        else
-            @student.active_term = '0'
-            flash[:notice] = "#{@student.first_name}\'s Application was withdrawed."
-            redirect_to student_path(@student)
-        end
+        @student = Student.find params[:id]
+        @student.update_attributes!(params[:student])
+        flash[:notice] = "#{@student.first_name} was successfully updated."
+        redirect_to student_path(@student)
     end
     
     def withdraw_application
