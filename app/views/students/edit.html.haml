@@ -1,3 +1,7 @@
+-
+%h1 Edit TA Application
+
+
 %table#students
   %thead
     %tr
@@ -31,4 +35,29 @@
       %td= @student.preferred_course
       %td= @student.status
       %td= @student.active_term
+
+%br
+
+= form_tag student_path(@student), :method => :put do
+
+  = label :student, :course_taken, 'Course taken'
+  = text_field :student, 'course_taken'
+  %br
+
+  = label :student, :course_taed, 'Course TAed'
+  = text_field :student, 'course_taed'
+  %br
+
+  = label :movie, :preferred_area, 'Prefered Area'
+  = text_field :student, 'preferred_area'
+  %br
+
+  = label :movie, :preferred_course, 'Prefered Courses'
+  = text_field :student, 'preferred_course'
+  %br
+
+  = submit_tag 'Update Application Info'
+  
+%br
         
+= link_to 'Back to Application Status', student_path(@student.id)
