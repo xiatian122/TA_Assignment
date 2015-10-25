@@ -1,14 +1,18 @@
 Rails.application.routes.draw do
-  resources :students
-  resources :courses
+  root 'static_pages#home'
+
+  get ({'help' => 'static_pages#help'})
+
+  get ({'contact' => 'static_pages#contact'})
   
+  resources :students  
   get '/students/(:id)/withdraw_application' => 'students#withdraw_application', :as => :withdraw_application
+  resources :courses
+
   #root :to => redirect('/students')
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
-  root 'courses#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
