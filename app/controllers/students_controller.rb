@@ -15,6 +15,7 @@ class StudentsController < ApplicationController
     @student = Student.create!(params[:student])
     #TODO, modify this part code, so it automatically gives correct active_term literal
     @student.active_term = "20153"
+    @student.status = 1
     @student.save
     #debugger
     flash[:notice] = "#{@student.uin} was successfully created."
