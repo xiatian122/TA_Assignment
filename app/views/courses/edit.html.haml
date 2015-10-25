@@ -1,1 +1,65 @@
-edit page
+/ = form_tag course_path(@course), :method => :put do
+
+/   = label :course, :cid, 'Course ID'
+/   = text_field :course, 'cid'
+/   %br
+
+/   = label :course, :name, 'Course Name'
+/   = text_field :course, 'name'
+/   %br
+
+/   = label :course, :lecturer, 'Lecturer'
+/   = text_field :course, 'lecturer'
+/   %br
+
+/   = label :course, :insemail, 'Instructor\' Email'
+/   = text_field :course, 'insemail'
+/   %br
+
+/   = label :course, :description, 'Description'
+/   = text_field :course, 'description'
+/   %br
+
+/   = submit_tag 'Update Course Information'
+  
+/ %br
+        
+/ = link_to 'Back to Course List', courses_path
+
+
+- utitilies={ semesters:["2015 Spring","2015 Summer","2015 Fall","2016 Spring","2016 Summer","2016 Fall","2017 Spring"]}
+.row
+  .col-md-10.col-md-offset-1
+    = form_for @course, url:{action:"update"}, html:{class:"update_course_form"} do |f|
+      .form-group
+        %label{:for => "course_cid"} Course ID
+        = f.text_field(:cid, {placeholder:"Enter the course ID", class:"form-control"})
+      .form-group
+        %label{:for => "course_name"} Course Name
+        = f.text_field(:name, {placeholder:"Enter the course name", class:"form-control"})
+      .form-group
+        %label{:for => "course_lecturer"} Lecturer
+        = f.text_field(:lecturer, {placeholder:"Lecturer Name", class:"form-control"})
+      .form-group
+        %label{:for => "course_insemail"} Advisor
+        = f.text_field(:insemail, {placeholder:"Instructor's Email", class:"form-control"})
+      .form-group
+        %label{:for => "course_area"} Area
+        %select#course_area.form-control{:name => "course[area]"}
+          %option{:value => "Theory", :selected => @course.area == "Theory"} Theory
+          %option{:value => "System", :selected => @course.area == "System"} System
+          %option{:value => "Artificial Intelligence", :selected => @course.area == "Artificial Intelligence"} Artificial Intelligence
+      .form-group
+        %label{:for => "course_description"} Course Description
+        = f.text_field(:description, {placeholder:"Course Description", class:"form-control"})
+      / / student[start_semester] is string typed
+      / .form-group
+      /   %label{:for => "student_start_semester"} Entering semester
+      /   %select#student_start_semester.form-control{:name => "student[start_semester]"}
+      /     - utitilies[:semesters].each do |semester_literal|
+      /       %option{:value => semester_literal}= semester_literal
+      / .form-group
+      /   %label{:for => "student_gpa"} GPA
+      /   = f.text_field(:gpa, {placeholder:"Enter your GPA", class:"form-control"})
+      = f.submit("Update", {class:"btn btn-primary"})
+      = f.submit("Back", {class:"btn btn-primary", :commit => 'Cancel'})
