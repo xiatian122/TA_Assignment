@@ -9,7 +9,8 @@ gem 'sass-rails', '~> 5.0'
 
 #Bowei Liu, include bootstrap for this rails project
 gem 'bootstrap-sass', '3.3.5.1'
-
+# http://www.gotealeaf.com/blog/integrating-rails-and-bootstrap-part-1 recomends it 
+gem 'autoprefixer-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
