@@ -3,6 +3,7 @@ class CreateCourses < ActiveRecord::Migration
     create_table :courses do |t|
       t.string :cid
       t.string :name
+      t.integer :credits
       t.string :lecturer
       t.string :insemail
       t.string :area

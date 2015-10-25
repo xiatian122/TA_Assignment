@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20151016041921) do
   create_table "courses", force: :cascade do |t|
     t.string   "cid"
     t.string   "name"
+    t.integer  "credits"
     t.string   "lecturer"
     t.string   "insemail"
     t.string   "area"
