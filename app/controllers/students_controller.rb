@@ -20,7 +20,7 @@ class StudentsController < ApplicationController
     #debugger
     flash[:notice] = "#{@student.uin} was successfully created."
     redirect_to students_path
-    end
+  end
 
   # GET /students/:id
   def show

@@ -15,7 +15,7 @@ class CoursesController < ApplicationController
 
   # POSt /courses
   def create
-    @course = Course.create!(params[:student])
+    @course = Course.create!(params[:course])
     #debugger
     flash[:notice] = "#{@course.name} was successfully created."
     redirect_to courses_path
