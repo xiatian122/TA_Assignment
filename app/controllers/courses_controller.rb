@@ -1,4 +1,7 @@
 class CoursesController < ApplicationController
+
+  before_filter :check_for_cancel, :only => [:create, :update]
+
 	def index
     @courses = Course.all
   end
@@ -32,9 +35,15 @@ class CoursesController < ApplicationController
   # PATCH /courses/:id
   def update
     @course = Course.find params[:id]
-    @course.update_attributes!(params[:student])
+    @course.update_attributes!(params[:course])
     flash[:notice] = "#{@course.name} was successfully updated."
-    redirect_to course_path(@course)
+    redirect_to courses_path
+  end
+
+  def check_for_cancel
+    if params[:commit] == "Cancel"
+      redirect_to courses_path
+    end
   end
 
   # DELETE /courses/:id
