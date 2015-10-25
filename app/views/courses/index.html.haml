@@ -6,9 +6,11 @@
       %th Couse ID
       %th Course-Name 
       %th Lecturer
+      %th Description
   %tbody
     - @courses.each do |course|
       %tr
         %td= course.cid
         %td= course.name
         %td= course.lecturer
+        %td= course.description
