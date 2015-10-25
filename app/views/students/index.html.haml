@@ -1,5 +1,13 @@
 %p#notice=notice
 
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="Student Overview "
+
+.row
+  .col-xs-6=link_to "New Student Record",new_student_path,class:"btn btn-primary"
+
+%hr
 %table#students.table.table-striped
   %thead
     %tr
