@@ -1,0 +1,51 @@
+
+<% utitilies={ semesters:["2015 Spring","2015 Summer","2015 Fall","2016 Spring","2016 Summer","2016 Fall","2017 Spring"]} %>
+
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <%= form_for @student, url:{action:"create"}, html:{class:"new_student_form"} do |f| %>
+      <div class="form-group">
+        <label for="student_uin">UIN</label>
+        <%= f.text_field(:uin, {placeholder:"Enter your UIN", class:"form-control"})%>
+      </div>
+
+      <div class="form-group">
+        <label for="student_first_name">First Name</label>
+        <%= f.text_field(:first_name, {placeholder:"First Name", class:"form-control"})%>
+      </div>
+      <div class="form-group">
+        <label for="student_last_name">Last Name</label>
+        <%= f.text_field(:last_name, {placeholder:"Last Name", class:"form-control"})%>
+      </div>
+      <div class="form-group">
+        <label for="student_advisor">Advisor</label>
+        <%= f.text_field(:uin, {placeholder:"Name of your advisor ", class:"form-control"})%>
+      </div>
+      <div class="form-group">
+        <label for="student_degree">Degree Program</label>
+        <select id="student_degree" name="student[degree]" class="form-control">
+          <option value="1">Meng</option>
+          <option value="2">MS</option>
+          <option value="3" selected="">PhD</option>
+        </select>
+      </div>
+      <!-- student[start_semester] is string typed-->
+      <div class="form-group">
+        <label for="student_start_semester">Entering semester</label>
+        <select id="student_start_semester" name="student[start_semester]" class="form-control">
+          <% utitilies[:semesters].each do |semester_literal| %>
+            <option value="<%=semester_literal%>"><%=semester_literal%></option>
+          <% end %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="student_gpa">GPA</label>
+        <%= f.text_field(:gpa, {placeholder:"Enter your GPA", class:"form-control"})%>
+      </div>
+
+      <%= f.submit("Create", {class:"btn btn-primary"}) %>
+    <% end %>
+  </div>
+</div>
