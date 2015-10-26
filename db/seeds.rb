@@ -43,7 +43,7 @@ courses = [
     insemail: "test@test.com",
     area: "Theory",
     description: "2015 Fall",
-    ta: "N/A",
+    ta: "2",
     notes: ""
   },
   {

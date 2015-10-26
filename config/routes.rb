@@ -9,6 +9,11 @@ Rails.application.routes.draw do
   get '/students/(:id)/withdraw_application' => 'students#withdraw_application', :as => :withdraw_application
   resources :courses
 
+  get '/courses/(:id)/select_new_ta' => 'courses#select_new_ta', :as => :select_new_ta
+  get '/courses/(:id)/assign_new_ta' => 'courses#assign_new_ta', :as => :assign_new_ta
+
+  get '/courses/(:id)/delete_ta' => 'courses#delete_ta', :as => :delete_ta, :action => :delete_ta
+
   #root :to => redirect('/students')
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
