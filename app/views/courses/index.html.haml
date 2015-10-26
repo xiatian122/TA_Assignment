@@ -16,10 +16,41 @@
       %th Course-Name 
       %th Lecturer
       %th Description
-  %tbody
-    - @courses.each do |course|
+      %th Edit
+
+  - @courses.each do |course|
+    %tbody{:class => 'course_header'}
       %tr
         %td= course.cid
         %td= course.name
         %td= course.lecturer
         %td= course.description
+        %td=link_to 'Edit', edit_course_path(course.id)
+    %tbody{:class => 'course_description'}
+      %tr
+        %td
+        %td{:colspan => 4}
+          %table#courses.table.table-striped
+            %thead
+              %tr
+                %th TA Name
+                %th Status
+                %th Action 
+              -if @courses_ta[course.id]
+                -@courses_ta[course.id].each do |ta_id, ta_val|
+                  %tr
+                    %td= ta_val[0]
+                    %td
+                      - case ta_val[1]
+                      - when 1
+                        %span{class:"label label-default"}="Under Review"
+                      - when 2
+                        %span{class:"label label-primary"}="Position Assigned"
+                      - when 3
+                        %span{class:"label label-success"}="Confirmed"
+                      - else
+                        %span{class:"label label-danger"}="Unknown"
+                    %td=link_to('Email', courses_path) +' / ' + link_to('Confirm', courses_path) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta_id))
+              %tr
+                %td{:colspan => 2}
+                %td=link_to 'Assign new TA', select_new_ta_path(course.id)
