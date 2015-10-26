@@ -1,0 +1,42 @@
+%p#notice=notice
+
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="Assign new TA for #{@course.name}"
+
+= form_tag assign_new_ta_path(@course.id), :method => :get, :id => 'tas_form' do
+  %table#students.table.table-striped
+    %thead
+      %tr
+        %th select
+        %th Student UIN
+        %th Name
+        %th GPA
+        %th Degree Program
+        %th Active Term
+        %th Status
+    %tbody
+      - @students.each do |student|
+        %tr
+          %td= check_box_tag "ids[#{student.id}]", :id => "ids_#{student.id}"
+          %td= student.uin
+          %td= student.fullName()
+          %td= student.gpa
+          %td= student.degree
+          %td= student.active_term
+          %td
+            - case student.status
+              - when 1
+                %span{class:"label label-default"}="Under Review"
+              - when 2
+                %span{class:"label label-primary"}="Position Assigned"
+              - when 3
+                %span{class:"label label-success"}="Confirmed"
+              - else
+                %span{class:"label label-danger"}="Unknown"
+    = submit_tag 'Assign', :id => 'assign_ta', class:'btn btn-primary'
+
+/ .row
+/   .col-xs-6=link_to "Assign",assign_new_ta_path(:ids),class:"btn btn-primary"
+
+=link_to "Back to courses list", courses_path
