@@ -9,7 +9,7 @@
 .row
   .col-xs-6=link_to "New Course",new_course_path,class:"btn btn-primary"
 
-%table#courses.table.table-striped
+%table#courses.table.table-striped{:class => "table table-hover"}
   %thead
     %tr
       %th Couse ID
@@ -18,20 +18,18 @@
       %th Lecturer
       %th Description
       %th Edit
-
-  - @courses.each do |course|
-    %tbody{:class => 'course_header'}
-      %tr
+  %tbody
+    - @courses.each do |course|
+      %tr{:id => "accordion-parent-#{course.id}", :class => 'clickable', "data-toggle" => "collapse", "data-target" => "#accordion-#{course.id}"}
         %td= course.cid
         %td= course.name
         %td= course.credits
         %td= course.lecturer
         %td= course.description
         %td=link_to 'Edit', edit_course_path(course.id)
-    %tbody{:class => 'course_description'}
-      %tr
+      %tr{:id => "accordion-#{course.id}", :class => 'collapse', "data-parent" => "accordion-parent-#{course.id}"}
         %td
-        %td{:colspan => 4}
+        %td{:colspan => 5}
           %table#courses.table.table-striped
             %thead
               %tr
