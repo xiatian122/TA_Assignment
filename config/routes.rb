@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :users
   root 'static_pages#home'
 
   get ({'help' => 'static_pages#help'})
@@ -13,6 +14,7 @@ Rails.application.routes.draw do
   get '/courses/(:id)/assign_new_ta' => 'courses#assign_new_ta', :as => :assign_new_ta
 
   get '/courses/(:id)/delete_ta' => 'courses#delete_ta', :as => :delete_ta, :action => :delete_ta
+  get '/courses/(:id)/email_ta_notification' => 'courses#email_ta_notification', :as => :email_ta_notification, :action => :email_ta_notification
 
   #root :to => redirect('/students')
   # The priority is based upon order of creation: first created -> highest priority.
