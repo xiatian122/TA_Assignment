@@ -95,6 +95,17 @@ class CoursesController < ApplicationController
     redirect_to courses_path
   end
 
+  # Email  
+  def email_ta_notification
+    @student = Student.find(params[:ta_id])
+    @user = User.find_by(:uin => @student.uin)
+    ## Sent mail to @user
+    UserNotifier.send_ta_notification(@user).deliver
+    flash[:notice] = "A Notification Email has been sent to #{@student.fullName()}: #{@user.email}"
+    redirect_to courses_path
+  end
+
+  # Delete courses/delete_ta
   def delete_ta
     @course = Course.find(params[:id])
     @student = Student.find(params[:ta_id])

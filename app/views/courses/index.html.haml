@@ -1,5 +1,5 @@
-
 -# file: app/views/courses/index.html.haml
+
 %p#notice=notice
 
 .row
@@ -14,6 +14,7 @@
     %tr
       %th Couse ID
       %th Course-Name 
+      %th Credits
       %th Lecturer
       %th Description
       %th Edit
@@ -23,6 +24,7 @@
       %tr
         %td= course.cid
         %td= course.name
+        %td= course.credits
         %td= course.lecturer
         %td= course.description
         %td=link_to 'Edit', edit_course_path(course.id)
@@ -50,7 +52,7 @@
                         %span{class:"label label-success"}="Confirmed"
                       - else
                         %span{class:"label label-danger"}="Unknown"
-                    %td=link_to('Email', courses_path) +' / ' + link_to('Confirm', courses_path) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta_id))
+                    %td=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta_id)) +' / ' + link_to('Confirm', courses_path) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta_id))
               %tr
                 %td{:colspan => 2}
                 %td=link_to 'Assign new TA', select_new_ta_path(course.id)
