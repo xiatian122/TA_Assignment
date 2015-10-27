@@ -1,6 +1,11 @@
-%h2 Your Application
+%p#notice=notice
 
-%table#details
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="#{@student.fullName()}\'s Application Status"
+
+%hr
+%table#students.table.table-striped
   %thead
     %tr
       %th Semester
@@ -9,10 +14,17 @@
       %th Action
   %tbody
     %tr
-      %td Fall 2015 
-      %td 10/25/2015
-      %td= @status
-      %td= link_to 'Apply', edit_student_path(@student)
-      %td= link_to 'Edit', edit_student_path(@student)
-      %td= link_to 'Withdraw', withdraw_application_path(@student)
-      
+      %td= "2015 Fall"
+      %td= "10/25/2015"
+      %td
+        - case @student.status
+          - when 1
+            %span{class:"label label-default"}="Under Review"
+          - when 2
+            %span{class:"label label-primary"}="Position Assigned"
+          - when 3
+            %span{class:"label label-success"}="Confirmed"
+          - else
+            %span{class:"label label-danger"}="Unknown"
+      %td= link_to('Apply', edit_student_path(@student), class:"btn btn-primary btn-xs") + ' / ' + link_to('Edit', edit_student_path(@student),class:"btn btn-primary btn-xs") + ' / ' + link_to('Withdraw', withdraw_application_path(@student),class:"btn btn-primary btn-xs")
+          

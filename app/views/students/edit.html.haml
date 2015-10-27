@@ -2,23 +2,23 @@
 %h1 Edit TA Application
 
 
-%table#students
+%table#student.table.table-striped
   %thead
     %tr
-      %th 'UIN'
-      %th 'FIRST NAME' 
-      %th 'LAST NAME'
-      %th 'ADVISOR'
-      %th 'DEGREE' 
-      %th 'START SEMESTER' 
-      %th 'GPA'
-      %th 'POSITION' 
-      %th 'COURSE TAKEN'
-      %th 'COURSE TAED'
-      %th 'PREFERED AREA' 
-      %th 'PREFERED COURSE'
-      %th 'STATUS' 
-      %th 'ACTIVE TERM'
+      %th UIN
+      %th FIRST NAME
+      %th LAST NAME
+      %th ADVISOR
+      %th DEGREE
+      %th START SEMESTER
+      %th GPA
+      %th POSITION
+      %th COURSE TAKEN
+      %th COURSE TAED
+      %th PREFERED AREA
+      %th PREFERED COURSE
+      %th STATUS
+      %th ACTIVE TERM
   %tbody
     %tr
       %td= @student.uin
@@ -38,26 +38,25 @@
 
 %br
 
-= form_tag student_path(@student), :method => :put do
+.row
+  .col-md-10.col-md-offset-1
+    = form_for @student, url:{action:"update"}, html:{class:"update_student_form"} do |f|
+      .form-group
+        %label{:for => "student_course_taken"} Course Taken
+        = f.text_field(:course_taken, {placeholder:"Enter the courses taken", class:"form-control"})
+      .form-group
+        %label{:for => "student_course_taed"} Course TAed Before
+        = f.text_field(:course_taed, {placeholder:"Enter the course TAed before", class:"form-control"})
+      .form-group
+        %label{:for => "student_preferred_area"} Prefered Area
+        %select#student_preferred_area.form-control{:name => "student[preferred_area]"}
+          %option{:value => "Theory", :selected => @student.preferred_area == "Theory"} Theory
+          %option{:value => "System", :selected => @student.preferred_area == "System"} System
+          %option{:value => "Artificial Intelligence", :selected => @student.preferred_area == "Artificial Intelligence"} Artificial Intelligence
+      .form-group
+        %label{:for => "student_preferred_course"} Prefered Courses
+        = f.text_field(:preferred_course, {placeholder:"Enter the prefered courses", class:"form-control"})
+      = f.submit("Update", {class:"btn btn-primary"})
 
-  = label :student, :course_taken, 'Course taken'
-  = text_field :student, 'course_taken'
-  %br
-
-  = label :student, :course_taed, 'Course TAed'
-  = text_field :student, 'course_taed'
-  %br
-
-  = label :movie, :preferred_area, 'Prefered Area'
-  = text_field :student, 'preferred_area'
-  %br
-
-  = label :movie, :preferred_course, 'Prefered Courses'
-  = text_field :student, 'preferred_course'
-  %br
-
-  = submit_tag 'Update Application Info'
-  
 %br
-        
 = link_to 'Back to Application Status', student_path(@student.id)
