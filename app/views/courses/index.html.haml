@@ -1,5 +1,5 @@
-
 -# file: app/views/courses/index.html.haml
+
 %p#notice=notice
 
 .row
@@ -14,6 +14,7 @@
     %tr
       %th Couse ID
       %th Course-Name 
+      %th Credits
       %th Lecturer
       %th Description
       %th Edit
@@ -23,6 +24,7 @@
       %tr
         %td= course.cid
         %td= course.name
+        %td= course.credits
         %td= course.lecturer
         %td= course.description
         %td=link_to 'Edit', edit_course_path(course.id)
