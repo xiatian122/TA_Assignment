@@ -105,6 +105,16 @@ class CoursesController < ApplicationController
     redirect_to courses_path
   end
 
+  # Confirm courses/confirm_ta/:id/:ta_id
+  def confirm_ta
+    @student = Student.find(params[:ta_id])
+    @student.status = 3
+    @student.save!
+
+    flash[:notice] = "TA #{@student.fullName()} is confirmd!"
+    redirect_to courses_path
+  end
+
   # Delete courses/delete_ta
   def delete_ta
     @course = Course.find(params[:id])
