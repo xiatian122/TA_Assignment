@@ -6,14 +6,7 @@ class CoursesController < ApplicationController
     @courses = Course.all
     @courses_ta = Hash.new 
     @courses.each do |course|
-      if not course.ta == 'N/A'
-        talist = course.ta.split(';')
-        tadata = Hash.new
-        talist.each do |ta|
-          student = Student.find(ta)
-          tadata[ta] = [student.fullName(), student.status]
-        end
-      end
+      tadata = Student.where(:course_assigned => course.id)
       @courses_ta[course.id] = tadata
     end
   end
@@ -80,14 +73,9 @@ class CoursesController < ApplicationController
       if not new_tas.empty?
         new_tas.each do |ta_id|
           @student = Student.find(ta_id)
+          @student.course_assigned = @course.id
           @student.status = 2
           @student.save!
-          if @course.ta == 'N/A'
-            @course.ta = ta_id.to_s
-          else
-            @course.ta = @course.ta + ';' + ta_id.to_s
-          end
-          @course.save!
         end
       end
     end
@@ -110,7 +98,6 @@ class CoursesController < ApplicationController
     @student = Student.find(params[:ta_id])
     @student.status = 3
     @student.save!
-
     flash[:notice] = "TA #{@student.fullName()} is confirmd!"
     redirect_to courses_path
   end
@@ -120,23 +107,8 @@ class CoursesController < ApplicationController
     @course = Course.find(params[:id])
     @student = Student.find(params[:ta_id])
     @student.status = 1
+    @student.course_assigned = 0
     @student.save!
-
-    ta_list = @course.ta.split(';')
-    ta_list.delete(@student.id.to_s)
-    if ta_list.empty?
-      @course.ta = 'N/A'
-    else
-      @course.ta = ''  
-      ta_list.each do |ta|
-        if @course.ta = ''
-          @course.ta = ta.to_s
-        else
-          @course.ta = @course.ta + ';' + ta.to_s
-        end
-      end
-    end
-    @course.save!
 
     flash[:notice] = "TA #{@student.fullName()} is deleted for #{@course.name}"
     redirect_to courses_path
