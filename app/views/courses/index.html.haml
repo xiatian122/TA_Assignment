@@ -4,64 +4,91 @@
 
 .row
   .col-xs-12
-    %h1{class:"text-left"}="Course Overview "
+    // We will not hard code 2015 fall here in furture
+    %h1{class:"text-left"}="2015 Fall Course Overview "
 
 .row
   .col-xs-6=link_to "New Course",new_course_path,class:"btn btn-primary"
 
-%table#courses.table.table-striped{:class => "table table-hover"}
-  %thead
-    %tr
-      %th Couse ID
-      %th Course-Name 
-      %th Credits
-      %th Lecturer
-      %th Description
-      %th Edit
-  %tbody
-    - @courses.each do |course|
-      %tr{:id => "accordion-parent-#{course.id}", :class => 'clickable', "data-toggle" => "collapse", "data-target" => "#accordion-#{course.id}"}
-        %td= course.cid
-        %td= course.name
-        %td= course.credits
-        %td= course.lecturer
-        %td= course.description
-        %td=link_to 'Edit', edit_course_path(course.id)
-      %tr{:id => "accordion-#{course.id}", :class => 'collapse', "data-parent" => "accordion-parent-#{course.id}"}
-        %td
-        %td{:colspan => 5}
-          %table#courses.table.table-striped
-            %thead
-              %tr
-                %th TA Name
-                %th Status
-                %th Action 
-              -if @courses_ta[course.id]
-                -@courses_ta[course.id].each do |ta|
-                  %tr
-                    %td= link_to ta.fullName(), '#myModal-#{course.id}-#{ta.id}', "data-toggle" => "modal",  "data-target" => "#myModal-#{course.id}-#{ta.id}"
-                    %td
-                      - case ta.status
-                        - when Student::UNDER_REVIEW
-                          %span{class:"label label-default"}="Under Review"
-                        - when Student::TEMP_ASSIGNED
-                          %span{class:"label label-primary"}="Temporary Assigned"
-                        - when Student::EMAIL_NOTIFIED
-                          %span{class:"label label-primary"}="Email Notified"
-                        - when Student::STUDENT_CONFIRMED
-                          %span{class:"label label-success"}="Student Confirmed"
-                        - when Student::STUDENT_REJECTED
-                          %span{class:"label label-warning"}="Student Rejected"
-                        - when Student::ASSIGNED
-                          %span{class:"label label-success"}="Assigned"
-                        - else
-                          %span{class:"label label-danger"}="Unknown"
-                    %td=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta.id)) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id)) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id))
-              %tr
-                %td{:colspan => 2}
-                %td=link_to 'Assign new TA', select_new_ta_path(course.id)
+.divide20
+
+.row
+  .col-xs-12
+    .panel.panel-default.remove-margin.pseudo-table-heading
+      / .panel-heading Panel heading without title
+      .panel-body
+        .col-xs-1 
+          %b Course ID
+        .col-xs-3 
+          %b Course Name
+        .col-xs-2 
+          %b Confirmed / Designated
+        .col-xs-1 
+          %b Lecturer
+        .col-xs-3 
+          %b Operations
+
+.row
+  .col-xs-12
+    #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
+      
+      // .panel-default as table row
+      - @courses.each do |course|
+
+        .panel.panel-default  
+          .panel-heading{:role => "tab"}
+            .row{"aria-controls" =>"collapse#{course.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{course.id}", :role => "button", :id=> "heading#{course.id}"}
+              .col-xs-1.td=course.id
+              .col-xs-3.td=course.name
+              .col-xs-2.td="#{@SlotStatus[course.id][:assigned] } / #{@SlotStatus[course.id][:slots] }"
+              .col-xs-1.td=course.lecturer
+              .col-xs-3.td
+                %a.btn.btn-default.btn-sm.edit-op-btn{:href=> edit_course_path(course.id) ,"data-toggle" =>"tooltip", "data-placement" => "bottom", "data-title" => "Edit"}
+                  %span.glyphicon.glyphicon-edit
+
+          .panel-collapse.collapse{"aria-labelledby" => "heading#{course.id}", :role => "tabpanel", :id=> "collapse#{course.id}"}
+            .panel-body
+              .row
+                .col-xs-10.col-xs-offset-1
+                  - if @courses_ta[course.id].length() > 0
+                    %ul.list-group
+
+                    -@courses_ta[course.id].each do |ta|
+
+                      %li.list-group-item
+                        .row
+                          .col-xs-2
+                            %a{ "data-toggle" => "modal",  "data-target" => "#myModal-#{course.id}-#{ta.id}"}=ta.fullName()
+                          .col-xs-3 
+                            - case ta.status
+                              - when Student::UNDER_REVIEW
+                                %span{class:"label label-default"}="Under Review"
+                              - when Student::TEMP_ASSIGNED
+                                %span{class:"label label-primary"}="Temporary Assigned"
+                              - when Student::EMAIL_NOTIFIED
+                                %span{class:"label label-primary"}="Email Notified"
+                              - when Student::STUDENT_CONFIRMED
+                                %span{class:"label label-success"}="Student Confirmed"
+                              - when Student::STUDENT_REJECTED
+                                %span{class:"label label-warning"}="Student Rejected"
+                              - when Student::ASSIGNED
+                                %span{class:"label label-success"}="Assigned"
+                              - else
+                                %span{class:"label label-danger"}="Unknown"
+                          .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta.id)) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id)) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id))
 
 
+                  - else
+                    %p No TA assigned yet for this course    
+              .divide30
+              .row
+                .col-xs-1.col-xs-offset-9
+                  %a{:href => select_new_ta_path(course.id), :class => "btn btn-primary"} Add new TA
+
+
+
+
+// BOWEI TODO: This will introduce performance issue when in production.
 - @courses.each do |course|
   -if @courses_ta[course.id]
     -@courses_ta[course.id].each do |student|

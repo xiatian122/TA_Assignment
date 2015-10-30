@@ -1,14 +1,25 @@
 class CoursesController < ApplicationController
-
+  include CoursesHelper
   before_filter :check_for_cancel, :only => [:create, :update]
 
 	def index
     @courses = Course.all
     @courses_ta = Hash.new 
+    internal_courses_ta = Hash.new  # internal usage
+    
     @courses.each do |course|
-      tadata = Student.where(:course_assigned => course.id)
+      tadata = Student.where(:course_assigned => course.id)  # This will return one list
       @courses_ta[course.id] = tadata
+
+      internal_courses_ta[course.id] = []
+      tadata.each_index do |i|
+        internal_courses_ta[course.id][i] = tadata[i].attributes
+      end
+
+      
     end
+    @SlotStatus = getSlotStatusForAllCourses(internal_courses_ta)
+    #debugger
   end
 
   #  /courses/new
