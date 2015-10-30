@@ -8,6 +8,11 @@ class Student < ActiveRecord::Base
   STUDENT_REJECTED = 5
   ASSIGNED = 6
 
+  UNDERGRAD = 1
+  MENG = 2
+  MS = 3
+  PHD = 4
+
   def fullName()
     return  self.first_name + " " + self.last_name
   end
