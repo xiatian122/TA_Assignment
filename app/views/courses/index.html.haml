@@ -39,7 +39,7 @@
               -if @courses_ta[course.id]
                 -@courses_ta[course.id].each do |ta|
                   %tr
-                    %td= ta.fullName()
+                    %td= link_to ta.fullName(), '#myModal-#{course.id}-#{ta.id}', "data-toggle" => "modal",  "data-target" => "#myModal-#{course.id}-#{ta.id}"
                     %td
                       - case ta.status
                         - when Student::UNDER_REVIEW
@@ -60,3 +60,41 @@
               %tr
                 %td{:colspan => 2}
                 %td=link_to 'Assign new TA', select_new_ta_path(course.id)
+
+
+- @courses.each do |course|
+  -if @courses_ta[course.id]
+    -@courses_ta[course.id].each do |student|
+      %div{class:"modal fade", "id" => "myModal-#{course.id}-#{student.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
+        %div{class:"modal-dialog", :role => "document"}
+          %div{class:"modal-content"}
+            %div{class:"modal-header"} 
+              %h2 #{student.fullName()}'s Application Form
+            %div{class:"modal-body"}
+              %table#student.table.table-striped
+                %thead
+                  %tr
+                    %th Field
+                    %th Info
+                %tbody
+                  %tr
+                    %td UIN
+                    %td= student.uin
+                  %tr
+                    %td Name
+                    %td= student.fullName()
+                  %tr
+                    %td Advisor
+                    %td= student.advisor
+                  %tr
+                    %td Degree
+                    %td= student.degree
+                  %tr
+                    %td GPA
+                    %td= student.gpa
+                  %tr
+                    %td Course Taken
+                    %td= student.course_taken
+                  %tr
+                    %td Course TAed
+                    %td= student.course_taed
