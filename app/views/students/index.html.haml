@@ -29,12 +29,14 @@
           - case student.status
             - when Student::UNDER_REVIEW
               %span{class:"label label-default"}="Under Review"
-            - when Student::EMAIL_NOTIFIED
+            - when Student::TEMP_ASSIGNED
               %span{class:"label label-primary"}="Temporary Assigned"
+            - when Student::EMAIL_NOTIFIED
+              %span{class:"label label-primary"}="Email Notified"
             - when Student::STUDENT_CONFIRMED
-              %span{class:"label label-success"}="Confirmed"
+              %span{class:"label label-success"}="Student Confirmed"
             - when Student::STUDENT_REJECTED
-              %span{class:"label label-success"}="Rejected"
+              %span{class:"label label-warning"}="Student Rejected"
             - when Student::ASSIGNED
               %span{class:"label label-success"}="Assigned"
             - else
