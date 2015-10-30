@@ -9,6 +9,7 @@
     %thead
       %tr
         %th select
+        %th detail
         %th Student UIN
         %th Name
         %th GPA
@@ -19,6 +20,7 @@
       - @students.each do |student|
         %tr
           %td= check_box_tag "ids[#{student.id}]", :id => "ids_#{student.id}"
+          %td= link_to 'Show Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{student.id}"
           %td= student.uin
           %td= student.fullName()
           %td= student.gpa
@@ -40,3 +42,38 @@
 /   .col-xs-6=link_to "Assign",assign_new_ta_path(:ids),class:"btn btn-primary"
 
 =link_to "Back to courses list", courses_path
+
+- @students.each do |student|
+  %div{class:"modal fade", "id" => "myModal-#{student.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
+    %div{class:"modal-dialog", :role => "document"}
+      %div{class:"modal-content"}
+        %div{class:"modal-header"} 
+          %h2 #{student.fullName()}'s Application Form
+        %div{class:"modal-body"}
+          %table#student.table.table-striped
+            %thead
+              %tr
+                %th Field
+                %th Info
+            %tbody
+              %tr
+                %td UIN
+                %td= student.uin
+              %tr
+                %td Name
+                %td= student.fullName()
+              %tr
+                %td Advisor
+                %td= student.advisor
+              %tr
+                %td Degree
+                %td= student.degree
+              %tr
+                %td GPA
+                %td= student.gpa
+              %tr
+                %td Course Taken
+                %td= student.course_taken
+              %tr
+                %td Course TAed
+                %td= student.course_taed

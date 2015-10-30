@@ -1,21 +1,25 @@
 class CoursesController < ApplicationController
-
+  include CoursesHelper
   before_filter :check_for_cancel, :only => [:create, :update]
 
 	def index
     @courses = Course.all
     @courses_ta = Hash.new 
+    internal_courses_ta = Hash.new  # internal usage
+    
     @courses.each do |course|
-      if not course.ta == 'N/A'
-        talist = course.ta.split(';')
-        tadata = Hash.new
-        talist.each do |ta|
-          student = Student.find(ta)
-          tadata[ta] = [student.fullName(), student.status]
-        end
-      end
+      tadata = Student.where(:course_assigned => course.id)  # This will return one list
       @courses_ta[course.id] = tadata
+
+      internal_courses_ta[course.id] = []
+      tadata.each_index do |i|
+        internal_courses_ta[course.id][i] = tadata[i].attributes
+      end
+
+      
     end
+    @SlotStatus = getSlotStatusForAllCourses(internal_courses_ta)
+    #debugger
   end
 
   #  /courses/new
@@ -69,7 +73,7 @@ class CoursesController < ApplicationController
 
   def select_new_ta
     @course = Course.find(params[:id])
-    @students = Student.where(status: 1)
+    @students = Student.where(status: Student::UNDER_REVIEW)
   end
 
   def assign_new_ta
@@ -80,14 +84,9 @@ class CoursesController < ApplicationController
       if not new_tas.empty?
         new_tas.each do |ta_id|
           @student = Student.find(ta_id)
-          @student.status = 2
+          @student.course_assigned = @course.id
+          @student.status = Student::TEMP_ASSIGNED
           @student.save!
-          if @course.ta == 'N/A'
-            @course.ta = ta_id.to_s
-          else
-            @course.ta = @course.ta + ';' + ta_id.to_s
-          end
-          @course.save!
         end
       end
     end
@@ -98,6 +97,8 @@ class CoursesController < ApplicationController
   # Email  
   def email_ta_notification
     @student = Student.find(params[:ta_id])
+    @student.status = Student::EMAIL_NOTIFIED
+    @student.save!
     @user = User.find_by(:uin => @student.uin)
     ## Sent mail to @user
     UserNotifier.send_ta_notification(@user).deliver
@@ -108,9 +109,8 @@ class CoursesController < ApplicationController
   # Confirm courses/confirm_ta/:id/:ta_id
   def confirm_ta
     @student = Student.find(params[:ta_id])
-    @student.status = 3
+    @student.status = Student::ASSIGNED
     @student.save!
-
     flash[:notice] = "TA #{@student.fullName()} is confirmd!"
     redirect_to courses_path
   end
@@ -119,24 +119,9 @@ class CoursesController < ApplicationController
   def delete_ta
     @course = Course.find(params[:id])
     @student = Student.find(params[:ta_id])
-    @student.status = 1
+    @student.status = Student::UNDER_REVIEW
+    @student.course_assigned = 0
     @student.save!
-
-    ta_list = @course.ta.split(';')
-    ta_list.delete(@student.id.to_s)
-    if ta_list.empty?
-      @course.ta = 'N/A'
-    else
-      @course.ta = ''  
-      ta_list.each do |ta|
-        if @course.ta = ''
-          @course.ta = ta.to_s
-        else
-          @course.ta = @course.ta + ';' + ta.to_s
-        end
-      end
-    end
-    @course.save!
 
     flash[:notice] = "TA #{@student.fullName()} is deleted for #{@course.name}"
     redirect_to courses_path

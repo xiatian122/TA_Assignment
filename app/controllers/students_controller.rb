@@ -15,7 +15,7 @@ class StudentsController < ApplicationController
     @student = Student.create!(params[:student])
     #TODO, modify this part code, so it automatically gives correct active_term literal
     @student.active_term = "20153"
-    @student.status = 1
+    @student.status = Student::UNDER_REVIEW
     @student.save
     #debugger
     flash[:notice] = "#{@student.uin} was successfully created."
@@ -26,15 +26,8 @@ class StudentsController < ApplicationController
   def show
     id = params[:id]
     @student = Student.find(id)
-    @student_status = @student.status
-    if @student_status == 1
-      @status = 'Under review'
-    elsif @student_status == 2
-      @status = 'Assigned'
-    elsif @student_status == 3
-      @status = 'Confirmed'
-    else
-      @status = 'Accepted'
+    if @student.status == Student::EMAIL_NOTIFIED
+      @course = Course.find(@student.course_assigned)
     end
   end
   
@@ -59,5 +52,21 @@ class StudentsController < ApplicationController
    @student.save!
    flash[:notice] = "#{@student.first_name}\'s Application was withdrawed."
    redirect_to student_path(@student)
+  end
+
+  def accept_assignment
+    @student = Student.find params[:id]
+    @student.status = Student::STUDENT_CONFIRMED
+    @student.save!
+    flash[:notice] = "Accepted TA Position!"
+    redirect_to student_path(@student)
+  end
+
+  def reject_assignment
+    @student = Student.find params[:id]
+    @student.status = Student::STUDENT_REJECTED
+    @student.save!
+    flash[:notice] = "Rejected TA Position!"
+    redirect_to student_path(@student)
   end
  end
