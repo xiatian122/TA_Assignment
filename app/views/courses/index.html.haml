@@ -19,13 +19,13 @@
       .panel-body
         .col-xs-1 
           %b Course ID
-        .col-xs-3 
+        .col-xs-4 
           %b Course Name
         .col-xs-2 
           %b Confirmed / Designated
-        .col-xs-1 
-          %b Lecturer
         .col-xs-3 
+          %b Lecturer
+        .col-xs-2 
           %b Operations
 
 .row
@@ -39,10 +39,10 @@
           .panel-heading{:role => "tab"}
             .row{"aria-controls" =>"collapse#{course.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{course.id}", :role => "button", :id=> "heading#{course.id}"}
               .col-xs-1.td=course.id
-              .col-xs-3.td=course.name
+              .col-xs-4.td=course.name
               .col-xs-2.td="#{@SlotStatus[course.id][:assigned] } / #{@SlotStatus[course.id][:slots] }"
-              .col-xs-1.td=course.lecturer
-              .col-xs-3.td
+              .col-xs-3.td=course.lecturer
+              .col-xs-2.td
                 %a.btn.btn-default.btn-sm.edit-op-btn{:href=> edit_course_path(course.id) ,"data-toggle" =>"tooltip", "data-placement" => "bottom", "data-title" => "Edit"}
                   %span.glyphicon.glyphicon-edit
 
@@ -82,7 +82,7 @@
                     %p No TA assigned yet for this course    
               .divide30
               .row
-                .col-xs-1.col-xs-offset-9
+                .col-xs-1.col-xs-offset-10
                   %a{:href => select_new_ta_path(course.id), :class => "btn btn-primary"} Add new TA
 
 
