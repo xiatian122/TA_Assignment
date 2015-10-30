@@ -27,12 +27,16 @@
         %td= student.active_term
         %td
           - case student.status
-            - when 1
+            - when Student::UNDER_REVIEW
               %span{class:"label label-default"}="Under Review"
-            - when 2
-              %span{class:"label label-primary"}="Position Assigned"
-            - when 3
+            - when Student::EMAIL_NOTIFIED
+              %span{class:"label label-primary"}="Temporary Assigned"
+            - when Student::STUDENT_CONFIRMED
               %span{class:"label label-success"}="Confirmed"
+            - when Student::STUDENT_REJECTED
+              %span{class:"label label-success"}="Rejected"
+            - when Student::ASSIGNED
+              %span{class:"label label-success"}="Assigned"
             - else
               %span{class:"label label-danger"}="Unknown"
 

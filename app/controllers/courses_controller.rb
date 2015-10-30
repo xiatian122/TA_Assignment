@@ -62,7 +62,7 @@ class CoursesController < ApplicationController
 
   def select_new_ta
     @course = Course.find(params[:id])
-    @students = Student.where(status: 1)
+    @students = Student.where(status: Student::UNDER_REVIEW)
   end
 
   def assign_new_ta
@@ -74,7 +74,7 @@ class CoursesController < ApplicationController
         new_tas.each do |ta_id|
           @student = Student.find(ta_id)
           @student.course_assigned = @course.id
-          @student.status = 2
+          @student.status = Student::TEMP_ASSIGNED
           @student.save!
         end
       end
@@ -86,6 +86,8 @@ class CoursesController < ApplicationController
   # Email  
   def email_ta_notification
     @student = Student.find(params[:ta_id])
+    @student.status = Student::EMAIL_NOTIFIED
+    @student.save!
     @user = User.find_by(:uin => @student.uin)
     ## Sent mail to @user
     UserNotifier.send_ta_notification(@user).deliver
@@ -96,7 +98,7 @@ class CoursesController < ApplicationController
   # Confirm courses/confirm_ta/:id/:ta_id
   def confirm_ta
     @student = Student.find(params[:ta_id])
-    @student.status = 3
+    @student.status = Student::ASSIGNED
     @student.save!
     flash[:notice] = "TA #{@student.fullName()} is confirmd!"
     redirect_to courses_path
@@ -106,7 +108,7 @@ class CoursesController < ApplicationController
   def delete_ta
     @course = Course.find(params[:id])
     @student = Student.find(params[:ta_id])
-    @student.status = 1
+    @student.status = Student::UNDER_REVIEW
     @student.course_assigned = 0
     @student.save!
 
