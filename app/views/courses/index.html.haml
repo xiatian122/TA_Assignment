@@ -115,7 +115,16 @@
                     %td= student.advisor
                   %tr
                     %td Degree
-                    %td= student.degree
+                    %td
+                      - case student.degree
+                        - when Student::UNDERGRAD
+                          Undergraduate
+                        - when Student::MENG
+                          M.Eng
+                        - when Student::MS
+                          MS
+                        - when Student::PHD
+                          PHD
                   %tr
                     %td GPA
                     %td= student.gpa

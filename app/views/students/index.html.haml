@@ -23,7 +23,16 @@
         %td= student.uin
         %td= student.fullName()
         %td= student.gpa
-        %td= student.degree
+        %td
+          - case student.degree
+            - when Student::UNDERGRAD
+              Undergraduate
+            - when Student::MENG
+              M.Eng
+            - when Student::MS
+              MS
+            - when Student::PHD
+              PHD
         %td= student.active_term
         %td
           - case student.status
@@ -67,7 +76,16 @@
                 %td= student.advisor
               %tr
                 %td Degree
-                %td= student.degree
+                %td
+                  - case student.degree
+                    - when Student::UNDERGRAD
+                      Undergraduate
+                    - when Student::MENG
+                      M.Eng
+                    - when Student::MS
+                      MS
+                    - when Student::PHD
+                      PHD
               %tr
                 %td GPA
                 %td= student.gpa
