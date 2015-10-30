@@ -37,11 +37,11 @@
                 %th Status
                 %th Action 
               -if @courses_ta[course.id]
-                -@courses_ta[course.id].each do |ta_id, ta_val|
+                -@courses_ta[course.id].each do |ta|
                   %tr
-                    %td= ta_val[0]
+                    %td= ta.fullName()
                     %td
-                      - case ta_val[1]
+                      - case ta.status
                       - when 1
                         %span{class:"label label-default"}="Under Review"
                       - when 2
@@ -50,7 +50,7 @@
                         %span{class:"label label-success"}="Confirmed"
                       - else
                         %span{class:"label label-danger"}="Unknown"
-                    %td=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta_id)) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta_id)) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta_id))
+                    %td=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta.id)) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id)) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id))
               %tr
                 %td{:colspan => 2}
                 %td=link_to 'Assign new TA', select_new_ta_path(course.id)
