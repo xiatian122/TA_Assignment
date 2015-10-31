@@ -35,7 +35,7 @@ fs.readFile('./courses_summary.html', 'utf8', function fileReadCB(err, data) {
   var courses = [];
   var dummy_course = {cid:'CSCE629',name:'Introduction to Algorithms',lecturer:'ABC',
              insemail:'test@test.com', area:'Theory', description:'2015 Fall', 
-             ta:'N/A', notes:''
+             ta:'N/A',credits:3, notes:''
             }
   var courses_summary = data;
   var course_names = [];
@@ -70,6 +70,7 @@ fs.readFile('./courses_summary.html', 'utf8', function fileReadCB(err, data) {
   to_be_output = to_be_output.replace(/\"description\"/gm,'description');
   to_be_output = to_be_output.replace(/\"ta\"/gm,'ta');
   to_be_output = to_be_output.replace(/\"notes\"/gm,'notes');
+  to_be_output = to_be_output.replace(/\"credits\"/gm,'credits');
   wstream.write(to_be_output);
   wstream.end()
   

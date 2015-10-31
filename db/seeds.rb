@@ -9,24 +9,32 @@
 #  Student  status mapping  {1: "Under Review", 2:"Assigned", 3:"Confirm"}
 Student.delete_all()
 Course.delete_all()
+User.delete_all()
+users = [{:name => 'user1', :uin => '922003095', :email => 'test1@gmail.com', :login => 'login1'},
+          {:name => 'user2', :uin => '922773022', :email => 'test2@gmail.com', :login => 'login1'},
+          {:name => 'user3', :uin => '922773022', :email => 'test3@gmail.com', :login => 'login1'},]
+
+users.each do |user|
+  User.create!(user)
+end
 
 students = [{:uin => '922003095', :first_name => 'Ha', :last_name => 'waka' , 
              :advisor => 'Miamia', :degree => '2', :start_semester => '2015 Fall', 
-             :gpa => '4.0', :position => '1', :course_taken => 'CSCE-606-601', 
+             :gpa => '4.0', :position => '1', :course_assigned => '0', :course_taken => 'CSCE-606-601', 
              :course_taed => 'CSCE-629-601', :preferred_area => 'Physics', :preferred_course => 'CSCE629', 
              :status => '1', :active_term => '20153'
             },
             {:uin => '922773022', :first_name => 'Testfirst', :last_name => 'Testlast' , 
              :advisor => 'T_Advisor', :degree => '3', :start_semester => '2012 Fall', 
-             :gpa => '4.0', :position => '3', :course_taken => 'CSCE-633-601', 
+             :gpa => '4.0', :position => '3', :course_assigned => '0', :course_taken => 'CSCE-633-601', 
              :course_taed => 'CSCE-603-601', :preferred_area => 'Machine Learning', :preferred_course => 'CSCE-603', 
-             :status => '3', :active_term => '20153'
+             :status => '1', :active_term => '20153'
             },
             {:uin => '922773022', :first_name => 'Jack', :last_name => 'Sparrow' , 
              :advisor => 'T_Advisor', :degree => '3', :start_semester => '2013 Spring', 
-             :gpa => '4.0', :position => '3', :course_taken => 'CSCE-633-601', 
-             :course_taed => 'CSCE-603-601', :preferred_area => 'Machine Learning', :preferred_course => 'CSCE-603', 
-             :status => '2', :active_term => '20153'
+             :gpa => '4.0', :position => '3', :course_assigned => '0', :course_taken => 'CSCE-633-601', 
+             :course_taed => 'CSCE-603-601', :preferred_area => 'Compiler Design', :preferred_course => 'CSCE-603', 
+             :status => '1', :active_term => '20153'
             }
 
         ]
@@ -44,6 +52,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -54,6 +63,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -64,6 +74,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -74,6 +85,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -84,6 +96,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -94,6 +107,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -104,6 +118,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -114,6 +129,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -124,6 +140,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -134,6 +151,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -144,6 +162,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -154,6 +173,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -164,6 +184,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -174,6 +195,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -184,6 +206,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -194,6 +217,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -204,6 +228,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -214,6 +239,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -224,6 +250,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -234,6 +261,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -244,6 +272,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -254,6 +283,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -264,6 +294,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -274,6 +305,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -284,6 +316,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -294,6 +327,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -304,6 +338,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -314,6 +349,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -324,6 +360,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -334,6 +371,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -344,6 +382,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -354,6 +393,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -364,6 +404,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -374,6 +415,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -384,6 +426,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -394,6 +437,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -404,6 +448,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -414,6 +459,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -424,6 +470,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -434,6 +481,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -444,6 +492,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -454,6 +503,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -464,6 +514,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -474,6 +525,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -484,6 +536,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -494,6 +547,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -504,6 +558,7 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   },
   {
@@ -514,9 +569,10 @@ courses = [
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
+    credits: 3,
     notes: ""
   }
-]
+];
 
 courses.each do |course|
   Course.create!(course)

@@ -1,18 +1,44 @@
-%h2 Your Application
+%p#notice=notice
 
-%table#details
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="#{@student.fullName()}\'s Application Status"
+
+%hr
+%table#students.table.table-striped
   %thead
     %tr
       %th Semester
       %th Due Date
       %th Status
+      -if @student.status == Student::EMAIL_NOTIFIED
+        %th{:colspan => 2} Assigned Course
       %th Action
   %tbody
     %tr
-      %td Fall 2015 
-      %td 10/25/2015
-      %td= @status
-      %td= link_to 'Apply', edit_student_path(@student)
-      %td= link_to 'Edit', edit_student_path(@student)
-      %td= link_to 'Withdraw', withdraw_application_path(@student)
-      
+      %td= "2015 Fall"
+      %td= "10/25/2015"
+      %td
+        - case @student.status
+          - when Student::UNDER_REVIEW
+            %span{class:"label label-default"}="Under Review"
+          //This field is intentionally set as Under Reivew. 
+          - when Student::TEMP_ASSIGNED
+            %span{class:"label label-default"}="Under Review"
+          //This field is intentionally set as Temporary Assigned.
+          //Only when Keyser email the student can this student view his status as temporary assigned
+          - when Student::EMAIL_NOTIFIED
+            %span{class:"label label-primary"}="Temporary Assigned"
+          - when Student::STUDENT_CONFIRMED
+            %span{class:"label label-success"}="Confirmed"
+          - when Student::STUDENT_REJECTED
+            %span{class:"label label-warning"}="Rejected"
+          - when Student::ASSIGNED
+            %span{class:"label label-success"}="Assigned"
+          - else
+            %span{class:"label label-danger"}="Unknown"
+      -if @student.status == Student::EMAIL_NOTIFIED
+        %td="#{@course.name}" 
+        %td=link_to('Accepted', accept_assignment_path(@student)) + ' / ' +  link_to('Rejected', reject_assignment_path(@student))
+      %td= link_to('Apply', edit_student_path(@student), class:"btn btn-primary btn-xs") + ' / ' + link_to('Edit', edit_student_path(@student),class:"btn btn-primary btn-xs") + ' / ' + link_to('Withdraw', withdraw_application_path(@student),class:"btn btn-primary btn-xs")
+          

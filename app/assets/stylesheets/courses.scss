@@ -8,3 +8,31 @@
     }
   }
 }
+.panel.panel-default.remove-margin.pseudo-table-heading{
+  border-radius: 4px 4px 0px 0px;
+}
+#accordion.panel-group{
+  .panel.panel-default {
+    border-radius: 0px;
+    margin:0px 0px; 
+    .panel-heading{
+      padding-top:0px;
+      padding-bottom: 0px;
+      line-height: 3;
+    }
+    .row{
+      .td + .td{
+        
+        border-left: 2px solid #ddd;
+        
+      }
+    }
+    &:last-child{
+      border-radius: 4px;
+    }
+  }
+  // span.label{
+  //   font-weight: 24px;
+  // }
+
+}
