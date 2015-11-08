@@ -1,6 +1,6 @@
 class CreateStudentApplications < ActiveRecord::Migration
   def up
-    create_table :studentapplications do |t|
+    create_table :student_applications do |t|
       t.string :uin
       t.string :first_name
       t.string :last_name
@@ -15,12 +15,13 @@ class CreateStudentApplications < ActiveRecord::Migration
       t.string :preferred_course
       t.integer :status
       t.integer :active_term
+      t.integer :course_assigned
       
       t.timestamps null: false
     end
   end
   
   def down
-    drop_table :studentapplications
+    drop_table :student_applications
   end
 end

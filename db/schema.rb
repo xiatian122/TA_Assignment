@@ -23,9 +23,8 @@ ActiveRecord::Schema.define(version: 20151108205936) do
     t.text     "description"
     t.string   "ta"
     t.text     "notes"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "course_assigned"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "student_applications", force: :cascade do |t|
@@ -43,26 +42,7 @@ ActiveRecord::Schema.define(version: 20151108205936) do
     t.string   "preferred_course"
     t.integer  "status"
     t.integer  "active_term"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-  end
-
-  create_table "students", force: :cascade do |t|
-    t.string   "uin"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "advisor"
-    t.integer  "degree"
-    t.string   "start_semester"
-    t.float    "gpa"
-    t.integer  "position"
     t.integer  "course_assigned"
-    t.string   "course_taken"
-    t.string   "course_taed"
-    t.string   "preferred_area"
-    t.string   "preferred_course"
-    t.integer  "status"
-    t.integer  "active_term"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
