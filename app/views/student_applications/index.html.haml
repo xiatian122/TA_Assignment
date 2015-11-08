@@ -1,0 +1,97 @@
+%p#notice=notice
+
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="Student Application Overview "
+
+.row
+  .col-xs-6=link_to "New Student Application Record",new_student_path,class:"btn btn-primary"
+
+%hr
+%table#studentapplications.table.table-striped
+  %thead
+    %tr
+      %th Student UIN
+      %th Name
+      %th GPA
+      %th Degree Program
+      %th Active Term
+      %th Status
+  - @studentapplications.each do |studentapplication|
+    %tbody
+      %tr
+        %td= studentapplication.uin
+        %td= studentapplication.fullName()
+        %td= studentapplication.gpa
+        %td
+          - case studentapplication.degree
+            - when StudentApplication::UNDERGRAD
+              Undergraduate
+            - when StudentApplication::MENG
+              M.Eng
+            - when StudentApplication::MS
+              MS
+            - when StudentApplication::PHD
+              PHD
+        %td= student.active_term
+        %td
+          - case student.status
+            - when StudentApplication::UNDER_REVIEW
+              %span{class:"label label-default"}="Under Review"
+            - when StudentApplication::TEMP_ASSIGNED
+              %span{class:"label label-primary"}="Temporary Assigned"
+            - when StudentApplication::EMAIL_NOTIFIED
+              %span{class:"label label-primary"}="Email Notified"
+            - when StudentApplication::STUDENT_CONFIRMED
+              %span{class:"label label-success"}="Student Confirmed"
+            - when StudentApplication::STUDENT_REJECTED
+              %span{class:"label label-warning"}="Student Rejected"
+            - when StudentApplication::ASSIGNED
+              %span{class:"label label-success"}="Assigned"
+            - else
+              %span{class:"label label-danger"}="Unknown"
+        %td=link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{student.id}"
+
+- @studentapplications.each do |studentapplication|
+  %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
+    %div{class:"modal-dialog", :role => "document"}
+      %div{class:"modal-content"}
+        %div{class:"modal-header"} 
+          %h2 #{studentapplication.fullName()}'s Application Form
+        %div{class:"modal-body"}
+          %table#studentapplication.table.table-striped
+            %thead
+              %tr
+                %th Field
+                %th Info
+            %tbody
+              %tr
+                %td UIN
+                %td= studentapplication.uin
+              %tr
+                %td Name
+                %td= studentapplication.fullName()
+              %tr
+                %td Advisor
+                %td= studentapplication.advisor
+              %tr
+                %td Degree
+                %td
+                  - case studentapplication.degree
+                    - when StudentApplication::UNDERGRAD
+                      Undergraduate
+                    - when StudentApplication::MENG
+                      M.Eng
+                    - when StudentApplication::MS
+                      MS
+                    - when StudentApplication::PHD
+                      PHD
+              %tr
+                %td GPA
+                %td= studentapplication.gpa
+              %tr
+                %td Course Taken
+                %td= studentapplication.course_taken
+              %tr
+                %td Course TAed
+                %td= studentapplication.course_taed

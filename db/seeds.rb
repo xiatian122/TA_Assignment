@@ -18,7 +18,7 @@ users.each do |user|
   User.create!(user)
 end
 
-students = [{:uin => '922003095', :first_name => 'Ha', :last_name => 'waka' , 
+student_applications = [{:uin => '922003095', :first_name => 'Ha', :last_name => 'waka' , 
              :advisor => 'Miamia', :degree => '2', :start_semester => '2015 Fall', 
              :gpa => '4.0', :position => '1', :course_assigned => '0', :course_taken => 'CSCE-606-601', 
              :course_taed => 'CSCE-629-601', :preferred_area => 'Physics', :preferred_course => 'CSCE629', 
@@ -39,8 +39,8 @@ students = [{:uin => '922003095', :first_name => 'Ha', :last_name => 'waka' ,
 
         ]
 
-students.each do |student|
-  Student.create!(student)
+student_applications.each do |student_application|
+  StudentApplication.create!(student_application)
 end
 
 courses = [
