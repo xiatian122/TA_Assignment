@@ -1,0 +1,44 @@
+%p#notice=notice
+
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="#{@studentapplication.fullName()}\'s Application Status"
+
+%hr
+%table#studentapplications.table.table-striped
+  %thead
+    %tr
+      %th Semester
+      %th Due Date
+      %th Status
+      -if @studentapplication.status == StudentApplication::EMAIL_NOTIFIED
+        %th{:colspan => 2} Assigned Course
+      %th Action
+  %tbody
+    %tr
+      %td= "2015 Fall"
+      %td= "10/25/2015"
+      %td
+        - case @studentapplication.status
+          - when StudentApplication::UNDER_REVIEW
+            %span{class:"label label-default"}="Under Review"
+          //This field is intentionally set as Under Reivew. 
+          - when StudentApplication::TEMP_ASSIGNED
+            %span{class:"label label-default"}="Under Review"
+          //This field is intentionally set as Temporary Assigned.
+          //Only when Keyser email the student can this student view his status as temporary assigned
+          - when StudentApplication::EMAIL_NOTIFIED
+            %span{class:"label label-primary"}="Temporary Assigned"
+          - when StudentApplication::STUDENT_CONFIRMED
+            %span{class:"label label-success"}="Confirmed"
+          - when StudentApplication::STUDENT_REJECTED
+            %span{class:"label label-warning"}="Rejected"
+          - when StudentApplication::ASSIGNED
+            %span{class:"label label-success"}="Assigned"
+          - else
+            %span{class:"label label-danger"}="Unknown"
+      -if @student.status == StudentApplication::EMAIL_NOTIFIED
+        %td="#{@course.name}" 
+        %td=link_to('Accepted', accept_assignment_path(@studentapplication)) + ' / ' +  link_to('Rejected', reject_assignment_path(@studentapplication))
+      %td= link_to('Apply', edit_student_path(@studentapplication), class:"btn btn-primary btn-xs") + ' / ' + link_to('Edit', edit_student_path(@studentapplication),class:"btn btn-primary btn-xs") + ' / ' + link_to('Withdraw', withdraw_application_path(@studentapplication),class:"btn btn-primary btn-xs")
+          
