@@ -7,6 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 #  Student  degree mapping  {1: "ME", 2:"MS", 3:"PhD" }
 #  Student  status mapping  {1: "Under Review", 2:"Assigned", 3:"Confirm"}
+ApplicationPool.delete_all()
 Course.delete_all()
 User.delete_all()
 StudentApplication.delete_all()
@@ -40,6 +41,12 @@ studentapplications = [{:uin => '922003095', :first_name => 'Ha', :last_name => 
 
 studentapplications.each do |studentapplication|
   StudentApplication.create!(studentapplication)
+end
+
+application_pools = [{:year => '2015', :semester => 'Fall', :deadline => '2015-11-25 11:59:59', :active => true}]
+
+application_pools.each do |application_pool|
+  ApplicationPool.create!(application_pool)
 end
 
 courses = [
