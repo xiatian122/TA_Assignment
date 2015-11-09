@@ -23,19 +23,19 @@ studentapplications = [{:uin => '922003095', :first_name => 'Ha', :last_name => 
              :advisor => 'Miamia', :degree => '2', :start_semester => '2015 Fall', 
              :gpa => '4.0', :position => '1', :course_assigned => '0', :course_taken => 'CSCE-606-601', 
              :course_taed => 'CSCE-629-601', :preferred_area => 'Physics', :preferred_course => 'CSCE629', 
-             :status => '1', :active_term => '20153'
+             :status => '1', :active_term => '20153', :application_pool_id => 1
             },
             {:uin => '922773022', :first_name => 'Testfirst', :last_name => 'Testlast' , 
              :advisor => 'T_Advisor', :degree => '3', :start_semester => '2012 Fall', 
              :gpa => '4.0', :position => '3', :course_assigned => '0', :course_taken => 'CSCE-633-601', 
              :course_taed => 'CSCE-603-601', :preferred_area => 'Machine Learning', :preferred_course => 'CSCE-603', 
-             :status => '1', :active_term => '20153'
+             :status => '1', :active_term => '20153', :application_pool_id => 1
             },
             {:uin => '922773022', :first_name => 'Jack', :last_name => 'Sparrow' , 
              :advisor => 'T_Advisor', :degree => '3', :start_semester => '2013 Spring', 
              :gpa => '4.0', :position => '3', :course_assigned => '0', :course_taken => 'CSCE-633-601', 
              :course_taed => 'CSCE-603-601', :preferred_area => 'Compiler Design', :preferred_course => 'CSCE-603', 
-             :status => '1', :active_term => '20153'
+             :status => '1', :active_term => '20153', :application_pool_id => 1
             }
         ]
 
