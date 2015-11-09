@@ -18,14 +18,14 @@
         = f.text_field(:advisor, {placeholder:"Name of your advisor ", class:"form-control"})
       .form-group
         %label{:for => "student_degree"} Degree Program
-        %select#student_degree.form-control{:name => "studentapplication[degree]"}
+        %select#student_degree.form-control{:name => "student_application[degree]"}
           %option{:value => "1"} Meng
           %option{:value => "2"} MS
           %option{:selected => "selected", :value => "3"} PhD
       / student[start_semester] is string typed
       .form-group
         %label{:for => "student_start_semester"} Entering semester
-        %select#student_start_semester.form-control{:name => "studentapplication[start_semester]"}
+        %select#student_start_semester.form-control{:name => "student_application[start_semester]"}
           - utitilies[:semesters].each do |semester_literal|
             %option{:value => semester_literal}= semester_literal
       .form-group
