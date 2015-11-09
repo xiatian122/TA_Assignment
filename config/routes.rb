@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
   resources :users
+
+  get '/users/:id/new_application' => 'users#new_application', :as => :new_application
+  get '/users/:id/edit_ta_application' => 'users#edit_ta_application', :as => :edit_ta_application
+  patch '/users/:id/update_ta_application' => 'users#update_ta_application', :as => :update_ta_application
+  post '/users/:id/create_ta_application' => 'users#create_ta_application', :as => :create_ta_application
+  get '/users/:id/withdraw_application' => 'users#withdraw_student_application', :as => :withdraw_student_application
+
   root 'static_pages#home'
 
   get ({'help' => 'static_pages#help'})
