@@ -118,7 +118,7 @@ class CoursesController < ApplicationController
   # Delete courses/delete_ta
   def delete_ta
     @course = Course.find(params[:id])
-    @studentapplication = Student.find(params[:ta_id])
+    @studentapplication = StudentApplication.find(params[:ta_id])
     @studentapplication.status = StudentApplication::UNDER_REVIEW
     @studentapplication.course_assigned = 0
     @studentapplication.save!
