@@ -31,7 +31,7 @@ class ApplicationPoolsController < ApplicationController
   def update
   	@application_pool = ApplicationPool.find params[:id]
     @application_pool.update_attributes!(params[:application_pool])
-    flash[:notice] = "Application pool for #{@application_pool.year} #{@application_pool.semester} was successfully updated. #{@application_pool.deadline}"
+    flash[:notice] = "Application pool for #{@application_pool.year} #{@application_pool.semester} was successfully updated."
     redirect_to application_pools_path
   end
 end

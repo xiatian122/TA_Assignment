@@ -43,7 +43,8 @@ studentapplications.each do |studentapplication|
   StudentApplication.create!(studentapplication)
 end
 
-application_pools = [{:year => '2015', :semester => 'Fall', :deadline => '2015-11-25 11:59:59', :active => true}]
+application_pools = [{:year => '2015', :semester => 'Fall', :deadline => '2015-11-25 11:59:59', :active => true},
+              {:year => '2015', :semester => 'Spring', :deadline => '2015-1-7 11:59:59', :active => false}]
 
 application_pools.each do |application_pool|
   ApplicationPool.create!(application_pool)
