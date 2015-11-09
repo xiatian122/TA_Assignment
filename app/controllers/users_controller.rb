@@ -10,6 +10,14 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @user = User.find(params[:id])
+    @application_pools = ApplicationPool.where(:active => true)
+    @studentapplications = Hash.new
+    @application_pools.each do |application_pool|
+      if StudentApplication.exists?(application_pool_id: application_pool.id, user_id: @user.id)
+        @studentapplications[application_pool.id] = StudentApplication.find_by(application_pool_id: application_pool.id, user_id: @user.id)
+      end
+    end
   end
 
   # GET /users/new
@@ -59,6 +67,48 @@ class UsersController < ApplicationController
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def new_application
+    @user = User.find(params[:id])
+    @application_pool = ApplicationPool.find(params[:term_id])
+    @studentapplication = StudentApplication.new
+  end
+
+  def create_ta_application
+    @user = User.find(params[:id])
+    @application_pool = ApplicationPool.find(params[:term_id])
+    @studentapplication = StudentApplication.create!(params[:student_application])
+    @studentapplication.application_pool_id = params[:term_id]
+    @studentapplication.user_id = @user.id
+    @studentapplication.save
+    flash[:notice] = "#{@studentapplication.fullName()} is created!"
+    redirect_to user_path(@user.id)
+  end
+
+  def show_ta_application
+    @user = User.find(params[:id])
+
+  end
+
+  def withdraw_student_application
+    @user = User.find(params[:id])
+    @studentapplication = StudentApplication.find(params[:app_id])
+    @studentapplication.destroy
+    redirect_to user_path(@user.id)
+  end
+
+  def edit_ta_application
+    @user = User.find(params[:id])
+    @studentapplication = StudentApplication.find(params[:app_id])
+  end
+
+  def update_ta_application
+    @user = User.find(params[:id])
+    @studentapplication = StudentApplication.find(params[:app_id])
+    @studentapplication.update_attributes!(params[:student_application])
+    flash[:notice] = "#{@studentapplication.fullName()} is updated!"
+    redirect_to user_path(@user.id)
   end
 
   private
