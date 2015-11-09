@@ -1,0 +1,26 @@
+%p#notice=notice
+
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="Application Pool Overview "
+
+.row
+  .col-xs-6=link_to "New Application Pool Record",new_application_pool_path,class:"btn btn-primary"
+
+%hr
+%table#application_pools.table.table-striped
+  %thead
+    %tr
+      %th Year
+      %th Semester
+      %th Deadline
+      %th Active
+      %th Edit
+  - @application_pools.each do |application_pool|
+    %tbody
+      %tr
+        %td= application_pool.year
+        %td= application_pool.semester
+        %td= application_pool.deadline
+        %td= application_pool.active
+        %td= link_to 'Edit', edit_application_pool_path(application_pool.id)

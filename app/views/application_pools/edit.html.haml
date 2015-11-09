@@ -1,0 +1,26 @@
+
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="Edit Application Pool for #{@application_pool.year} #{@application_pool.semester}"
+
+.row
+  .col-md-10.col-md-offset-1
+    = form_for @application_pool, url:{action:"update"}, html:{class:"update_application_pool_form"} do |f|
+      .form-group
+        %label{:for => "application_pool_year"} Year
+        = f.text_field(:year, {placeholder:"Enter application year", class:"form-control"})
+      .form-group
+        %label{:for => "application_pool_semester"} Semester
+        = f.text_field(:semester, {placeholder:"Enter semester", class:"form-control"})
+      .form-group
+        %label{:for => "application_pool_deadline"} Deadline
+        %div{class:"input-group date", id:"datetimepicker1"}
+          = f.text_field(:deadline, {placeholder:"Deadline", class:"form-control", "data-date-format" => "YYYY-MM-DD hh:mm:ss"})
+          %span{class:"input-group-addon"}
+            %span{class:"glyphicon glyphicon-calendar"}
+        :javascript
+          $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });
+      = f.submit("Update", {class:"btn btn-primary"})
+      = f.submit("Cancel", {class:"btn btn-primary"})
