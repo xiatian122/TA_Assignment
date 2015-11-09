@@ -6,10 +6,14 @@ Rails.application.routes.draw do
 
   get ({'contact' => 'static_pages#contact'})
   
-  resources :students  
-  get '/students/(:id)/withdraw_application' => 'students#withdraw_application', :as => :withdraw_application
-  get '/students/(:id)/accept_assignment' => 'students#accept_assignment', :as => :accept_assignment
-  get '/students/(:id)/reject_assignment' => 'students#reject_assignment', :as => :reject_assignment
+  #resources :students  
+  #get '/students/(:id)/withdraw_application' => 'students#withdraw_application', :as => :withdraw_application
+  #get '/students/(:id)/accept_assignment' => 'students#accept_assignment', :as => :accept_assignment
+  #get '/students/(:id)/reject_assignment' => 'students#reject_assignment', :as => :reject_assignment
+  resources :student_applications
+  get '/student_applications/(:id)/withdraw_application' => 'student_applications#withdraw_application', :as => :withdraw_application
+  get '/student_applications/(:id)/accept_assignment' => 'student_applications#accept_assignment', :as => :accept_assignment
+  get '/student_applications/(:id)/reject_assignment' => 'student_applications#reject_assignment', :as => :reject_assignment
   resources :courses
 
   get '/courses/(:id)/select_new_ta' => 'courses#select_new_ta', :as => :select_new_ta

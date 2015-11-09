@@ -8,7 +8,7 @@ class CoursesController < ApplicationController
     internal_courses_ta = Hash.new  # internal usage
     
     @courses.each do |course|
-      tadata = Student.where(:course_assigned => course.id)  # This will return one list
+      tadata = StudentApplication.where(:course_assigned => course.id)  # This will return one list
       @courses_ta[course.id] = tadata
 
       internal_courses_ta[course.id] = []
@@ -73,7 +73,7 @@ class CoursesController < ApplicationController
 
   def select_new_ta
     @course = Course.find(params[:id])
-    @students = Student.where(status: Student::UNDER_REVIEW)
+    @studentapplications = StudentApplication.where(status: StudentApplication::UNDER_REVIEW)
   end
 
   def assign_new_ta
@@ -83,10 +83,10 @@ class CoursesController < ApplicationController
       new_tas = params[:ids].keys
       if not new_tas.empty?
         new_tas.each do |ta_id|
-          @student = Student.find(ta_id)
-          @student.course_assigned = @course.id
-          @student.status = Student::TEMP_ASSIGNED
-          @student.save!
+          @studentapplication = StudentApplication.find(ta_id)
+          @studentapplication.course_assigned = @course.id
+          @studentapplication.status = StudentApplication::TEMP_ASSIGNED
+          @studentapplication.save!
         end
       end
     end
@@ -96,34 +96,34 @@ class CoursesController < ApplicationController
 
   # Email  
   def email_ta_notification
-    @student = Student.find(params[:ta_id])
-    @student.status = Student::EMAIL_NOTIFIED
-    @student.save!
-    @user = User.find_by(:uin => @student.uin)
+    @studentapplication = StudentApplication.find(params[:ta_id])
+    @studentapplication.status = StudentApplication::EMAIL_NOTIFIED
+    @studentapplication.save!
+    @user = User.find_by(:uin => @studentapplication.uin)
     ## Sent mail to @user
-    UserNotifier.send_ta_notification(@user).deliver
-    flash[:notice] = "A Notification Email has been sent to #{@student.fullName()}: #{@user.email}"
+    UserNotifier.send_ta_notification(@user).deliver_now
+    flash[:notice] = "A Notification Email has been sent to #{@studentapplication.fullName()}: #{@user.email}"
     redirect_to courses_path
   end
 
   # Confirm courses/confirm_ta/:id/:ta_id
   def confirm_ta
-    @student = Student.find(params[:ta_id])
-    @student.status = Student::ASSIGNED
-    @student.save!
-    flash[:notice] = "TA #{@student.fullName()} is confirmd!"
+    @studentapplication = StudentApplication.find(params[:ta_id])
+    @studentapplication.status = StudentApplication::ASSIGNED
+    @studentapplication.save!
+    flash[:notice] = "TA #{@studentapplication.fullName()} is confirmd!"
     redirect_to courses_path
   end
 
   # Delete courses/delete_ta
   def delete_ta
     @course = Course.find(params[:id])
-    @student = Student.find(params[:ta_id])
-    @student.status = Student::UNDER_REVIEW
-    @student.course_assigned = 0
-    @student.save!
+    @studentapplication = StudentApplication.find(params[:ta_id])
+    @studentapplication.status = StudentApplication::UNDER_REVIEW
+    @studentapplication.course_assigned = 0
+    @studentapplication.save!
 
-    flash[:notice] = "TA #{@student.fullName()} is deleted for #{@course.name}"
+    flash[:notice] = "TA #{@studentapplication.fullName()} is deleted for #{@course.name}"
     redirect_to courses_path
   end
 end

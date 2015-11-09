@@ -61,17 +61,17 @@
                             %a{ "data-toggle" => "modal",  "data-target" => "#myModal-#{course.id}-#{ta.id}"}=ta.fullName()
                           .col-xs-3 
                             - case ta.status
-                              - when Student::UNDER_REVIEW
+                              - when StudentApplication::UNDER_REVIEW
                                 %span{class:"label label-default"}="Under Review"
-                              - when Student::TEMP_ASSIGNED
+                              - when StudentApplication::TEMP_ASSIGNED
                                 %span{class:"label label-primary"}="Temporary Assigned"
-                              - when Student::EMAIL_NOTIFIED
+                              - when StudentApplication::EMAIL_NOTIFIED
                                 %span{class:"label label-primary"}="Email Notified"
-                              - when Student::STUDENT_CONFIRMED
+                              - when StudentApplication::STUDENT_CONFIRMED
                                 %span{class:"label label-success"}="Student Confirmed"
-                              - when Student::STUDENT_REJECTED
+                              - when StudentApplication::STUDENT_REJECTED
                                 %span{class:"label label-warning"}="Student Rejected"
-                              - when Student::ASSIGNED
+                              - when StudentApplication::ASSIGNED
                                 %span{class:"label label-success"}="Assigned"
                               - else
                                 %span{class:"label label-danger"}="Unknown"
@@ -117,13 +117,13 @@
                     %td Degree
                     %td
                       - case student.degree
-                        - when Student::UNDERGRAD
+                        - when StudentApplication::UNDERGRAD
                           Undergraduate
-                        - when Student::MENG
+                        - when StudentApplication::MENG
                           M.Eng
-                        - when Student::MS
+                        - when StudentApplication::MS
                           MS
-                        - when Student::PHD
+                        - when StudentApplication::PHD
                           PHD
                   %tr
                     %td GPA
