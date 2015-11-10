@@ -73,7 +73,28 @@ class CoursesController < ApplicationController
 
   def select_new_ta
     @course = Course.find(params[:id])
-    @studentapplications = StudentApplication.where(status: StudentApplication::UNDER_REVIEW)
+    @student_application_status = Hash.new
+    @student_application_assignable = Hash.new
+    @student_application_requesters = Hash.new 
+    @studentapplications = StudentApplication.where(application_pool_id: @course.application_pool_id)
+    @studentapplications.each do |studentapplication|
+      @app_course_matching = AppCourseMatching.find_by(student_application_id: studentapplication.id)
+      @assignable = true
+      if not @app_course_matching
+        @app_course_matching.each do |app_matching|
+          if app_matching.status == AppCourseMatching.LECTURER_REQUEST
+            @requested_course = Course.find(app_matching.course_id)
+            student_application_requesters << @requested_course.lecturer
+          else
+            @student_application_status[studentapplication.id] << app_matching.status
+            if app_matching.status != AppCourseMatching >= 2
+              @assignable = false 
+            end
+          end
+        end
+      end
+      @student_application_assignable[studentapplication.id] = @assignable
+    end
   end
 
   def assign_new_ta
