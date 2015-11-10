@@ -15,7 +15,7 @@
       %th Name
       %th GPA
       %th Degree Program
-      %th AppPool Id
+      %th Application Term
       %th Status
   - @studentapplications.each do |studentapplication|
     %tbody
@@ -33,7 +33,7 @@
               MS
             - when StudentApplication::PHD
               PHD
-        %td= studentapplication.application_pool_id
+        %td= ApplicationPool::getAppPoolYearSemester studentapplication.application_pool_id
         %td
           - case studentapplication.status
             - when StudentApplication::UNDER_REVIEW
