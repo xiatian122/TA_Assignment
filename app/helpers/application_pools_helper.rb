@@ -1,0 +1,2 @@
+module ApplicationPoolsHelper
+end

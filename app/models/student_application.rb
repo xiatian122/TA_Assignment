@@ -1,6 +1,6 @@
 class StudentApplication < ActiveRecord::Base
   attr_accessible :uin, :first_name, :last_name, :advisor, :degree, :start_semester, :gpa, :position,
-                  :course_taken, :course_taed, :preferred_area, :preferred_course, :status, :active_term, :course_assigned
+                  :course_taken, :course_taed, :preferred_area, :preferred_course, :status, :active_term, :course_assigned, :application_pool_id, :user_id
   UNDER_REVIEW = 1
   TEMP_ASSIGNED = 2
   EMAIL_NOTIFIED = 3
