@@ -29,6 +29,64 @@
 
 =link_to 'Edit', edit_user_path(@user)
 
+-if not @studentapplications.empty?
+  %hr
+  .row
+    .col-xs-12
+      %h2{class:"text-left"}="Assignment Status"
+  -@application_pools.each do |application_pool|
+    -if not @studentapplications.has_key?(application_pool.id)
+      .row
+        .col-xs-1
+          %p= application_pool.year
+        .col-xs-1
+          %p= application_pool.semester
+        .col-xs-2 
+          %span{class:"label label-default"}="Not Applied"
+    -else
+      -if not @application_status.has_key?(application_pool.id)
+        .row
+          .col-xs-1
+            %p= application_pool.year
+          .col-xs-1
+            %p= application_pool.semester
+          .col-xs-2 
+            %span{class:"label label-default"}="Under Review"
+      -else
+        -@application_status[application_pool.id].each do |status|
+          .row
+            .col-xs-1
+              %p= application_pool.year
+            .col-xs-1
+              %p= application_pool.semester
+            .col-xs-2
+              =status['Course']
+            .col-xs-2
+              -case status['Position']
+                -when AppCourseMatching::FULLTA
+                Full TA
+                -when AppCourseMatching::HALFTA
+                Half TA
+            .col-xs-2
+              -case status['Status']
+                - when StudentApplication::TEMP_ASSIGNED
+                %span{class:"label label-primary"}="Temporary Assigned"
+                - when StudentApplication::EMAIL_NOTIFIED
+                %span{class:"label label-primary"}="Temporary Assigned"
+                - when StudentApplication::STUDENT_CONFIRMED
+                %span{class:"label label-success"}="Student Confirmed"
+                - when StudentApplication::STUDENT_REJECTED
+                %span{class:"label label-warning"}="Student Rejected"
+                - when StudentApplication::ASSIGNED
+                %span{class:"label label-success"}="Assigned"
+                - else
+                %span{class:"label label-danger"}="Unknown"
+            -if status['Status'] == StudentApplication::EMAIL_NOTIFIED
+              .col-xs-2
+                =link_to('Accept', accept_ta_assignment_path(:id => @user.id, :match_id => status['Matching_id'])) + ' / ' + link_to('Reject', reject_ta_assignment_path(:match_id => status['Matching_id']))
+
+
+
 %hr
 .row
   .col-xs-12

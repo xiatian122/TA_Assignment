@@ -17,16 +17,14 @@ class CoursesController < ApplicationController
         tadata_ids << matching.student_application_id
         tadata_status[matching.student_application_id] = {'status' => matching.status, 'position' => matching.position}
       end
-      tadata = StudentApplication.where("id = ?", tadata_ids)  # This will return one list
+      tadata = StudentApplication.where(id: tadata_ids)  # This will return one list
       @courses_ta[course.id] = tadata
       @ta_status[course.id] = tadata_status
 
       internal_courses_ta[course.id] = []
       tadata.each_index do |i|
         internal_courses_ta[course.id][i] = tadata[i].attributes
-      end
-
-      
+      end      
     end
     @SlotStatus = getSlotStatusForAllCourses(internal_courses_ta)
     #debugger
@@ -93,6 +91,7 @@ class CoursesController < ApplicationController
       @app_course_matching = AppCourseMatching.where(student_application_id: studentapplication.id)
       info_for_student = Hash.new 
       assignable = true
+      assignable_position = Array.new
 
       #Retrieve status info for each assigned course
       if @app_course_matching.length > 0
@@ -102,6 +101,8 @@ class CoursesController < ApplicationController
           assignable = false
         elsif @app_course_matching[0].position == AppCourseMatching::FULLTA
           assignable = false
+        else
+          assignable_position << {AppCourseMatching::HALFTA => 'Half TA'}
         end
 
         @app_course_matching.each do |app_matching|
@@ -109,8 +110,12 @@ class CoursesController < ApplicationController
           matching_for_student <<{'Course' => matched_course.name, 'Position' => app_matching.position, 'app_status' =>app_matching.status } 
         end
         info_for_student['status'] = matching_for_student
+      else
+        assignable_position << {AppCourseMatching::FULLTA => 'Full TA'}
+        assignable_position << {AppCourseMatching::HALFTA => 'Half TA'}
       end
       info_for_student['assignable'] = assignable
+      info_for_student['assignable_position'] = assignable_position
 
       #Retrieve requester info
       requesters = studentapplication.requester

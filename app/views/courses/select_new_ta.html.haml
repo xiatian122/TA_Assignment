@@ -4,6 +4,8 @@
   .col-xs-12
     %h1{class:"text-left"}="Assign new TA for #{@course.name}"
 
+.divide20
+
 = form_tag assign_new_ta_path(@course.id), :method => :get, :id => 'tas_form' do
   .row
     .col-xs-12
@@ -38,8 +40,10 @@
                 .col-xs-2
                   %select#position.form-control{:name => "positions[#{studentapplication.id}]", :id => "positions_#{studentapplication.id}"}
                     %option{:value => nil} 
-                    %option{:value => AppCourseMatching::FULLTA} Full TA
-                    %option{:value => AppCourseMatching::HALFTA} Half TA
+                    -@student_application_info[studentapplication.id]['assignable_position'].each do |assignable_position|
+                      -assignable_position.each do |key, val|
+                        %option{:value => key}= "#{val}"
+
                 .col-xs-2= studentapplication.uin
                 .col-xs-2= studentapplication.fullName()
                 .col-xs-1= studentapplication.gpa
