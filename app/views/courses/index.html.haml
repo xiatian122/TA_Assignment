@@ -59,8 +59,14 @@
                         .row
                           .col-xs-2
                             %a{ "data-toggle" => "modal",  "data-target" => "#myModal-#{course.id}-#{ta.id}"}=ta.fullName()
+                          .col-xs-2
+                            -case @ta_status[course.id][ta.id]['position']
+                              -when AppCourseMatching::FULLTA
+                              Full TA
+                              -when AppCourseMatching::HALFTA
+                              Half TA
                           .col-xs-3 
-                            - case ta.status
+                            - case @ta_status[course.id][ta.id]['status']
                               - when StudentApplication::UNDER_REVIEW
                                 %span{class:"label label-default"}="Under Review"
                               - when StudentApplication::TEMP_ASSIGNED
