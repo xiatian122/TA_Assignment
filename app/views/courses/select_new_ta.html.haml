@@ -5,22 +5,82 @@
     %h1{class:"text-left"}="Assign new TA for #{@course.name}"
 
 = form_tag assign_new_ta_path(@course.id), :method => :get, :id => 'tas_form' do
+  .row
+  .col-xs-12
+    .panel.panel-default.remove-margin.pseudo-table-heading
+      / .panel-heading Panel heading without title
+      .panel-body
+        .col-xs-1 
+          %b Select
+        .col-xs-1 
+          %b Position
+        .col-xs-2
+          %b Student UIN
+        .col-xs-1
+          %b Name
+        .col-xs-1
+          %b GPA
+        .col-xs-2
+          %b Degree Program
+        .col-xs-2 
+          %b Application Term
+        .col-xs-1 
+          %b Status
+        .col-xs-1 
+          %b Detail
+
+  .row
+    .col-xs-12
+      #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
+
+        - @studentapplications.each do |studentapplication|
+          .panel.panel-default  
+          .panel-heading{:role => "tab"}
+            .row{"aria-controls" =>"collapse#{studentapplication.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{studentapplication.id}", :role => "button", :id=> "heading#{studentapplication.id}"}
+              .col-xs-1.td=check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
+              .col-xs-1.td
+              .col-xs-1.td= studentapplication.uin
+              .col-xs-2.td= studentapplication.fullName()
+              .col-xs-1.td= studentapplication.gpa
+              .col-xs-2.td
+                - case studentapplication.degree
+                  - when StudentApplication::UNDERGRAD
+                    Undergraduate
+                  - when StudentApplication::MENG
+                    M.Eng
+                  - when StudentApplication::MS
+                    MS
+                  - when StudentApplication::PHD
+                    PHD
+              .col-xs-2.td=ApplicationPool::getAppPoolYearSemester studentapplication.application_pool_id
+              .col-xs-1.td
+                - case studentapplication.status
+                  - when 1
+                    %span{class:"label label-default"}="Under Review"
+                  - when 2
+                    %span{class:"label label-primary"}="Position Assigned"
+                  - when 3
+                    %span{class:"label label-success"}="Confirmed"
+                  - else
+                    %span{class:"label label-danger"}="Unknown"
+              .col-xs-1.td= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
+
+
   %table#studentapplications.table.table-striped
     %thead
       %tr
-        %th select
-        %th detail
+        %th Select
         %th Student UIN
         %th Name
         %th GPA
         %th Degree Program
-        %th Active Term
+        %th Applied Term
         %th Status
-    %tbody
-      - @studentapplications.each do |studentapplication|
+        %th Detail
+    - @studentapplications.each do |studentapplication|
+      %tbody
         %tr
           %td= check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
-          %td= link_to 'Show Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
           %td= studentapplication.uin
           %td= studentapplication.fullName()
           %td= studentapplication.gpa
@@ -34,7 +94,7 @@
                 MS
               - when StudentApplication::PHD
                 PHD
-          %td= studentapplication.active_term
+          %td= ApplicationPool::getAppPoolYearSemester studentapplication.application_pool_id
           %td
             - case studentapplication.status
               - when 1
@@ -45,6 +105,7 @@
                 %span{class:"label label-success"}="Confirmed"
               - else
                 %span{class:"label label-danger"}="Unknown"
+          %td= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
     = submit_tag 'Assign', :id => 'assign_ta', class:'btn btn-primary'
 
 / .row
