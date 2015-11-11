@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151110025439) do
+ActiveRecord::Schema.define(version: 20151111033819) do
 
   create_table "app_course_matchings", force: :cascade do |t|
     t.integer  "student_application_id"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20151110025439) do
     t.datetime "updated_at",          null: false
     t.integer  "application_pool_id"
     t.integer  "user_id"
+    t.string   "requester"
   end
 
   create_table "users", force: :cascade do |t|
