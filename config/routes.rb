@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   post '/users/:id/create_ta_application' => 'users#create_ta_application', :as => :create_ta_application
   get '/users/:id/withdraw_application' => 'users#withdraw_student_application', :as => :withdraw_student_application
 
+  get '/users/:id/accept_assignment' => 'users#accept_ta_assignment', :as => :accept_ta_assignment
+  get '/users/:id/reject_assignment' => 'users#reject_ta_assignment', :as => :reject_ta_assignment
+
   root 'static_pages#home'
 
   get ({'help' => 'static_pages#help'})

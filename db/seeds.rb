@@ -61,6 +61,7 @@ courses = [
     description: "2015 Fall",
     ta: "N/A",
     credits: 3,
+    :application_pool_id => '1',
     notes: ""
   },
   {
@@ -72,6 +73,7 @@ courses = [
     description: "2015 Fall",
     ta: "N/A",
     credits: 3,
+    :application_pool_id => '1',
     notes: ""
   },
   {
@@ -83,6 +85,7 @@ courses = [
     description: "2015 Fall",
     ta: "N/A",
     credits: 3,
+    :application_pool_id => '1',
     notes: ""
   },
   {
