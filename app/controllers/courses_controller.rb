@@ -183,7 +183,7 @@ class CoursesController < ApplicationController
       end
     end
     flash[:notice] = "New TA assigned for #{@course.name}"
-    redirect_to courses_path
+    redirect_to(courses_path + "#heading#{id}")
   end
 
   # Email  
