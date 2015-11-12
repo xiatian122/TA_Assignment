@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
   include CoursesHelper
-  before_filter :check_for_cancel, :only => [:create, :update]
+  before_filter :check_for_cancel, :check_for_delete, :only => [:create, :update]
 
 	def index
     @courses = Course.all
@@ -35,6 +35,7 @@ class CoursesController < ApplicationController
   # default: render 'new' template
     @course = Course.new
   end
+  
 
 
   # POSt /courses
@@ -45,6 +46,7 @@ class CoursesController < ApplicationController
     redirect_to courses_path
     end
 
+
   # GET /courses/:id
   def show
     @course = Course.find(params[:id])
@@ -54,8 +56,8 @@ class CoursesController < ApplicationController
   def edit
     @course = Course.find params[:id]
   end
-  
 
+  
   # PATCH /courses/:id
   def update
     @course = Course.find params[:id]
@@ -68,6 +70,28 @@ class CoursesController < ApplicationController
     if params[:commit] == "Cancel"
       redirect_to courses_path
     end
+  end
+  
+  def check_for_delete
+    if params[:commit] == "Delete"
+      ## delete the course
+      @course = Course.find(params[:id])
+      if @course.exists!
+        @course.destroy!
+      end
+      redirect_to courses_path
+    end
+  end
+  
+  # GET /courses/#drop_all
+  def drop_all
+    byebug
+    @course_num = params[:id]
+    @courses = Course.all
+    if @courses.exists?
+      @courses.destroy_all
+    end
+    redirect_to courses_path
   end
 
   # DELETE /courses/:id
