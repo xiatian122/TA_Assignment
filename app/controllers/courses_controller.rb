@@ -56,6 +56,23 @@ class CoursesController < ApplicationController
   def edit
     @course = Course.find params[:id]
   end
+  
+  
+  # GET /courses/:id
+  def upload
+    @client = Google::APIClient.new(
+      :application_name => 'bazinga',
+      :application_version => '1.0.0'
+    )
+    @auth = @client.authorization
+    @auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
+    @auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
+    @auth.scope =
+      "https://www.googleapis.com/auth/drive " +
+      "https://spreadsheets.google.com/feeds/"
+    @auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+    @auth_uri = @auth.authorization_uri.to_s
+  end
 
   
   # PATCH /courses/:id

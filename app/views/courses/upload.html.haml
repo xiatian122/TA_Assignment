@@ -1,0 +1,15 @@
+-# file: app/views/courses/upload.html.haml
+
+%p#notice=notice
+
+.row
+  .col-xs-12
+    // We will not hard code 2015 fall here in furture
+    %h1{class:"text-left"}="Import Course Table from Google Spreadsheet "
+
+.row
+  .col-xs-6
+    //=link_to "Generate Random Code",@auth_uri,class:"btn btn-primary"
+    #browse_app
+    //%a.btn.btn-large.btn-info{:onclick => @auth_uri} Generate Random Code
+    %a.btn.btn-large.btn-info{:href => @auth_uri, :target => "_blank"} Browse
