@@ -10,3 +10,29 @@ $(document).ready(function (){
     
   });
 });
+
+
+// // For Delete Button
+// $('button[name="remove_levels"]').on('click', function(e){
+//     var $form=$(this).closest('form');
+//     e.preventDefault();
+//     $('#confirm').modal({ backdrop: 'static', keyboard: false })
+//         .one('click', '#delete', function (e) {
+//             $form.trigger('submit');
+//         });
+// });
+
+// // Eample bootstrap code
+// <form action ="<?php echo $URL .'/admin/privileges.php?action=editable' ?>" method="POST">
+// <button class='btn btn-danger btn-xs' type="submit" name="remove_levels" value="delete"><span class="fa fa-times"></span> delete</button>
+// </form>
+
+// <div id="confirm" class="modal hide fade">
+//   <div class="modal-body" id="delete-modal">
+//     Are you sure?
+//   </div>
+//   <div class="modal-footer">
+//     <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+//     <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+//   </div>
+// </div>

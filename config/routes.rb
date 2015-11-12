@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   get '/courses/(:id)/delete_ta' => 'courses#delete_ta', :as => :delete_ta, :action => :delete_ta
   get '/courses/(:id)/email_ta_notification' => 'courses#email_ta_notification', :as => :email_ta_notification, :action => :email_ta_notification
   get '/courses/(:id)/confirm_ta' => 'courses#confirm_ta', :as => :confirm_ta, :action => :confirm_ta
+  get '/courses/(:id)/drop_all' => 'courses#drop_all', :as => :drop_all, :action => :drop_all
 
   resources :application_pools
   #root :to => redirect('/students')
