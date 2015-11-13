@@ -61,6 +61,7 @@ $(document).ready(function (){
   });
 
   
+  
 
 
   //http://railsapps.github.io/rails-javascript-include-external.html
