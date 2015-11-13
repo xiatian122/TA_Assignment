@@ -10,6 +10,7 @@ class CreateCourses < ActiveRecord::Migration
       t.text :description
       t.string :ta
       t.text :notes
+      t.string :suggestion
 
       t.timestamps null: false
     end
