@@ -288,7 +288,7 @@ class CoursesController < ApplicationController
     ## Sent mail to @user
     UserNotifier.send_ta_notification(@user).deliver_now
     flash[:notice] = "A Notification Email has been sent to #{@studentapplication.fullName()}: #{@user.email}"
-    redirect_to courses_path
+    redirect_to courses_path+"#heading#{params[:id]}"
   end
 
   # Confirm courses/confirm_ta/:id/:ta_id
@@ -302,7 +302,7 @@ class CoursesController < ApplicationController
     # @studentapplication.save!
 
     flash[:notice] = "TA #{@studentapplication.fullName()} is confirmd!"
-    redirect_to courses_path
+    redirect_to courses_path+"#heading#{params[:id]}"
   end
 
   # Delete courses/delete_ta
@@ -317,6 +317,6 @@ class CoursesController < ApplicationController
     # @studentapplication.save!
 
     flash[:notice] = "TA #{@studentapplication.fullName()} is deleted for #{@course.name}"
-    redirect_to courses_path
+    redirect_to courses_path+"#heading#{params[:id]}"
   end
 end
