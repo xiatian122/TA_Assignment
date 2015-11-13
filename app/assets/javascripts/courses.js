@@ -40,9 +40,9 @@ $(document).ready(function (){
       }
       else {
         $(anchor).collapse('toggle');
+        $(anchor).collapse('toggle');
       }
     }
-
   }
   // Bowei: I understand this piece of code is weired, but I have to close this accordian before go to new link,
   // I have to update the  Bootstrap event manager that this accordian has been closed, 
@@ -61,6 +61,21 @@ $(document).ready(function (){
 
   });
 
+  $('.delete-link, .confirm-link, .email-link').click(function (event){
+    var atag = this;
+    event.preventDefault();
+    event.stopPropagation();
+    $.ajax({
+      url:$(atag).attr("href"),
+
+      success:function (data){
+        window.location.reload();
+      },
+      error: function (){
+        alert("error");
+      }
+    });
+  });
   
   
 
