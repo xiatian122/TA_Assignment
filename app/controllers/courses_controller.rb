@@ -287,8 +287,7 @@ class CoursesController < ApplicationController
     @user = User.find_by(:uin => @studentapplication.uin)
     ## Sent mail to @user
     UserNotifier.send_ta_notification(@user).deliver_now
-    flash[:notice] = "A Notification Email has been sent to #{@studentapplication.fullName()}: #{@user.email}"
-    redirect_to courses_path
+    render json:{"ta_id"=>params[:ta_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}
   end
 
   # Confirm courses/confirm_ta/:id/:ta_id
@@ -300,9 +299,7 @@ class CoursesController < ApplicationController
     @studentapplication = StudentApplication.find(params[:ta_id])
     # @studentapplication.status = StudentApplication::ASSIGNED
     # @studentapplication.save!
-
-    flash[:notice] = "TA #{@studentapplication.fullName()} is confirmd!"
-    redirect_to courses_path
+    render json:{"ta_id"=>params[:ta_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"confirm"}
   end
 
   # Delete courses/delete_ta
@@ -315,8 +312,6 @@ class CoursesController < ApplicationController
     # @studentapplication.status = StudentApplication::UNDER_REVIEW
     # @studentapplication.course_assigned = 0
     # @studentapplication.save!
-
-    flash[:notice] = "TA #{@studentapplication.fullName()} is deleted for #{@course.name}"
-    redirect_to courses_path
+    render json:{"ta_id"=>params[:ta_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"delete"}
   end
 end

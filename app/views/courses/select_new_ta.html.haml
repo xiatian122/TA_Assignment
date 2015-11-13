@@ -35,6 +35,7 @@
             .panel-heading{:role => "tab"}
               .row{"aria-controls" =>"collapse#{studentapplication.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{studentapplication.id}", :role => "button", :id=> "heading#{studentapplication.id}"}
                 .col-xs-1
+                  // need to refer "http://apidock.com/rails/ActionView/Helpers/FormTagHelper/check_box_tag" to see API of  check_box_tag
                   - if @student_application_info[studentapplication.id]['assignable']
                     =check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
                 .col-xs-2
@@ -139,7 +140,7 @@
 / .row
 /   .col-xs-6=link_to "Assign",assign_new_ta_path(:ids),class:"btn btn-primary"
 
-=link_to "Back to courses list", courses_path
+%a{href:courses_path+ "#heading#{@course.id}" , class:"back-to-class-list" } Back to courses list
 
 - @studentapplications.each do |studentapplication|
   %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
