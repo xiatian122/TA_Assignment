@@ -11,7 +11,8 @@ $(document).ready(function (){
     var $tag = this;
     event.preventDefault();
     event.stopPropagation();
-    if (tag == 'a'){
+    if (tag === 'a'){
+      console.log($($tag).attr('href'));
       window.location.href=$($tag).attr('href');
     } else if (tag == 'option'){
       console.log("option");
@@ -68,8 +69,8 @@ $(document).ready(function (){
   // Basically ruby on rails originally does not allow page-specific javascript ??!
   // since ruby on rails adopts a very strange javascript importing mechanism(according the first three lines of comments of this file),
   // following code is related with select new TA
-
-  $('a.back-to-class-list').click(tagJqueryClickCb);
+  console.log("select new ta section")
+  $('a.back-to-class-list').click(function (e){ tagJqueryClickCb.call(this,e,"a");});
 
   $('input[type=checkbox], select').click(function (e){
     e.stopPropagation();
