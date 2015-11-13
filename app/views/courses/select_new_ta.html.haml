@@ -139,7 +139,7 @@
 / .row
 /   .col-xs-6=link_to "Assign",assign_new_ta_path(:ids),class:"btn btn-primary"
 
-=link_to "Back to courses list", courses_path
+%a{href:courses_path+ "#heading#{@course.id}" , class:"back-to-class-list" } Back to courses list
 
 - @studentapplications.each do |studentapplication|
   %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}

@@ -5,21 +5,78 @@
 
 // following code is to prevent course row from expanding when user clicked edit button of each course row at courses index 
 $(document).ready(function (){
+  console.log("course. js onReady()");
+
+  function tagJqueryClickCb ( event, tag){
+    var $tag = this;
+    event.preventDefault();
+    event.stopPropagation();
+    if (tag == 'a'){
+      window.location.href=$($tag).attr('href');
+    } else if (tag == 'option'){
+      console.log("option");
+    }
+  }
+
   $('.edit-op-btn').click(function(e){
     e.preventDefault();
     e.stopPropagation();
     window.open($(this).attr('href'));
   });
 
+  console.log(window.location.hash)
+  console.log(window.location.href)
 
-  window.setTimeout(function delayed(){
-    if (window.location.hash){
-      var anchor = window.location.hash;
+  if (window.location.hash){
+    var anchor = window.location.hash;
+    console.log(anchor);
+    if(anchor.match(/^#heading\d+$/)){
       anchor = anchor.replace("heading","collapse");
       console.log(anchor);  // #heading1
-      $(anchor).collapse("show");
+      if (!$(anchor).hasClass('in')) {
+        console.log("here");  
+        $(anchor).collapse('toggle');
+      }
+      else {
+        $(anchor).collapse('toggle');
+      }
     }
-  },500);
+
+  }
+  // Bowei: I understand this piece of code is weired, but I have to close this accordian before go to new link,
+  // I have to update the  Bootstrap event manager that this accordian has been closed, 
+  // otherwise, if use click back to courses, the accordian cannot be expanded, due to bootstrap event manager will
+  // wrongly believe that the accordian has already been expanded.
+
+  $('a.add-new-ta').click(function(event){
+    var atag = this;
+    event.preventDefault();
+    event.stopPropagation();
+    var $target = $(this).attr("data-toggle-target");
+    $($target).collapse("hide");
+    setTimeout(function (){
+      window.location.href= $(atag).attr('href');
+    },500);
+
+  });
+
+  
+
+
+  //http://railsapps.github.io/rails-javascript-include-external.html
+  // Basically ruby on rails originally does not allow page-specific javascript ??!
+  // since ruby on rails adopts a very strange javascript importing mechanism(according the first three lines of comments of this file),
+  // following code is related with select new TA
+
+  $('a.back-to-class-list').click(tagJqueryClickCb);
+
+  $('input[type=checkbox], select').click(function (e){
+    e.stopPropagation();
+  });
+  $('a[href=#myModal]').click( function (e){
+    e.stopPropagation();
+    $($(this).attr('data-target')).modal('show');
+  });
 
 
 });

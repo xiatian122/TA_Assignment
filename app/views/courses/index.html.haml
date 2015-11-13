@@ -93,7 +93,7 @@
               .divide30
               .row
                 .col-xs-1.col-xs-offset-10
-                  %a{:href => select_new_ta_path(course.id), :class => "btn btn-primary"} Add new TA
+                  %a{:href => select_new_ta_path(course.id), :class => "btn btn-primary add-new-ta" ,"data-toggle-target"=>"#collapse#{course.id}"} Add new TA
 
 .row
   .col-xs-6
