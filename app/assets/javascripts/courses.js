@@ -69,6 +69,11 @@ $(document).ready(function (){
       url:$(atag).attr("href"),
 
       success:function (data){
+        if ($(atag).hasClass("confirm-link")){
+          var $this_li = $( $(atag).attr("data-target") );
+          $this_li.find(".label").removeClass().addClass("label label-success").html("Assigned");;
+          return;
+        }
         window.location.reload();
       },
       error: function (){
