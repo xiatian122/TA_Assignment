@@ -4,8 +4,13 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
 
+# Use Google Spreadsheet
 gem 'google-api-client', :require => 'google/api_client'
 gem 'google_drive'
+
+
+# Use active-record import: enables insert multiple records at once
+gem 'activerecord-import'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
