@@ -56,7 +56,96 @@ class CoursesController < ApplicationController
   def edit
     @course = Course.find params[:id]
   end
+  
+  
+  # GET /courses/:id
+  def upload
+    ## :id == 0 => initial visit creates the variable
+    ##if params[:id] == 0 && $client.nil?
+    $client = Google::APIClient.new(
+      :application_name => 'bazinga',
+      :application_version => '1.0.0'
+    )
+    $auth = $client.authorization
+    $auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
+    $auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
+    $auth.scope =
+      "https://www.googleapis.com/auth/drive " +
+      "https://spreadsheets.google.com/feeds/"
+    $auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+    @auth_uri = $auth.authorization_uri.to_s
+    ##end
+   
+      
+  end
+  
+  # GET /courses/:id
+  def process_import
+    if params[:code] == "" || params[:url] == ""
+      flash[:notice] = "Please get the code and paste the url before clicking import"
+      redirect_to courses_path + "/0/upload"
+    end
+      
+    ## Establish Google connection
+    $client = Google::APIClient.new(
+      :application_name => 'bazinga',
+      :application_version => '1.0.0'
+    )
+    $auth = $client.authorization
+    $auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
+    $auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
+    $auth.scope =
+      "https://www.googleapis.com/auth/drive " +
+      "https://spreadsheets.google.com/feeds/"
+    $auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+    
+    
+    $auth.code = params[:code]
+    @url = params[:url]
+    
+    begin
+      $auth.fetch_access_token!
+    rescue Exception
+    end
+  
+    if $auth.access_token.nil?
+      flash[:notice] = "Please get the code and paste the url before clicking import"
+      redirect_to courses_path + "/0/upload"
+    end
+    @my_session = GoogleDrive.login_with_oauth($auth.access_token)
+    begin
+      @ws = @my_session.spreadsheet_by_url(@url).worksheets[0]
+    rescue Exception
+    end
+    
+    if @ws.nil?
+      flash[:notic] = "Please make sure the code and url correnct: Try Again!"
+      redirect_to courses_path + "/0/upload"
+    end
 
+    ## Process data in spread sheet: By default, the sheet is 3 cols with column names [course_id, course_title, instructor]
+    @row_num = @ws.num_rows - 1
+    @col_num = @ws.num_cols
+    
+    if @col_num % 3 != 0
+      flash[:notice] = "The spreadsheet is wrong: more than 3 columns"
+      redirect_to courses_path + "/0/upload"
+    end
+    
+    ### Fetch data from spreadsheet & insert into db
+    @data = []
+    
+    (1..@row_num).each do |i|
+      @data << Course.new(
+        :cid      => @ws[i+1, 1],
+        :name     => @ws[i+1, 2],
+        :lecturer => @ws[i+1, 3]
+        )
+    end
+    Course.import @data
+    
+    redirect_to courses_path
+  end
   
   # PATCH /courses/:id
   def update
@@ -85,7 +174,6 @@ class CoursesController < ApplicationController
   
   # GET /courses/#drop_all
   def drop_all
-    byebug
     @course_num = params[:id]
     @courses = Course.all
     if @courses.exists?
