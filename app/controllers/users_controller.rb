@@ -5,23 +5,6 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
-    @courselist = Course.where(:lecturer => 'ABC')
-    @courses_ta = Hash.new 
-    internal_courses_ta = Hash.new  # internal usage
-    @ta_status = Hash.new
-    @courselist.each do |course|
-      tadata_matching = AppCourseMatching.where(course_id: course.id)
-      tadata_ids = Array.new
-      tadata_status = Hash.new 
-      tadata_matching.each do |matching|
-        tadata_ids << matching.student_application_id
-        tadata_status[matching.student_application_id] = {'status' => matching.status, 'position' => matching.position}
-      end
-      tadata = StudentApplication.where(id: tadata_ids)  # This will return one list
-      @courses_ta[course.id] = tadata
-      @ta_status[course.id] = tadata_status
-      @suggestion = course.suggestion
-    end
   end
 
   # GET /users/1
@@ -216,25 +199,92 @@ class UsersController < ApplicationController
   
   def submit_ta_suggestion
     id = params[:id]
-    @course = Course.find(id)
+    @course = Course.find_by(id)
     if params[:ids]
       new_tas = params[:ids].keys
-      positions = params[:positions]
       if not new_tas.empty?
         new_tas.each do |ta_id|
-          if @course.suggestion
-            @course.suggestion << ',' + StudentApplication.find(ta_id).last_name
+          studentapplication = StudentApplication.find(ta_id)
+          if @course.suggestion != nil
+            @course.suggestion << '/' + studentapplication.first_name + ' ' + studentapplication.last_name + ';' + "#{ta_id}"
           else
-            @course.suggestion = StudentApplication.find(ta_id)
+            @course.suggestion = studentapplication.first_name + ' ' + studentapplication.last_name+ ';' +"#{ta_id}"
           end
+          if studentapplication.requester != nil
+            studentapplication.requester << ',' + "#{@course.id}"
+          else
+            studentapplication.requester = "#{@course.id}"
+          end
+          studentapplication.save!
             # @studentapplication.course_assigned = @course.id
             # @studentapplication.status = StudentApplication::TEMP_ASSIGNED
             # @studentapplication.save!
         end
       end
     end
-    flash[:notice] = "New TA assigned for #{@course.name}"
-    redirect_to(users_path)
+    @course.save!
+    redirect_to(lecturer_show_path(session[:pname]))
+  end
+  
+  def delete_suggestion
+    id = params[:id]
+    @course = Course.find(id)
+    suggestionid = @course.suggestion.split('/')
+    suggestionid.each do |studentid|
+      ta_id = studentid.split(';')
+      @ta = StudentApplication.find_by_id(ta_id[1])
+      if @ta.requester != nil
+      courserelated = @ta.requester.split(',')
+      @ta.requester = nil
+      courserelated.delete("#{id}")
+      courserelated.each do |course|
+        if @ta.requester != nil
+          @ta.requester << ','+course
+        else
+          @ta.requester = course
+        end
+      end
+      @ta.save!
+      end
+    end
+    @course.suggestion = nil
+    @course.save!
+    redirect_to(lecturer_show_path(session[:pname]))
+  end
+    
+  
+  def lecturer_show
+    @pname = params[:name]
+    session[:pname] = @pname
+    @courselist = Course.where(:lecturer => @pname)
+    @courses_ta = Hash.new
+    @suggestion = Array.new
+    internal_courses_ta = Hash.new  # internal usage
+    @ta_status = Hash.new
+    @courselist.each do |course|
+      tadata_matching = AppCourseMatching.where(course_id: course.id)
+      tadata_ids = Array.new
+      tadata_status = Hash.new 
+      tadata_matching.each do |matching|
+        tadata_ids << matching.student_application_id
+        tadata_status[matching.student_application_id] = {'status' => matching.status, 'position' => matching.position}
+      end
+      tadata = StudentApplication.where(id: tadata_ids)  # This will return one list
+      @courses_ta[course.id] = tadata
+      @ta_status[course.id] = tadata_status
+      if course.suggestion != nil
+      coursesuggestion = course.suggestion.split('/')
+      coursesuggestion.each do |taname|
+        if @suggestion[course.id] != nil
+          @suggestion[course.id] << '/' + taname.split(';')[0]
+        else
+          @suggestion[course.id] = taname.split(';')[0]
+        end
+      end
+      else
+        @suggestion[course.id] = nil
+      end
+    end
   end
   
   private
