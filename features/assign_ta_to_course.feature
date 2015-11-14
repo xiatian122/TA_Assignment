@@ -31,8 +31,3 @@ Scenario: Select one TA and delete one TA
   When I follow "Delete"
   Then I should see "delete"
 
-
-Scenario: Delete one TA
-
-
-

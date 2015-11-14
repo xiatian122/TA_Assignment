@@ -17,3 +17,5 @@ When /^(?:|I )follow "(.+)" in expanded accordian$/ do |link|
     click_link(link)
   end
 end
+
+
