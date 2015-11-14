@@ -22,9 +22,10 @@ module NavigationHelpers
       
     when /^the course home\s?page$/
       '/courses'
+    when /^the edit page of course_id \d+/
+      '/courses/'+ page_name.match(/\d+/)[0] +'/edit'
 
     when /^page for selecting TA for course_id \d+$/
-      
       '/courses/'+ page_name.match(/\d+/)[0] +'/select_new_ta'
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

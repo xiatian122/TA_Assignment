@@ -46,7 +46,7 @@
               .col-xs-2.td="#{@SlotStatus[course.id][:assigned] } / #{@SlotStatus[course.id][:slots] }"
               .col-xs-3.td=course.lecturer
               .col-xs-2.td
-                %a.btn.btn-default.btn-sm.edit-op-btn{:href=> edit_course_path(course.id) ,"data-toggle" =>"tooltip", "data-placement" => "bottom", "data-title" => "Edit"}
+                %a.btn.btn-default.btn-sm.edit-op-btn{:href=> edit_course_path(course.id) ,"data-toggle" =>"tooltip", "data-placement" => "bottom", "data-title" => "Edit", id:"edit-#{course.id}"}
                   %span.glyphicon.glyphicon-edit
                 
 
