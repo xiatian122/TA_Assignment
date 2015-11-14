@@ -9,6 +9,9 @@ Rails.application.routes.draw do
 
   get '/users/:id/accept_assignment' => 'users#accept_ta_assignment', :as => :accept_ta_assignment
   get '/users/:id/reject_assignment' => 'users#reject_ta_assignment', :as => :reject_ta_assignment
+  
+  get '/users/:id/uploadusers' => 'users#uploadusers', :as => :uploadusers
+  get '/users/:id/process_user_import' => 'users#process_user_import', :as => :process_user_import
 
   root 'static_pages#home'
 
