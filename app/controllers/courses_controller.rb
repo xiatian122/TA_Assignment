@@ -164,11 +164,13 @@ class CoursesController < ApplicationController
   def check_for_delete
     if params[:commit] == "Delete"
       ## delete the course
+      # 
       @course = Course.find(params[:id])
-      if @course.exists! && !@course.nil?
+
+      if !@course.nil?
         @course.destroy!
       else
-        flash[:notice] = "The course does not exist! Refresh again!"
+        returnflash[:notice] = "The course does not exist! Refresh again!"
       end
       redirect_to courses_path
     end
