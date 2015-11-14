@@ -41,7 +41,7 @@
         .panel.panel-default  
           .panel-heading{:role => "tab"}
             .row{"aria-controls" =>"collapse#{course.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{course.id}", :role => "button", :id=> "heading#{course.id}"}
-              .col-xs-1.td=course.id
+              .col-xs-1.td=course.cid
               .col-xs-4.td=course.name
               .col-xs-2.td="#{@SlotStatus[course.id][:assigned] } / #{@SlotStatus[course.id][:slots] }"
               .col-xs-3.td=course.lecturer
