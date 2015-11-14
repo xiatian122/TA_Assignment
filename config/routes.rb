@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   get '/users/:id/accept_assignment' => 'users#accept_ta_assignment', :as => :accept_ta_assignment
   get '/users/:id/reject_assignment' => 'users#reject_ta_assignment', :as => :reject_ta_assignment
+  get '/users/(:id)/suggest_ta' => 'users#suggest_ta', :as => :suggest_ta
+  get '/users/(:id)/submit_ta_suggestion' => 'users#submit_ta_suggestion', :as => :submit_ta_suggestion
 
   root 'static_pages#home'
 

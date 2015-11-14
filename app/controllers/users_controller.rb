@@ -5,6 +5,23 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
+    @courselist = Course.where(:lecturer => 'ABC')
+    @courses_ta = Hash.new 
+    internal_courses_ta = Hash.new  # internal usage
+    @ta_status = Hash.new
+    @courselist.each do |course|
+      tadata_matching = AppCourseMatching.where(course_id: course.id)
+      tadata_ids = Array.new
+      tadata_status = Hash.new 
+      tadata_matching.each do |matching|
+        tadata_ids << matching.student_application_id
+        tadata_status[matching.student_application_id] = {'status' => matching.status, 'position' => matching.position}
+      end
+      tadata = StudentApplication.where(id: tadata_ids)  # This will return one list
+      @courses_ta[course.id] = tadata
+      @ta_status[course.id] = tadata_status
+      @suggestion = course.suggestion
+    end
   end
 
   # GET /users/1
@@ -154,6 +171,72 @@ class UsersController < ApplicationController
     redirect_to user_path(@user.id)
   end
 
+  def suggest_ta
+      @course = Course.find(params[:id])
+
+      @student_application_info = Hash.new
+      @student_application_requesters = Hash.new 
+
+      @studentapplications = StudentApplication.where(application_pool_id: @course.application_pool_id)
+
+      @studentapplications.each do |studentapplication|
+      @app_course_matching = AppCourseMatching.where(student_application_id: studentapplication.id)
+      info_for_student = Hash.new 
+      assignable = true
+      assignable_position = Array.new
+
+      #Retrieve status info for each assigned course
+      if @app_course_matching.length > 0
+        matching_for_student = Array.new
+        #if already two half TA, cannot assign
+        if @app_course_matching.length == 2
+          assignable = false
+        elsif @app_course_matching[0].position == AppCourseMatching::FULLTA
+          assignable = false
+        else
+          assignable_position << {AppCourseMatching::HALFTA => 'Half TA'}
+        end
+
+        @app_course_matching.each do |app_matching|
+          matched_course = Course.find app_matching.course_id 
+          matching_for_student <<{'Course' => matched_course.name, 'Position' => app_matching.position, 'app_status' =>app_matching.status } 
+        end
+        info_for_student['status'] = matching_for_student
+      else
+        assignable_position << {AppCourseMatching::FULLTA => 'Full TA'}
+        assignable_position << {AppCourseMatching::HALFTA => 'Half TA'}
+      end
+      info_for_student['assignable'] = assignable
+      info_for_student['assignable_position'] = assignable_position
+
+      #Retrieve requester info
+      @student_application_info[studentapplication.id] = info_for_student
+    end
+  end
+  
+  def submit_ta_suggestion
+    id = params[:id]
+    @course = Course.find(id)
+    if params[:ids]
+      new_tas = params[:ids].keys
+      positions = params[:positions]
+      if not new_tas.empty?
+        new_tas.each do |ta_id|
+          if @course.suggestion
+            @course.suggestion << ',' + StudentApplication.find(ta_id).last_name
+          else
+            @course.suggestion = StudentApplication.find(ta_id)
+          end
+            # @studentapplication.course_assigned = @course.id
+            # @studentapplication.status = StudentApplication::TEMP_ASSIGNED
+            # @studentapplication.save!
+        end
+      end
+    end
+    flash[:notice] = "New TA assigned for #{@course.name}"
+    redirect_to(users_path)
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -164,4 +247,5 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :uin, :email, :login)
     end
+    
 end

@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20151111033819) do
     t.text     "description"
     t.string   "ta"
     t.text     "notes"
+    t.string   "suggestion"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "application_pool_id"
