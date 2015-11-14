@@ -33,3 +33,7 @@ Git Team Work Protocol
 please refer to 
 http://code.tutsplus.com/tutorials/focusing-on-a-team-workflow-with-git--cms-22514
 for teamwork git usage guideline
+
+
+Google Drive Configuration:
+https://github.com/gimite/google-drive-ruby

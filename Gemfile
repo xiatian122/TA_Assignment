@@ -4,6 +4,14 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
 
+# Use Google Spreadsheet
+gem 'google-api-client', :require => 'google/api_client'
+gem 'google_drive'
+
+
+# Use active-record import: enables insert multiple records at once
+gem 'activerecord-import'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 
@@ -38,6 +46,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'haml'
 gem 'protected_attributes'
 # to use attr_accessible
+
+gem 'bootstrap-datepicker-rails'
+gem 'momentjs-rails', '>= 2.9.0'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -4,62 +4,152 @@
   .col-xs-12
     %h1{class:"text-left"}="Assign new TA for #{@course.name}"
 
+.divide20
+
 = form_tag assign_new_ta_path(@course.id), :method => :get, :id => 'tas_form' do
-  %table#students.table.table-striped
-    %thead
-      %tr
-        %th select
-        %th detail
-        %th Student UIN
-        %th Name
-        %th GPA
-        %th Degree Program
-        %th Active Term
-        %th Status
-    %tbody
-      - @students.each do |student|
-        %tr
-          %td= check_box_tag "ids[#{student.id}]", :id => "ids_#{student.id}"
-          %td= link_to 'Show Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{student.id}"
-          %td= student.uin
-          %td= student.fullName()
-          %td= student.gpa
-          %td
-            - case student.degree
-              - when Student::UNDERGRAD
-                Undergraduate
-              - when Student::MENG
-                M.Eng
-              - when Student::MS
-                MS
-              - when Student::PHD
-                PHD
-          %td= student.active_term
-          %td
-            - case student.status
-              - when 1
-                %span{class:"label label-default"}="Under Review"
-              - when 2
-                %span{class:"label label-primary"}="Position Assigned"
-              - when 3
-                %span{class:"label label-success"}="Confirmed"
-              - else
-                %span{class:"label label-danger"}="Unknown"
-    = submit_tag 'Assign', :id => 'assign_ta', class:'btn btn-primary'
+  .row
+    .col-xs-12
+      .panel.panel-default.remove-margin.pseudo-table-heading
+        / .panel-heading Panel heading without title
+        .panel-body
+          .col-xs-1 
+            %b Select
+          .col-xs-2
+            %b Position
+          .col-xs-2
+            %b Student UIN
+          .col-xs-2
+            %b Name
+          .col-xs-1
+            %b GPA
+          .col-xs-2
+            %b Degree Program
+          .col-xs-1 
+            %b Detail
+  .row
+    .col-xs-12
+      #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
+
+        - @studentapplications.each do |studentapplication|
+          .panel.panel-default  
+            .panel-heading{:role => "tab"}
+              .row{"aria-controls" =>"collapse#{studentapplication.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{studentapplication.id}", :role => "button", :id=> "heading#{studentapplication.id}"}
+                .col-xs-1
+                  // need to refer "http://apidock.com/rails/ActionView/Helpers/FormTagHelper/check_box_tag" to see API of  check_box_tag
+                  - if @student_application_info[studentapplication.id]['assignable']
+                    =check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
+                .col-xs-2
+                  %select#position.form-control{:name => "positions[#{studentapplication.id}]", :id => "positions_#{studentapplication.id}"}
+                    %option{:value => nil} 
+                    -@student_application_info[studentapplication.id]['assignable_position'].each do |assignable_position|
+                      -assignable_position.each do |key, val|
+                        %option{:value => key}= "#{val}"
+
+                .col-xs-2= studentapplication.uin
+                .col-xs-2= studentapplication.fullName()
+                .col-xs-1= studentapplication.gpa
+                .col-xs-2
+                  - case studentapplication.degree
+                    - when StudentApplication::UNDERGRAD
+                      Undergraduate
+                    - when StudentApplication::MENG
+                      M.Eng
+                    - when StudentApplication::MS
+                      MS
+                    - when StudentApplication::PHD
+                      PHD
+                .col-xs-1= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
+            .panel-collapse.collapse{"aria-labelledby" => "heading#{studentapplication.id}", :role => "tabpanel", :id=> "collapse#{studentapplication.id}"}
+              .panel-body
+                .row
+                  .col-xs-10.col-xs-offset-1
+                    %ul.list-group
+                      -if @student_application_info[studentapplication.id].has_key?('status')
+                        %li.list-group-item
+                          .row
+                            -@student_application_info[studentapplication.id]['status'].each do |student_status|
+                              .col-xs-4= student_status['Course']
+                              .col-xs-3
+                                -case student_status['Position']
+                                  -when AppCourseMatching::FULLTA
+                                  Full TA
+                                  -when AppCourseMatching::HALFTA
+                                  Half TA
+                              .col-xs-2
+                                -case student_status['app_status']
+                                  - when StudentApplication::UNDER_REVIEW
+                                  %span{class:"label label-default"}="Under Review"
+                                  - when StudentApplication::TEMP_ASSIGNED
+                                  %span{class:"label label-primary"}="Temporary Assigned"
+                                  - when StudentApplication::EMAIL_NOTIFIED
+                                  %span{class:"label label-primary"}="Email Notified"
+                                  - when StudentApplication::STUDENT_CONFIRMED
+                                  %span{class:"label label-success"}="Student Confirmed"
+                                  - when StudentApplication::STUDENT_REJECTED
+                                  %span{class:"label label-warning"}="Student Rejected"
+                                  - when StudentApplication::ASSIGNED
+                                  %span{class:"label label-success"}="Assigned"
+                                  - else
+                                  %span{class:"label label-danger"}="Unknown"
+                      -else
+                        %p Under Review
+  = submit_tag 'Assign', :id => 'assign_ta', class:'btn btn-primary'
+
+  / %table#studentapplications.table.table-striped
+  /   %thead
+  /     %tr
+  /       %th Select
+  /       %th Student UIN
+  /       %th Name
+  /       %th GPA
+  /       %th Degree Program
+  /       %th Applied Term
+  /       %th Status
+  /       %th Detail
+  /   - @studentapplications.each do |studentapplication|
+  /     %tbody
+  /       %tr
+  /         %td= check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
+  /         %td= studentapplication.uin
+  /         %td= studentapplication.fullName()
+  /         %td= studentapplication.gpa
+  /         %td
+  /           - case studentapplication.degree
+  /             - when StudentApplication::UNDERGRAD
+  /               Undergraduate
+  /             - when StudentApplication::MENG
+  /               M.Eng
+  /             - when StudentApplication::MS
+  /               MS
+  /             - when StudentApplication::PHD
+  /               PHD
+  /         %td= ApplicationPool::getAppPoolYearSemester studentapplication.application_pool_id
+  /         %td
+  /           - case studentapplication.status
+  /             - when 1
+  /               %span{class:"label label-default"}="Under Review"
+  /             - when 2
+  /               %span{class:"label label-primary"}="Position Assigned"
+  /             - when 3
+  /               %span{class:"label label-success"}="Confirmed"
+  /             - else
+  /               %span{class:"label label-danger"}="Unknown"
+  /         %td= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
+    
 
 / .row
 /   .col-xs-6=link_to "Assign",assign_new_ta_path(:ids),class:"btn btn-primary"
 
-=link_to "Back to courses list", courses_path
+%a{href:courses_path+ "#heading#{@course.id}" , class:"back-to-class-list" } Back to courses list
 
-- @students.each do |student|
-  %div{class:"modal fade", "id" => "myModal-#{student.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
+- @studentapplications.each do |studentapplication|
+  %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
     %div{class:"modal-dialog", :role => "document"}
       %div{class:"modal-content"}
         %div{class:"modal-header"} 
-          %h2 #{student.fullName()}'s Application Form
+          %h2 #{studentapplication.fullName()}'s Application Form
         %div{class:"modal-body"}
-          %table#student.table.table-striped
+          %table#studentapplication.table.table-striped
             %thead
               %tr
                 %th Field
@@ -67,31 +157,31 @@
             %tbody
               %tr
                 %td UIN
-                %td= student.uin
+                %td= studentapplication.uin
               %tr
                 %td Name
-                %td= student.fullName()
+                %td= studentapplication.fullName()
               %tr
                 %td Advisor
-                %td= student.advisor
+                %td= studentapplication.advisor
               %tr
                 %td Degree
                 %td
-                  - case student.degree
-                    - when Student::UNDERGRAD
+                  - case studentapplication.degree
+                    - when StudentApplication::UNDERGRAD
                       Undergraduate
-                    - when Student::MENG
+                    - when StudentApplication::MENG
                       M.Eng
-                    - when Student::MS
+                    - when StudentApplication::MS
                       MS
-                    - when Student::PHD
+                    - when StudentApplication::PHD
                       PHD
               %tr
                 %td GPA
-                %td= student.gpa
+                %td= studentapplication.gpa
               %tr
                 %td Course Taken
-                %td= student.course_taken
+                %td= studentapplication.course_taken
               %tr
                 %td Course TAed
-                %td= student.course_taed
+                %td= studentapplication.course_taed

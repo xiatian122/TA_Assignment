@@ -1,0 +1,62 @@
+-
+%h1 Edit TA Application
+
+
+%table#studentapplication.table.table-striped
+  %thead
+    %tr
+      %th UIN
+      %th FIRST NAME
+      %th LAST NAME
+      %th ADVISOR
+      %th DEGREE
+      %th START SEMESTER
+      %th GPA
+      %th POSITION
+      %th COURSE TAKEN
+      %th COURSE TAED
+      %th PREFERED AREA
+      %th PREFERED COURSE
+      %th STATUS
+      %th ACTIVE TERM
+  %tbody
+    %tr
+      %td= @studentapplication.uin
+      %td= @studentapplication.first_name
+      %td= @studentapplication.last_name
+      %td= @studentapplication.advisor
+      %td= @studentapplication.degree
+      %td= @studentapplication.start_semester
+      %td= @studentapplication.gpa
+      %td= @studentapplication.position
+      %td= @studentapplication.course_taken
+      %td= @studentapplication.course_taed
+      %td= @studentapplication.preferred_area
+      %td= @studentapplication.preferred_course
+      %td= @studentapplication.status
+      %td= @studentapplication.active_term
+
+%br
+
+.row
+  .col-md-10.col-md-offset-1
+    = form_for @studentapplication, url:{action:"update"}, html:{class:"update_student_form"} do |f|
+      .form-group
+        %label{:for => "student_course_taken"} Course Taken
+        = f.text_field(:course_taken, {placeholder:"Enter the courses taken", class:"form-control"})
+      .form-group
+        %label{:for => "student_course_taed"} Course TAed Before
+        = f.text_field(:course_taed, {placeholder:"Enter the course TAed before", class:"form-control"})
+      .form-group
+        %label{:for => "student_preferred_area"} Prefered Area
+        %select#student_preferred_area.form-control{:name => "studentapplication[preferred_area]"}
+          %option{:value => "Theory", :selected => @studentapplication.preferred_area == "Theory"} Theory
+          %option{:value => "System", :selected => @studentapplication.preferred_area == "System"} System
+          %option{:value => "Artificial Intelligence", :selected => @studentapplication.preferred_area == "Artificial Intelligence"} Artificial Intelligence
+      .form-group
+        %label{:for => "student_preferred_course"} Prefered Courses
+        = f.text_field(:preferred_course, {placeholder:"Enter the prefered courses", class:"form-control"})
+      = f.submit("Update", {class:"btn btn-primary"})
+
+%br
+= link_to 'Back to Application Status', studentapplication_path(@studentapplication.id)

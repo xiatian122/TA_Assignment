@@ -1,15 +1,29 @@
 Rails.application.routes.draw do
   resources :users
+
+  get '/users/:id/new_application' => 'users#new_application', :as => :new_application
+  get '/users/:id/edit_ta_application' => 'users#edit_ta_application', :as => :edit_ta_application
+  patch '/users/:id/update_ta_application' => 'users#update_ta_application', :as => :update_ta_application
+  post '/users/:id/create_ta_application' => 'users#create_ta_application', :as => :create_ta_application
+  get '/users/:id/withdraw_application' => 'users#withdraw_student_application', :as => :withdraw_student_application
+
+  get '/users/:id/accept_assignment' => 'users#accept_ta_assignment', :as => :accept_ta_assignment
+  get '/users/:id/reject_assignment' => 'users#reject_ta_assignment', :as => :reject_ta_assignment
+
   root 'static_pages#home'
 
   get ({'help' => 'static_pages#help'})
 
   get ({'contact' => 'static_pages#contact'})
   
-  resources :students  
-  get '/students/(:id)/withdraw_application' => 'students#withdraw_application', :as => :withdraw_application
-  get '/students/(:id)/accept_assignment' => 'students#accept_assignment', :as => :accept_assignment
-  get '/students/(:id)/reject_assignment' => 'students#reject_assignment', :as => :reject_assignment
+  #resources :students  
+  #get '/students/(:id)/withdraw_application' => 'students#withdraw_application', :as => :withdraw_application
+  #get '/students/(:id)/accept_assignment' => 'students#accept_assignment', :as => :accept_assignment
+  #get '/students/(:id)/reject_assignment' => 'students#reject_assignment', :as => :reject_assignment
+  resources :student_applications
+  get '/student_applications/(:id)/withdraw_application' => 'student_applications#withdraw_application', :as => :withdraw_application
+  get '/student_applications/(:id)/accept_assignment' => 'student_applications#accept_assignment', :as => :accept_assignment
+  get '/student_applications/(:id)/reject_assignment' => 'student_applications#reject_assignment', :as => :reject_assignment
   resources :courses
 
   get '/courses/(:id)/select_new_ta' => 'courses#select_new_ta', :as => :select_new_ta
@@ -18,7 +32,12 @@ Rails.application.routes.draw do
   get '/courses/(:id)/delete_ta' => 'courses#delete_ta', :as => :delete_ta, :action => :delete_ta
   get '/courses/(:id)/email_ta_notification' => 'courses#email_ta_notification', :as => :email_ta_notification, :action => :email_ta_notification
   get '/courses/(:id)/confirm_ta' => 'courses#confirm_ta', :as => :confirm_ta, :action => :confirm_ta
-
+  get '/courses/(:id)/drop_all' => 'courses#drop_all', :as => :drop_all, :action => :drop_all
+  
+  get '/courses/(:id)/upload' => 'courses#upload', :as => :upload, :action => :upload
+  get '/courses/(:id)/process_import' => 'courses#process_import', :as => :process_import, :action => :process_import
+  
+  resources :application_pools
   #root :to => redirect('/students')
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

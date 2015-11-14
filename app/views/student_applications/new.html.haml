@@ -1,0 +1,34 @@
+-# file: app/views/student_applications/new.html.haml
+
+- utitilies={ semesters:["2015 Spring","2015 Summer","2015 Fall","2016 Spring","2016 Summer","2016 Fall","2017 Spring"]}
+.row
+  .col-md-10.col-md-offset-1
+    = form_for @studentapplication, url:{action:"create"}, html:{class:"new_student_form"} do |f|
+      .form-group
+        %label{:for => "student_uin"} UIN
+        = f.text_field(:uin, {placeholder:"Enter your UIN", class:"form-control"})
+      .form-group
+        %label{:for => "student_first_name"} First Name
+        = f.text_field(:first_name, {placeholder:"First Name", class:"form-control"})
+      .form-group
+        %label{:for => "student_last_name"} Last Name
+        = f.text_field(:last_name, {placeholder:"Last Name", class:"form-control"})
+      .form-group
+        %label{:for => "student_advisor"} Advisor
+        = f.text_field(:advisor, {placeholder:"Name of your advisor ", class:"form-control"})
+      .form-group
+        %label{:for => "student_degree"} Degree Program
+        %select#student_degree.form-control{:name => "student_application[degree]"}
+          %option{:value => "1"} Meng
+          %option{:value => "2"} MS
+          %option{:selected => "selected", :value => "3"} PhD
+      / student[start_semester] is string typed
+      .form-group
+        %label{:for => "student_start_semester"} Entering semester
+        %select#student_start_semester.form-control{:name => "student_application[start_semester]"}
+          - utitilies[:semesters].each do |semester_literal|
+            %option{:value => semester_literal}= semester_literal
+      .form-group
+        %label{:for => "student_gpa"} GPA
+        = f.text_field(:gpa, {placeholder:"Enter your GPA", class:"form-control"})
+      = f.submit("Create", {class:"btn btn-primary"})
