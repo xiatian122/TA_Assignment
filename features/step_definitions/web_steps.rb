@@ -110,6 +110,14 @@ Then /^(?:|I )should see "([^"]*)"$/ do |text|
   end
 end
 
+
+Then /^(?:|I )expect to see "([^"]*)"$/ do |text|
+
+    expect(page).to have_content(text)
+  
+end
+
+
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
   regexp = Regexp.new(regexp)
 
