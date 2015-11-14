@@ -49,12 +49,17 @@ When /^(?:|I )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
+When /^(?:|I )click "([^"]*)"$/ do |clickable|
+  click(clickable)
+end
+
 When /^(?:|I )press "([^"]*)"$/ do |button|
   click_button(button)
 end
 
 When /^(?:|I )follow "([^"]*)"$/ do |link|
   click_link(link)
+  # capybara click_link can accepts link text or id
 end
 
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
@@ -78,7 +83,7 @@ end
 #
 When /^(?:|I )fill in the following:$/ do |fields|
   fields.rows_hash.each do |name, value|
-    When %{I fill in "#{name}" with "#{value}"}
+    fill_in(name, :with => value)
   end
 end
 
@@ -109,6 +114,14 @@ Then /^(?:|I )should see "([^"]*)"$/ do |text|
     assert page.has_content?(text)
   end
 end
+
+
+Then /^(?:|I )expect to see "([^"]*)"$/ do |text|
+
+    expect(page).to have_content(text)
+  
+end
+
 
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
   regexp = Regexp.new(regexp)

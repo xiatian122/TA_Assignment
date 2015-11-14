@@ -20,9 +20,7 @@ $(document).ready(function (){
   }
 
   $('.edit-op-btn').click(function(e){
-    e.preventDefault();
     e.stopPropagation();
-    window.open($(this).attr('href'));
   });
 
   console.log(window.location.hash)
