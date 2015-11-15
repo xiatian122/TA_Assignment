@@ -154,6 +154,17 @@ class CoursesController < ApplicationController
       end
       @student_application_info[studentapplication.id] = info_for_student
     end
+    if @course.suggestion != nil
+    tasuggestion = @course.suggestion.split('/')
+    tasuggestion.each do |ta_info|
+      if @suggestion != nil
+        @suggestion << '/' + ta_info.split(';')[0]
+      else
+        @suggestion = ta_info.split(';')[0]
+      end
+    end
+    end
+  
     
   end
 
