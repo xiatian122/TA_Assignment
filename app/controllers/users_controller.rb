@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
+    
   end
 
   # GET /users/1
@@ -223,7 +224,7 @@ class UsersController < ApplicationController
       end
     end
     @course.save!
-    redirect_to(lecturer_show_path(session[:pname]))
+    redirect_to(lecturer_show_path(session[:puin]))
   end
   
   def delete_suggestion
@@ -249,14 +250,15 @@ class UsersController < ApplicationController
     end
     @course.suggestion = nil
     @course.save!
-    redirect_to(lecturer_show_path(session[:pname]))
+    redirect_to(lecturer_show_path(session[:puin]))
   end
     
   
   def lecturer_show
-    @pname = params[:name]
-    session[:pname] = @pname
-    @courselist = Course.where(:lecturer => @pname)
+    @puin = params[:luin]
+    @lecturer = User.find_by_uin(@puin)
+    session[:puin] = @puin
+    @courselist = Course.where(:lecturer_uin => @puin)
     @courses_ta = Hash.new
     @suggestion = Array.new
     internal_courses_ta = Hash.new  # internal usage

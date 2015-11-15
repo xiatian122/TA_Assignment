@@ -25,6 +25,7 @@
 
   <tbody>
     <% @users.each do |user| %>
+    <% if user.identity == "student" %>
       <tr>
         <td><%= user.name %></td>
         <td><%= user.uin %></td>
@@ -34,6 +35,7 @@
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
         <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
+    <% end %>
     <% end %>
   </tbody>
 </table>
@@ -46,9 +48,28 @@
   </div>
 </div>
 
-<div class="col-xs-4">
-  <a href="<%= lecturer_show_path("Jing Wang") %>" class="btn btn-primary">Jing Wang</a>
-</div>
-<div class="col-xs-4">
-  <a href="<%= lecturer_show_path("Keyser Lee") %>" class="btn btn-primary">Keyser Lee</a>
-</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Uin</th>
+      <th>Email</th>
+      <th>Login</th>
+      <th>Your course</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+    <% if user.identity == "lecturer" %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.uin %></td>
+        <td><%= user.email %></td>
+        <td><%= user.login %></td>
+        <td><%= link_to "Your Course", lecturer_show_path(user.uin) %></td>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
