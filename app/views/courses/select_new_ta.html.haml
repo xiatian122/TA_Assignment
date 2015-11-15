@@ -6,6 +6,10 @@
 
 .divide20
 
+.row
+  .col-xs-12
+    %p.lead{class:"text-left"}="Professor #{@course.lecturer}'s suggestion for this course is: #{@suggestion}"
+
 = form_tag assign_new_ta_path(@course.id), :method => :get, :id => 'tas_form' do
   .row
     .col-xs-12
