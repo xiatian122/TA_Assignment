@@ -11,11 +11,12 @@ ApplicationPool.delete_all()
 Course.delete_all()
 User.delete_all()
 StudentApplication.delete_all()
-users = [{:name => 'user1', :uin => '922003095', :email => 'test1@gmail.com', :login => 'login1'},
-          {:name => 'user2', :uin => '922773022', :email => 'test2@gmail.com', :login => 'login1'},
-          {:name => 'user3', :uin => '922773023', :email => 'test3@gmail.com', :login => 'login1'},
-          {:name => 'user4', :uin => '922773024', :email => 'test3@gmail.com', :login => 'login1'}]
-
+users = [{:name => 'user1', :uin => '922003095', :email => 'test1@gmail.com', :login => 'login1', :identity => 'student'},
+          {:name => 'user2', :uin => '922773022', :email => 'test2@gmail.com', :login => 'login1', :identity => 'student'},
+          {:name => 'user3', :uin => '922773023', :email => 'test3@gmail.com', :login => 'login1', :identity => 'student'},
+          {:name => 'user4', :uin => '922773024', :email => 'test3@gmail.com', :login => 'login1', :identity => 'student'},
+          {:name => 'user5', :uin => '922003096', :email => 'test5@gmail.com', :login => 'login1', :identity => 'lecturer'},
+          {:name => 'user6', :uin => '922003097', :email => 'test6@gmail.com', :login => 'login1', :identity => 'lecturer'}]
 users.each do |user|
   User.create!(user)
 end
@@ -55,8 +56,9 @@ courses = [
   {
     cid: "CSCE110",
     name: "PROGRAMMING I",
-    lecturer: "ABC",
-    insemail: "test@test.com",
+    lecturer: "user5",
+    lecturer_uin: "922003096",
+    insemail: "test5@test.com",
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
@@ -67,8 +69,9 @@ courses = [
   {
     cid: "CSCE111",
     name: "CPSC CONCEPTS &amp; PROGRAM",
-    lecturer: "ABC",
-    insemail: "test@test.com",
+    lecturer: "user6",
+    lecturer_uin: "922003097",
+    insemail: "test6@test.com",
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",
@@ -79,8 +82,9 @@ courses = [
   {
     cid: "CSCE121",
     name: "INTRO PGM DESIGN CONCEPT",
-    lecturer: "ABC",
-    insemail: "test@test.com",
+    lecturer: "user6",
+    lecturer_uin: "922003097",
+    insemail: "test6@test.com",
     area: "Theory",
     description: "2015 Fall",
     ta: "N/A",

@@ -5,6 +5,7 @@ class CreateCourses < ActiveRecord::Migration
       t.string :name
       t.integer :credits
       t.string :lecturer
+      t.string :lecturer_uin
       t.string :insemail
       t.string :area
       t.text :description
