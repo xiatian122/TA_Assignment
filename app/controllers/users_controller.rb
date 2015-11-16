@@ -230,6 +230,7 @@ class UsersController < ApplicationController
   def delete_suggestion
     id = params[:id]
     @course = Course.find(id)
+    if @course.suggestion != nil
     suggestionid = @course.suggestion.split('/')
     suggestionid.each do |studentid|
       ta_id = studentid.split(';')
@@ -247,6 +248,7 @@ class UsersController < ApplicationController
       end
       @ta.save!
       end
+    end
     end
     @course.suggestion = nil
     @course.save!
