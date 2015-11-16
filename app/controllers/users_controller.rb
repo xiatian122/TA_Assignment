@@ -200,7 +200,7 @@ class UsersController < ApplicationController
   
   def submit_ta_suggestion
     id = params[:id]
-    @course = Course.find_by(id)
+    @course = Course.find_by_id(id)
     if params[:ids]
       new_tas = params[:ids].keys
       if not new_tas.empty?
