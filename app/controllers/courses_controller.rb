@@ -27,7 +27,6 @@ class CoursesController < ApplicationController
       end      
     end
     @SlotStatus = getSlotStatusForAllCourses(internal_courses_ta)
-    #debugger
   end
 
   #  /courses/new
@@ -44,7 +43,7 @@ class CoursesController < ApplicationController
     #debugger
     flash[:notice] = "#{@course.name} was successfully created."
     redirect_to courses_path
-    end
+  end
 
 
   # GET /courses/:id
@@ -171,8 +170,11 @@ class CoursesController < ApplicationController
       # 
       @course = Course.find(params[:id])
 
-      if !@course.nil?
+      if @course.exist? && !@course.nil?
         @course.destroy!
+        ### Destroy app_course_matching associated with the course
+        ### Remains to be solved
+        # byebug
       else
         returnflash[:notice] = "The course does not exist! Refresh again!"
       end
@@ -184,8 +186,15 @@ class CoursesController < ApplicationController
   def drop_all
     @course_num = params[:id]
     @courses = Course.all
-    if @courses.exists?
+    @course_app_ids = @courses.uniq.select(:application_pool_id).where.not(:application_pool_id => nil)
+    @appcoursematchings = AppCourseMatching.includes(:courses).where("app_course_matchings.application_pool_id = ?")
+    if @courses.exists? && !@courses.nil?
       @courses.destroy_all
+      #byebug
+      ### Destroy all associated appcoursematching
+      #if @appcoursematchings.exists? && !@appcoursematchings.nil?
+      #  @appcoursematchings.destroy_all
+      #end
     end
     redirect_to courses_path
   end
@@ -201,7 +210,7 @@ class CoursesController < ApplicationController
 
   def select_new_ta
     @course = Course.find(params[:id])
-
+   # byebug
     @student_application_info = Hash.new
     @student_application_requesters = Hash.new 
 
