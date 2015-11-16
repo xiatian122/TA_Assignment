@@ -44,6 +44,13 @@
           <div class="panel" aria-labelledby="heading#{course.id}" role="tabpanel" id="showtadetail<%= course.id %>">
             <div class="panel-body">
               <div class="col-xs-10 col-xs-offset-1">
+                <u1 class="list-group">
+                  <li class="list-group-item">
+                    <b>Current Assigned TA</b>
+                  </li>
+                </u1>
+              </div>
+              <div class="col-xs-10 col-xs-offset-1">
                 <% if @courses_ta[course.id].length() > 0 %>
                 <u1 class="list-group">
                   <% @courses_ta[course.id].each do |ta| %>
@@ -85,8 +92,13 @@
                   <% end %>
                 </u1>
                 <% else %>
-                <u1 class="list-group">
-                  <p>No TA assigned yet for this course</p>
+                <div class="col-xs-10 col-xs-offset-1">
+                  <u1 class="list-group">
+                    <li class="list-group-item">
+                      <p>No TA assigned yet for this course</p>
+                    </li>
+                  </u1>
+                </div>
                 </u1>
                 <% end %>
                 <div class="divide30">
@@ -113,70 +125,3 @@
   </div>
 </div>
 
-<% @courselist.each do |course| %>
-<% if @courses_ta[course.id] %>
-<% @courses_ta[course.id].each do |student| %>
-<div class="modal fade" id="myModal-<%= course.id %>-<%= student.id %>" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header"><
-        <h2><%= student.fullName()+"'s Application Form" %>
-          <div class="modal-body">
-            <table id="student" class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Field</th>
-                  <th>Info</th>
-                </tr>
-                <tbody>
-                  <tr>
-                    <td>UIN</td>
-                    <td><%= student.uin %></td>
-                  </tr>
-                  <tr>
-                    <td>Name</td>
-                    <td><%= student.fullName() %></td>
-                  </tr>
-                  <tr>
-                    <td>Advisor</td>
-                    <td><%= student.advisor %></td>
-                  </tr>
-                  <tr>
-                    <td>Degree</td>
-                    <td>
-                      <% case student.degree
-                        when StudentApplication::UNDERGRAD %>
-                      Undergraduate
-                      <% when StudentApplication::MENG %>
-                      M.Eng
-                      <% when StudentApplication::MS %>
-                      MS
-                      <% when StudentApplication::PHD %>
-                      PHD
-                      <% end %>
-                  <tr>
-                    <td>GPA</td>
-                    <td><%= student.gpa %></td>
-                  </tr>
-                  <tr>
-                    <td>Course Taken</td>
-                    <td><%= student.course_taken%></td>
-                  </tr>
-                  <tr>
-                    <td>Course TAed</td>
-                    <td><%= student.course_taed %></td>
-                  </tr>
-                </tbody>
-              </thead>
-            </table>
-          </div>
-        </h2>
-      </div>
-    </div>
-  </div>
-</div>
-<% end %>
-<% end %>
-<% end %>
-
-              
