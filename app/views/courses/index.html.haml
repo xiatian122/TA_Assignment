@@ -10,6 +10,7 @@
 .row
   .col-xs-6
     =link_to "New Course",new_course_path,class:"btn btn-primary"
+    =link_to "Import",upload_path(:id => 0),class:"btn btn-primary"
    
 
 .divide20
@@ -40,12 +41,12 @@
         .panel.panel-default  
           .panel-heading{:role => "tab"}
             .row{"aria-controls" =>"collapse#{course.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{course.id}", :role => "button", :id=> "heading#{course.id}"}
-              .col-xs-1.td=course.id
+              .col-xs-1.td=course.cid
               .col-xs-4.td=course.name
               .col-xs-2.td="#{@SlotStatus[course.id][:assigned] } / #{@SlotStatus[course.id][:slots] }"
               .col-xs-3.td=course.lecturer
               .col-xs-2.td
-                %a.btn.btn-default.btn-sm.edit-op-btn{:href=> edit_course_path(course.id) ,"data-toggle" =>"tooltip", "data-placement" => "bottom", "data-title" => "Edit"}
+                %a.btn.btn-default.btn-sm.edit-op-btn{:href=> edit_course_path(course.id) ,"data-toggle" =>"tooltip", "data-placement" => "bottom", "data-title" => "Edit", id:"edit-#{course.id}"}
                   %span.glyphicon.glyphicon-edit
                 
 
@@ -56,43 +57,41 @@
                   - if @courses_ta[course.id].length() > 0
                     %ul.list-group
 
-                    -@courses_ta[course.id].each do |ta|
+                      -@courses_ta[course.id].each do |ta|
 
-                      %li.list-group-item
-                        .row
-                          .col-xs-2
-                            %a{ "data-toggle" => "modal",  "data-target" => "#myModal-#{course.id}-#{ta.id}"}=ta.fullName()
-                          .col-xs-2
-                            -case @ta_status[course.id][ta.id]['position']
-                              -when AppCourseMatching::FULLTA
-                              Full TA
-                              -when AppCourseMatching::HALFTA
-                              Half TA
-                          .col-xs-3 
-                            - case @ta_status[course.id][ta.id]['status']
-                              - when StudentApplication::UNDER_REVIEW
-                                %span{class:"label label-default"}="Under Review"
-                              - when StudentApplication::TEMP_ASSIGNED
-                                %span{class:"label label-primary"}="Temporary Assigned"
-                              - when StudentApplication::EMAIL_NOTIFIED
-                                %span{class:"label label-primary"}="Email Notified"
-                              - when StudentApplication::STUDENT_CONFIRMED
-                                %span{class:"label label-success"}="Student Confirmed"
-                              - when StudentApplication::STUDENT_REJECTED
-                                %span{class:"label label-warning"}="Student Rejected"
-                              - when StudentApplication::ASSIGNED
-                                %span{class:"label label-success"}="Assigned"
-                              - else
-                                %span{class:"label label-danger"}="Unknown"
-                          .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta.id)) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id)) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id))
-
-
+                        %li.list-group-item{id:"tali-#{course.id}-#{ta.id}"}
+                          .row
+                            .col-xs-2
+                              %a{ "data-toggle" => "modal",  "data-target" => "#myModal-#{course.id}-#{ta.id}"}=ta.fullName()
+                            .col-xs-2
+                              -case @ta_status[course.id][ta.id]['position']
+                                -when AppCourseMatching::FULLTA
+                                Full TA
+                                -when AppCourseMatching::HALFTA
+                                Half TA
+                            .col-xs-3 
+                              - case @ta_status[course.id][ta.id]['status']
+                                - when StudentApplication::UNDER_REVIEW
+                                  %span{class:"label label-default"}="Under Review"
+                                - when StudentApplication::TEMP_ASSIGNED
+                                  %span{class:"label label-primary"}="Temporary Assigned"
+                                - when StudentApplication::EMAIL_NOTIFIED
+                                  %span{class:"label label-primary"}="Email Notified"
+                                - when StudentApplication::STUDENT_CONFIRMED
+                                  %span{class:"label label-success"}="Student Confirmed"
+                                - when StudentApplication::STUDENT_REJECTED
+                                  %span{class:"label label-warning"}="Student Rejected"
+                                - when StudentApplication::ASSIGNED
+                                  %span{class:"label label-success"}="Assigned"
+                                - else
+                                  %span{class:"label label-danger"}="Unknown"
+                            .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta.id), {:class=>"email-link", "data-target"=>"#tali-#{course.id}-#{ta.id}"}) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id),{:class=>"confirm-link","data-target"=> "#tali-#{course.id}-#{ta.id}"}) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id), {:class => "delete-link", "data-target"=> "#tali-#{course.id}-#{ta.id}"})
                   - else
                     %p No TA assigned yet for this course    
               .divide30
               .row
                 .col-xs-1.col-xs-offset-10
-                  %a{:href => select_new_ta_path(course.id), :class => "btn btn-primary"} Add new TA
+                  %a{:href => select_new_ta_path(course.id), :class => "btn btn-primary add-new-ta" ,"data-toggle-target"=>"#collapse#{course.id}"} Add new TA
 
 .row
   .col-xs-6

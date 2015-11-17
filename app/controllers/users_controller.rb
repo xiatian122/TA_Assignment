@@ -18,15 +18,15 @@ class UsersController < ApplicationController
     @application_pools.each do |application_pool|
       if StudentApplication.exists?(application_pool_id: application_pool.id, user_id: @user.id)
         @studentapplications[application_pool.id] = StudentApplication.find_by(application_pool_id: application_pool.id, user_id: @user.id)
-        matchings = AppCourseMatching.where(student_application_id: @studentapplications[application_pool.id].id)
+        matchings = AppuserMatching.where(student_application_id: @studentapplications[application_pool.id].id)
         if matchings
           matchings.each do |match|
-            course = Course.find match.course_id
+            user = user.find match.user_id
             if not match.status == StudentApplication::TEMP_ASSIGNED
               if not @application_status[application_pool.id]
                 @application_status[application_pool.id] = Array.new
               end
-              @application_status[application_pool.id] << {'Matching_id' => match.id, 'Course' => course.name, 'Position' => match.position, 'Status' => match.status}
+              @application_status[application_pool.id] << {'Matching_id' => match.id, 'user' => user.name, 'Position' => match.position, 'Status' => match.status}
             end
           end
         end
@@ -34,9 +34,98 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/new
-  def new
-    @user = User.new
+ # GET /users/uploadusers
+  def uploadusers
+    ## :id == 0 => initial visit creates the variable
+    ##if params[:id] == 0 && @client.nil?
+    @client = Google::APIClient.new(
+      :application_name => 'bazinga',
+      :application_version => '1.0.0'
+    )
+    @auth = @client.authorization
+    @auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
+    @auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
+    @auth.scope =
+      "https://www.googleapis.com/auth/drive " +
+      "https://spreadsheets.google.com/feeds/"
+    @auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+    
+    @auth_uri = @auth.authorization_uri.to_s
+    ##end
+   
+      
+  end
+  
+  # GET /users/process_user_import
+  def process_user_import
+    if params[:code] == "" || params[:url] == ""
+      flash[:notice] = "Please get the code and paste the url before clicking import"
+      redirect_to users_path + "/0/uploadusers"
+      return
+    end
+      
+    ## Establish Google connection
+    @client = Google::APIClient.new(
+      :application_name => 'bazinga',
+      :application_version => '1.0.0'
+    )
+    @auth = @client.authorization
+    @auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
+    @auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
+    @auth.scope =
+      "https://www.googleapis.com/auth/drive " +
+      "https://spreadsheets.google.com/feeds/"
+    @auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+    
+    
+    @auth.code = params[:code]
+    @url = params[:url]
+    
+    begin
+      @auth.fetch_access_token!
+    rescue Exception
+    end
+  
+    if @auth.access_token.nil?
+      flash[:notice] = "Please get the code and paste the url before clicking import"
+      redirect_to users_path + "/0/uploadusers"
+      return
+    end
+    @my_session = GoogleDrive.login_with_oauth(@auth.access_token)
+    begin
+      @ws = @my_session.spreadsheet_by_url(@url).worksheets[0]
+    rescue Exception
+    end
+    
+    if @ws.nil?
+      flash[:notice] = "Please make sure the code and url correctly: Try Again!"
+      redirect_to users_path + "/0/uploadusers"
+      return
+    end
+
+    ## Process data in spread sheet: By default, the sheet is 3 cols with column names [course_id, course_title, instructor]
+    @row_num = @ws.num_rows - 1
+    @col_num = @ws.num_cols
+    
+    if @col_num % 3 != 0
+      flash[:notice] = "The spreadsheet is wrong: more than 3 columns"
+      redirect_to users_path + "/0/uploadusers"
+      return
+    end
+    
+    ### Fetch data from spreadsheet & insert into db
+    @data = []
+    
+    (1..@row_num).each do |i|
+      @data << User.new(
+        :uin      => @ws[i+1, 1],
+        :name     => @ws[i+1, 2],
+        :email => @ws[i+1, 3]
+        )
+    end
+    User.import @data
+    
+    redirect_to users_path    
   end
 
   # GET /users/1/edit
@@ -110,7 +199,7 @@ class UsersController < ApplicationController
     @studentapplication = StudentApplication.find(params[:app_id])
 
     #delete all matchings in the matching table
-    @matchings = AppCourseMatching.where(student_application_id: params[:app_id])
+    @matchings = AppuserMatching.where(student_application_id: params[:app_id])
     @matchings.each do |matching|
       matching.destroy
     end
@@ -134,24 +223,23 @@ class UsersController < ApplicationController
 
   def accept_ta_assignment
     @user = User.find(params[:id])
-    @matching = AppCourseMatching.find params[:match_id]
-    @course = Course.find @matching.course_id
+    @matching = AppuserMatching.find params[:match_id]
+    @user = user.find @matching.user_id
     @matching.status = StudentApplication::STUDENT_CONFIRMED
     @matching.save
 
-    flash[:notice] = "TA assignment for #{@course.name} is accepted!"
-
+    flash[:notice] = "TA assignment for #{@user.name} is accepted!"
     redirect_to user_path(@user.id)
   end
 
   def reject_ta_assignment
     @user = User.find(params[:id])
-    @matching = AppCourseMatching.find params[:match_id]
-    @course = Course.find @matching.course_id
+    @matching = AppuserMatching.find params[:match_id]
+    @user = user.find @matching.user_id
     @matching.status = StudentApplication::STUDENT_REJECTED
     @matching.save
 
-    flash[:notice] = "TA assignment for #{@course.name} is rejected!"
+    flash[:notice] = "TA assignment for #{@user.name} is rejected!"
     redirect_to user_path(@user.id)
   end
 

@@ -9,10 +9,16 @@ Rails.application.routes.draw do
 
   get '/users/:id/accept_assignment' => 'users#accept_ta_assignment', :as => :accept_ta_assignment
   get '/users/:id/reject_assignment' => 'users#reject_ta_assignment', :as => :reject_ta_assignment
+
   get '/users/(:id)/suggest_ta' => 'users#suggest_ta', :as => :suggest_ta
   get '/users/(:id)/submit_ta_suggestion' => 'users#submit_ta_suggestion', :as => :submit_ta_suggestion
   get '/users/(:luin)/lecturer_show' => 'users#lecturer_show', :as => :lecturer_show
   get '/users/(:id)/delete_suggestion' => 'users#delete_suggestion', :as => :delete_suggestion
+
+  
+  get '/users/:id/uploadusers' => 'users#uploadusers', :as => :uploadusers
+  get '/users/:id/process_user_import' => 'users#process_user_import', :as => :process_user_import
+
 
   root 'static_pages#home'
 
@@ -37,7 +43,10 @@ Rails.application.routes.draw do
   get '/courses/(:id)/email_ta_notification' => 'courses#email_ta_notification', :as => :email_ta_notification, :action => :email_ta_notification
   get '/courses/(:id)/confirm_ta' => 'courses#confirm_ta', :as => :confirm_ta, :action => :confirm_ta
   get '/courses/(:id)/drop_all' => 'courses#drop_all', :as => :drop_all, :action => :drop_all
-
+  
+  get '/courses/(:id)/upload' => 'courses#upload', :as => :upload, :action => :upload
+  get '/courses/(:id)/process_import' => 'courses#process_import', :as => :process_import, :action => :process_import
+  
   resources :application_pools
   #root :to => redirect('/students')
   # The priority is based upon order of creation: first created -> highest priority.
