@@ -68,7 +68,7 @@
         <td><%= user.uin %></td>
         <td><%= user.email %></td>
         <td><%= user.login %></td>
-        <td><%= link_to "Your Course", lecturer_show_path(user.uin) %></td>
+        <td><%= link_to "Your Course", lecturer_show_path(user.id) %></td>
       </tr>
     <% end %>
     <% end %>

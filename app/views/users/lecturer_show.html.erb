@@ -113,7 +113,7 @@
                     <a href="<%= delete_suggestion_path(course.id) %>" class="btn btn-warning">Delete Suggestion</a>
                   </div>
                   <div class="col-xs-1">
-                    <a href="<%= suggest_ta_path(course.id) %>" class="btn btn-primary">Suggest new TA</a>
+                    <a href="<%= suggest_ta_path :id => @user.id, :courseid => course.id %>" class="btn btn-primary">Suggest new TA</a>
                   </div>
                 </div>
               </div>

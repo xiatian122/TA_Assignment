@@ -156,7 +156,8 @@ class UsersController < ApplicationController
   end
 
   def suggest_ta
-      @course = Course.find(params[:id])
+      @course = Course.find params[:courseid]
+      #@course = Course.find(params[:id])
 
       @student_application_info = Hash.new
       @student_application_requesters = Hash.new 
@@ -199,7 +200,7 @@ class UsersController < ApplicationController
   end
   
   def submit_ta_suggestion
-    id = params[:id]
+    id = params[:courseid]
     @course = Course.find_by_id(id)
     if params[:ids]
       new_tas = params[:ids].keys
@@ -224,7 +225,7 @@ class UsersController < ApplicationController
       end
     end
     @course.save!
-    redirect_to(lecturer_show_path(session[:puin]))
+    redirect_to(lecturer_show_path(params[:id]))
   end
   
   def delete_suggestion
@@ -257,7 +258,9 @@ class UsersController < ApplicationController
     
   
   def lecturer_show
-    @puin = params[:luin]
+    @user = User.find params[:id]
+    @puin = @user.uin
+    #@puin = params[:luin]
     @lecturer = User.find_by_uin(@puin)
     session[:puin] = @puin
     @courselist = Course.where(:lecturer_uin => @puin)

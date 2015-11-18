@@ -5,6 +5,7 @@ class CoursesController < ApplicationController
 	def index
     @courses = Course.all
     @courses_ta = Hash.new 
+    @courses_suggestion = Hash.new 
     internal_courses_ta = Hash.new  # internal usage
 
     @ta_status = Hash.new
@@ -20,6 +21,18 @@ class CoursesController < ApplicationController
       tadata = StudentApplication.where(id: tadata_ids)  # This will return one list
       @courses_ta[course.id] = tadata
       @ta_status[course.id] = tadata_status
+
+      #add lecturer request students
+      if course.suggestion != nil
+        suggestion = Array.new
+        tasuggestion = course.suggestion.split('/')
+        tasuggestion.each do |ta_info|
+          suggestion << ta_info.split(';')[1]
+        end
+        suggested_students = StudentApplication.where(id: suggestion)
+        @courses_suggestion[course.id] = suggested_students
+      end
+    
 
       internal_courses_ta[course.id] = []
       tadata.each_index do |i|
@@ -260,14 +273,14 @@ class CoursesController < ApplicationController
       @student_application_info[studentapplication.id] = info_for_student
     end
     if @course.suggestion != nil
-    tasuggestion = @course.suggestion.split('/')
-    tasuggestion.each do |ta_info|
-      if @suggestion != nil
-        @suggestion << '/' + ta_info.split(';')[0]
-      else
-        @suggestion = ta_info.split(';')[0]
+      tasuggestion = @course.suggestion.split('/')
+      tasuggestion.each do |ta_info|
+        if @suggestion != nil
+          @suggestion << '/' + ta_info.split(';')[0]
+        else
+          @suggestion = ta_info.split(';')[0]
+        end
       end
-    end
     end
   
     
