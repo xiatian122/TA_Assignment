@@ -17,15 +17,15 @@ class UsersController < ApplicationController
     @application_pools.each do |application_pool|
       if StudentApplication.exists?(application_pool_id: application_pool.id, user_id: @user.id)
         @studentapplications[application_pool.id] = StudentApplication.find_by(application_pool_id: application_pool.id, user_id: @user.id)
-        matchings = AppuserMatching.where(student_application_id: @studentapplications[application_pool.id].id)
+        matchings = AppCourseMatching.where(student_application_id: @studentapplications[application_pool.id].id)
         if matchings
           matchings.each do |match|
-            user = user.find match.user_id
+            course = Course.find match.course_id
             if not match.status == StudentApplication::TEMP_ASSIGNED
               if not @application_status[application_pool.id]
                 @application_status[application_pool.id] = Array.new
               end
-              @application_status[application_pool.id] << {'Matching_id' => match.id, 'user' => user.name, 'Position' => match.position, 'Status' => match.status}
+              @application_status[application_pool.id] << {'Matching_id' => match.id, 'Course' => course.name, 'Position' => match.position, 'Status' => match.status}
             end
           end
         end
@@ -198,7 +198,7 @@ class UsersController < ApplicationController
     @studentapplication = StudentApplication.find(params[:app_id])
 
     #delete all matchings in the matching table
-    @matchings = AppuserMatching.where(student_application_id: params[:app_id])
+    @matchings = AppCourseMatching.where(student_application_id: params[:app_id])
     @matchings.each do |matching|
       matching.destroy
     end
@@ -222,23 +222,23 @@ class UsersController < ApplicationController
 
   def accept_ta_assignment
     @user = User.find(params[:id])
-    @matching = AppuserMatching.find params[:match_id]
-    @user = user.find @matching.user_id
+    @matching = AppCourseMatching.find params[:match_id]
+    @course = Course.find @matching.course_id
     @matching.status = StudentApplication::STUDENT_CONFIRMED
     @matching.save
 
-    flash[:notice] = "TA assignment for #{@user.name} is accepted!"
+    flash[:notice] = "TA assignment for #{@course.name} is accepted!"
     redirect_to user_path(@user.id)
   end
 
   def reject_ta_assignment
     @user = User.find(params[:id])
-    @matching = AppuserMatching.find params[:match_id]
-    @user = user.find @matching.user_id
+    @matching = AppCourseMatching.find params[:match_id]
+    @course = Course.find @matching.course_id
     @matching.status = StudentApplication::STUDENT_REJECTED
     @matching.save
 
-    flash[:notice] = "TA assignment for #{@user.name} is rejected!"
+    flash[:notice] = "TA assignment for #{@course.name} is rejected!"
     redirect_to user_path(@user.id)
   end
 
