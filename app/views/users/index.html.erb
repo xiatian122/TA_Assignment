@@ -26,6 +26,7 @@
 
   <tbody>
     <% @users.each do |user| %>
+    <% if user.identity == "student" %>
       <tr>
         <td><%= user.name %></td>
         <td><%= user.uin %></td>
@@ -36,6 +37,40 @@
         <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
+    <% end %>
   </tbody>
 </table>
 
+<hr></hr>
+
+<div class='row'>
+  <div class='col-xs-12'>
+    <h1 class="text-left">Instructor Overview</h1>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Uin</th>
+      <th>Email</th>
+      <th>Login</th>
+      <th>Your course</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+    <% if user.identity == "lecturer" %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.uin %></td>
+        <td><%= user.email %></td>
+        <td><%= user.login %></td>
+        <td><%= link_to "Your Course", lecturer_show_path(user.id) %></td>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
