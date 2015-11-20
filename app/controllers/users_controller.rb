@@ -229,7 +229,7 @@ class UsersController < ApplicationController
   end
   
   def delete_suggestion
-    id = params[:id]
+    id = params[:courseid]
     @course = Course.find(id)
     if @course.suggestion != nil
     suggestionid = @course.suggestion.split('/')
@@ -253,7 +253,7 @@ class UsersController < ApplicationController
     end
     @course.suggestion = nil
     @course.save!
-    redirect_to(lecturer_show_path(session[:puin]))
+    redirect_to(lecturer_show_path(params[:id]))
   end
     
   
