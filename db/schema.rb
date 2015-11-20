@@ -37,11 +37,13 @@ ActiveRecord::Schema.define(version: 20151111033819) do
     t.string   "name"
     t.integer  "credits"
     t.string   "lecturer"
+    t.string   "lecturer_uin"
     t.string   "insemail"
     t.string   "area"
     t.text     "description"
     t.string   "ta"
     t.text     "notes"
+    t.string   "suggestion"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "application_pool_id"
@@ -75,6 +77,7 @@ ActiveRecord::Schema.define(version: 20151111033819) do
     t.string   "uin"
     t.string   "email"
     t.string   "login"
+    t.string   "identity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

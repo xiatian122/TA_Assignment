@@ -87,7 +87,21 @@
                                   %span{class:"label label-danger"}="Unknown"
                             .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta.id), {:class=>"email-link", "data-target"=>"#tali-#{course.id}-#{ta.id}"}) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id),{:class=>"confirm-link","data-target"=> "#tali-#{course.id}-#{ta.id}"}) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id), {:class => "delete-link", "data-target"=> "#tali-#{course.id}-#{ta.id}"})
                   - else
-                    %p No TA assigned yet for this course    
+                    %p No TA assigned yet for this course
+                  - if @courses_suggestion.has_key?(course.id)
+                    %p Requested students:
+                    %ul.list-group
+
+                      -@courses_suggestion[course.id].each do |ta|
+
+                        %li.list-group-item{id:"tali-#{course.id}-#{ta.id}"}
+                          .row
+                            .col-xs-2
+                              %a{ "data-toggle" => "modal",  "data-target" => "#myModal-suggest-#{course.id}-#{ta.id}"}=ta.fullName()
+                  - else
+                    %p No TA requested yet by this lecturer
+                            
+
               .divide30
               .row
                 .col-xs-1.col-xs-offset-10
@@ -103,6 +117,50 @@
   -if @courses_ta[course.id]
     -@courses_ta[course.id].each do |student|
       %div{class:"modal fade", "id" => "myModal-#{course.id}-#{student.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
+        %div{class:"modal-dialog", :role => "document"}
+          %div{class:"modal-content"}
+            %div{class:"modal-header"} 
+              %h2 #{student.fullName()}'s Application Form
+            %div{class:"modal-body"}
+              %table#student.table.table-striped
+                %thead
+                  %tr
+                    %th Field
+                    %th Info
+                %tbody
+                  %tr
+                    %td UIN
+                    %td= student.uin
+                  %tr
+                    %td Name
+                    %td= student.fullName()
+                  %tr
+                    %td Advisor
+                    %td= student.advisor
+                  %tr
+                    %td Degree
+                    %td
+                      - case student.degree
+                        - when StudentApplication::UNDERGRAD
+                          Undergraduate
+                        - when StudentApplication::MENG
+                          M.Eng
+                        - when StudentApplication::MS
+                          MS
+                        - when StudentApplication::PHD
+                          PHD
+                  %tr
+                    %td GPA
+                    %td= student.gpa
+                  %tr
+                    %td Course Taken
+                    %td= student.course_taken
+                  %tr
+                    %td Course TAed
+                    %td= student.course_taed
+  -if @courses_suggestion[course.id]
+    -@courses_suggestion[course.id].each do |student|
+      %div{class:"modal fade", "id" => "myModal-suggest-#{course.id}-#{student.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
         %div{class:"modal-dialog", :role => "document"}
           %div{class:"modal-content"}
             %div{class:"modal-header"} 

@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
+    
   end
 
   # GET /users/1
@@ -40,98 +41,9 @@ class UsersController < ApplicationController
     end
   end
 
- # GET /users/uploadusers
-  def uploadusers
-    ## :id == 0 => initial visit creates the variable
-    ##if params[:id] == 0 && @client.nil?
-    @client = Google::APIClient.new(
-      :application_name => 'bazinga',
-      :application_version => '1.0.0'
-    )
-    @auth = @client.authorization
-    @auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
-    @auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
-    @auth.scope =
-      "https://www.googleapis.com/auth/drive " +
-      "https://spreadsheets.google.com/feeds/"
-    @auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
-    
-    @auth_uri = @auth.authorization_uri.to_s
-    ##end
-   
-      
-  end
-  
-  # GET /users/process_user_import
-  def process_user_import
-    if params[:code] == "" || params[:url] == ""
-      flash[:notice] = "Please get the code and paste the url before clicking import"
-      redirect_to users_path + "/0/uploadusers"
-      return
-    end
-      
-    ## Establish Google connection
-    @client = Google::APIClient.new(
-      :application_name => 'bazinga',
-      :application_version => '1.0.0'
-    )
-    @auth = @client.authorization
-    @auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
-    @auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
-    @auth.scope =
-      "https://www.googleapis.com/auth/drive " +
-      "https://spreadsheets.google.com/feeds/"
-    @auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
-    
-    
-    @auth.code = params[:code]
-    @url = params[:url]
-    
-    begin
-      @auth.fetch_access_token!
-    rescue Exception
-    end
-  
-    if @auth.access_token.nil?
-      flash[:notice] = "Please get the code and paste the url before clicking import"
-      redirect_to users_path + "/0/uploadusers"
-      return
-    end
-    @my_session = GoogleDrive.login_with_oauth(@auth.access_token)
-    begin
-      @ws = @my_session.spreadsheet_by_url(@url).worksheets[0]
-    rescue Exception
-    end
-    
-    if @ws.nil?
-      flash[:notice] = "Please make sure the code and url correctly: Try Again!"
-      redirect_to users_path + "/0/uploadusers"
-      return
-    end
-
-    ## Process data in spread sheet: By default, the sheet is 3 cols with column names [course_id, course_title, instructor]
-    @row_num = @ws.num_rows - 1
-    @col_num = @ws.num_cols
-    
-    if @col_num % 3 != 0
-      flash[:notice] = "The spreadsheet is wrong: more than 3 columns"
-      redirect_to users_path + "/0/uploadusers"
-      return
-    end
-    
-    ### Fetch data from spreadsheet & insert into db
-    @data = []
-    
-    (1..@row_num).each do |i|
-      @data << User.new(
-        :uin      => @ws[i+1, 1],
-        :name     => @ws[i+1, 2],
-        :email => @ws[i+1, 3]
-        )
-    end
-    User.import @data
-    
-    redirect_to users_path    
+  # GET /users/new
+  def new
+    @user = User.new
   end
 
   # GET /users/1/edit
@@ -246,6 +158,10 @@ class UsersController < ApplicationController
     @matching.save
 
     flash[:notice] = "TA assignment for #{@course.name} is accepted!"
+# <<<<<<< HEAD
+
+# =======
+# >>>>>>> develop
     redirect_to user_path(@user.id)
   end
 
@@ -260,6 +176,146 @@ class UsersController < ApplicationController
     redirect_to user_path(@user.id)
   end
 
+  def suggest_ta
+      @user = User.find params[:id]
+      @course = Course.find params[:courseid]
+      #@course = Course.find(params[:id])
+
+      @student_application_info = Hash.new
+      @student_application_requesters = Hash.new 
+
+      @studentapplications = StudentApplication.where(application_pool_id: @course.application_pool_id)
+
+      @studentapplications.each do |studentapplication|
+      @app_course_matching = AppCourseMatching.where(student_application_id: studentapplication.id)
+      info_for_student = Hash.new 
+      assignable = true
+      assignable_position = Array.new
+
+      #Retrieve status info for each assigned course
+      if @app_course_matching.length > 0
+        matching_for_student = Array.new
+        #if already two half TA, cannot assign
+        if @app_course_matching.length == 2
+          assignable = false
+        elsif @app_course_matching[0].position == AppCourseMatching::FULLTA
+          assignable = false
+        else
+          assignable_position << {AppCourseMatching::HALFTA => 'Half TA'}
+        end
+
+        @app_course_matching.each do |app_matching|
+          matched_course = Course.find app_matching.course_id 
+          matching_for_student <<{'Course' => matched_course.name, 'Position' => app_matching.position, 'app_status' =>app_matching.status } 
+        end
+        info_for_student['status'] = matching_for_student
+      else
+        assignable_position << {AppCourseMatching::FULLTA => 'Full TA'}
+        assignable_position << {AppCourseMatching::HALFTA => 'Half TA'}
+      end
+      info_for_student['assignable'] = assignable
+      info_for_student['assignable_position'] = assignable_position
+
+      #Retrieve requester info
+      @student_application_info[studentapplication.id] = info_for_student
+    end
+  end
+  
+  def submit_ta_suggestion
+    id = params[:courseid]
+    @course = Course.find_by_id(id)
+    if params[:ids]
+      new_tas = params[:ids].keys
+      if not new_tas.empty?
+        new_tas.each do |ta_id|
+          studentapplication = StudentApplication.find(ta_id)
+          if @course.suggestion != nil
+            @course.suggestion << '/' + studentapplication.first_name + ' ' + studentapplication.last_name + ';' + "#{ta_id}"
+          else
+            @course.suggestion = studentapplication.first_name + ' ' + studentapplication.last_name+ ';' +"#{ta_id}"
+          end
+          if studentapplication.requester != nil
+            studentapplication.requester << ',' + "#{@course.id}"
+          else
+            studentapplication.requester = "#{@course.id}"
+          end
+          studentapplication.save!
+            # @studentapplication.course_assigned = @course.id
+            # @studentapplication.status = StudentApplication::TEMP_ASSIGNED
+            # @studentapplication.save!
+        end
+      end
+    end
+    @course.save!
+    redirect_to(lecturer_show_path(params[:id]))
+  end
+  
+  def delete_suggestion
+    id = params[:courseid]
+    @course = Course.find(id)
+    if @course.suggestion != nil
+    suggestionid = @course.suggestion.split('/')
+    suggestionid.each do |studentid|
+      ta_id = studentid.split(';')
+      @ta = StudentApplication.find_by_id(ta_id[1])
+      if @ta.requester != nil
+      courserelated = @ta.requester.split(',')
+      @ta.requester = nil
+      courserelated.delete("#{id}")
+      courserelated.each do |course|
+        if @ta.requester != nil
+          @ta.requester << ','+course
+        else
+          @ta.requester = course
+        end
+      end
+      @ta.save!
+      end
+    end
+    end
+    @course.suggestion = nil
+    @course.save!
+    redirect_to(lecturer_show_path(params[:id]))
+  end
+    
+  
+  def lecturer_show
+    @user = User.find params[:id]
+    @puin = @user.uin
+    #@puin = params[:luin]
+    @lecturer = User.find_by_uin(@puin)
+    session[:puin] = @puin
+    @courselist = Course.where(:lecturer_uin => @puin)
+    @courses_ta = Hash.new
+    @suggestion = Array.new
+    internal_courses_ta = Hash.new  # internal usage
+    @ta_status = Hash.new
+    @courselist.each do |course|
+      tadata_matching = AppCourseMatching.where(course_id: course.id)
+      tadata_ids = Array.new
+      tadata_status = Hash.new 
+      tadata_matching.each do |matching|
+        tadata_ids << matching.student_application_id
+        tadata_status[matching.student_application_id] = {'status' => matching.status, 'position' => matching.position}
+      end
+      tadata = StudentApplication.where(id: tadata_ids)  # This will return one list
+      @courses_ta[course.id] = tadata
+      @ta_status[course.id] = tadata_status
+      if course.suggestion != nil
+      coursesuggestion = course.suggestion.split('/')
+      coursesuggestion.each do |taname|
+        if @suggestion[course.id] != nil
+          @suggestion[course.id] << '/' + taname.split(';')[0]
+        else
+          @suggestion[course.id] = taname.split(';')[0]
+        end
+      end
+      else
+        @suggestion[course.id] = nil
+      end
+    end
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -270,4 +326,5 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :uin, :email, :login)
     end
+    
 end
