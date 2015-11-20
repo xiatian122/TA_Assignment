@@ -11,7 +11,6 @@ class ApplicationPoolsController < ApplicationController
 
   def create
   	@application_pool = ApplicationPool.create!(params[:application_pool])
-  	@application_pool.active = true
   	@application_pool.save!
     #debugger
     flash[:notice] = "New application pool for #{@application_pool.year} #{@application_pool.semester}  was successfully created."

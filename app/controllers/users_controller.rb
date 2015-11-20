@@ -12,10 +12,17 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
+
+    #Get all application pools that are currently active
     @application_pools = ApplicationPool.where(:active => true)
     @studentapplications = Hash.new
     @application_status = Hash.new 
+
+    #For each active application pool, see if this user has applied
     @application_pools.each do |application_pool|
+
+      #If the user has applied, fetch the application form, get matchings, and construct
+      #hashtable for saving its application status
       if StudentApplication.exists?(application_pool_id: application_pool.id, user_id: @user.id)
         @studentapplications[application_pool.id] = StudentApplication.find_by(application_pool_id: application_pool.id, user_id: @user.id)
         matchings = AppCourseMatching.where(student_application_id: @studentapplications[application_pool.id].id)
@@ -83,12 +90,14 @@ class UsersController < ApplicationController
     end
   end
 
+  #create new student_application for a application_pool
   def new_application
     @user = User.find(params[:id])
     @application_pool = ApplicationPool.find(params[:term_id])
     @studentapplication = StudentApplication.new
   end
 
+  #Save the newly created student_application
   def create_ta_application
     @user = User.find(params[:id])
     @application_pool = ApplicationPool.find(params[:term_id])
@@ -105,6 +114,13 @@ class UsersController < ApplicationController
 
   end
 
+  #Delete student_application from the table, and purge all matchings in 
+  #the matching table
+  #TODO: If the student withdraws application, but there already has matchings
+  #in the matching table, shouldn't we notify Keyser? Or we just let the
+  #student withdraw silently?
+  #TODO2: For course requesters, we should purge related information in
+  #courses that request this student, too.
   def withdraw_student_application
     @user = User.find(params[:id])
     @studentapplication = StudentApplication.find(params[:app_id])
@@ -114,6 +130,8 @@ class UsersController < ApplicationController
     @matchings.each do |matching|
       matching.destroy
     end
+
+    #TODO: purge requester information
 
     @studentapplication.destroy
     redirect_to user_path(@user.id)
@@ -140,7 +158,10 @@ class UsersController < ApplicationController
     @matching.save
 
     flash[:notice] = "TA assignment for #{@course.name} is accepted!"
+# <<<<<<< HEAD
 
+# =======
+# >>>>>>> develop
     redirect_to user_path(@user.id)
   end
 
@@ -156,6 +177,7 @@ class UsersController < ApplicationController
   end
 
   def suggest_ta
+      @user = User.find params[:id]
       @course = Course.find params[:courseid]
       #@course = Course.find(params[:id])
 

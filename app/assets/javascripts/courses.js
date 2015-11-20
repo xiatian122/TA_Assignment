@@ -4,8 +4,8 @@
 
 
 // following code is to prevent course row from expanding when user clicked edit button of each course row at courses index 
-$(document).ready(function (){
-  console.log("course. js onReady()");
+function courseIndexRelevant (){
+  console.log(".courses.index on page change ");
 
   function tagJqueryClickCb ( event, tag){
     var $tag = this;
@@ -23,8 +23,8 @@ $(document).ready(function (){
     e.stopPropagation();
   });
 
-  console.log(window.location.hash)
-  console.log(window.location.href)
+  // console.log(window.location.hash);
+  // console.log(window.location.href);
 
   if (window.location.hash){
     var anchor = window.location.hash;
@@ -65,7 +65,6 @@ $(document).ready(function (){
     event.stopPropagation();
     $.ajax({
       url:$(atag).attr("href"),
-
       success:function (data){
         if ($(atag).hasClass("confirm-link")){
           var $this_li = $( $(atag).attr("data-target") );
@@ -79,30 +78,26 @@ $(document).ready(function (){
       }
     });
   });
-  
-  
+}
 
+$(document).on("page:change", function (){
+  if ($(".courses.index").length > 0){
+    courseIndexRelevant();
+  }
+  if ($(".courses.select_new_ta").length > 0){
 
-  //http://railsapps.github.io/rails-javascript-include-external.html
-  // Basically ruby on rails originally does not allow page-specific javascript ??!
-  // since ruby on rails adopts a very strange javascript importing mechanism(according the first three lines of comments of this file),
-  // following code is related with select new TA
-  console.log("select new ta section")
-  $('a.back-to-class-list').click(function (e){ tagJqueryClickCb.call(this,e,"a");});
-
-  $('input[type=checkbox], select').click(function (e){
-    e.stopPropagation();
-  });
-  $('a[href=#myModal]').click( function (e){
-    e.stopPropagation();
-    $($(this).attr('data-target')).modal('show');
-  });
-
-
+    (function (){
+      $("input, select,option").click(function (e){
+        e.stopPropagation();
+      })
+      $("a[href=#myModal]").click(function (e){
+        console.log("link clicked")
+        e.stopPropagation();
+        $($(this).data("target")).modal("show")
+      });
+    })();
+  }
 });
-
-
-
 
 // // For Delete Button
 // $('button[name="remove_levels"]').on('click', function(e){

@@ -23,5 +23,10 @@
           $(function () {
                 $('#datetimepicker1').datetimepicker();
             });
+      .form-group
+        %label{:for => "application_pool_active"} Active
+        %p=f.check_box(:active, {class:"form-control", name:"application_pool[active]", checked:@application_pool.active}) 
+        :javascript
+          $("[id='application_pool_active']").bootstrapSwitch();
       = f.submit("Create", {class:"btn btn-primary"})
       = f.submit("Cancel", {class:"btn btn-primary"})
