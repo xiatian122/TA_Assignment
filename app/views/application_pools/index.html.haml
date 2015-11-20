@@ -22,5 +22,9 @@
         %td= application_pool.year
         %td= application_pool.semester
         %td= application_pool.deadline
-        %td= application_pool.active
+        %td
+          -if application_pool.active
+            %span{class:"label label-success"}="Active"
+          -else
+            %span{class:"label label-default"}="Inactive"
         %td= link_to 'Edit', edit_application_pool_path(application_pool.id)
