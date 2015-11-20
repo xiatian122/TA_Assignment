@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get '/users/:id/suggest_ta' => 'users#suggest_ta', :as => :suggest_ta
   get '/users/:id/submit_ta_suggestion' => 'users#submit_ta_suggestion', :as => :submit_ta_suggestion
   get '/users/(:id)/lecturer_show' => 'users#lecturer_show', :as => :lecturer_show
-  get '/users/(:id)/delete_suggestion' => 'users#delete_suggestion', :as => :delete_suggestion
+  get '/users/:id/delete_suggestion' => 'users#delete_suggestion', :as => :delete_suggestion
 
   
   get '/users/:id/uploadusers' => 'users#uploadusers', :as => :uploadusers
