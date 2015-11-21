@@ -288,8 +288,10 @@ class UsersController < ApplicationController
     @courselist = Course.where(:lecturer_uin => @puin)
     @courses_ta = Hash.new
     @suggestion = Array.new
+
     internal_courses_ta = Hash.new  # internal usage
     @ta_status = Hash.new
+
     @courselist.each do |course|
       tadata_matching = AppCourseMatching.where(course_id: course.id)
       tadata_ids = Array.new
@@ -298,18 +300,19 @@ class UsersController < ApplicationController
         tadata_ids << matching.student_application_id
         tadata_status[matching.student_application_id] = {'status' => matching.status, 'position' => matching.position}
       end
-      tadata = StudentApplication.where(id: tadata_ids)  # This will return one list
+      tadata = StudentApplication.where(id: tadata_ids)  # This will return one list      
       @courses_ta[course.id] = tadata
       @ta_status[course.id] = tadata_status
+
       if course.suggestion != nil
-      coursesuggestion = course.suggestion.split('/')
-      coursesuggestion.each do |taname|
-        if @suggestion[course.id] != nil
-          @suggestion[course.id] << '/' + taname.split(';')[0]
-        else
-          @suggestion[course.id] = taname.split(';')[0]
+        coursesuggestion = course.suggestion.split('/')
+        coursesuggestion.each do |taname|
+          if @suggestion[course.id] != nil
+            @suggestion[course.id] << '/' + taname.split(';')[0]
+          else
+            @suggestion[course.id] = taname.split(';')[0]
+          end
         end
-      end
       else
         @suggestion[course.id] = nil
       end
