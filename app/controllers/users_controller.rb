@@ -302,14 +302,14 @@ class UsersController < ApplicationController
       @courses_ta[course.id] = tadata
       @ta_status[course.id] = tadata_status
       if course.suggestion != nil
-      coursesuggestion = course.suggestion.split('/')
-      coursesuggestion.each do |taname|
-        if @suggestion[course.id] != nil
-          @suggestion[course.id] << '/' + taname.split(';')[0]
-        else
-          @suggestion[course.id] = taname.split(';')[0]
+        coursesuggestion = course.suggestion.split('/')
+        coursesuggestion.each do |taname|
+          if @suggestion[course.id] != nil
+            @suggestion[course.id] << '/' + taname.split(';')[0]
+          else
+            @suggestion[course.id] = taname.split(';')[0]
+          end
         end
-      end
       else
         @suggestion[course.id] = nil
       end
