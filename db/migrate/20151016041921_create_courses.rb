@@ -10,6 +10,7 @@ class CreateCourses < ActiveRecord::Migration
       t.text :notes
       t.string :suggestion
       t.integer :application_pool_id
+      t.string :description
 
       t.timestamps null: false
     end
