@@ -7,6 +7,7 @@ class StudentApplicationsController < ApplicationController
       @status_for_student = Array.new
       @matching = AppCourseMatching.where(student_application_id: student_application.id)
       if @matching.length > 0
+        byebug
         @matching.each do |m|
           course = Course.find m.course_id 
           @status_for_student << {'Course' => course.name, 'Position' => m.position, 'Status' => m.status}
