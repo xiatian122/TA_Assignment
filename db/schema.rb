@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(version: 20151110025439) do
     t.text     "notes"
     t.string   "suggestion"
     t.integer  "application_pool_id"
+    t.string   "description"
+    t.integer  "active_term"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
   end
@@ -55,6 +57,7 @@ ActiveRecord::Schema.define(version: 20151110025439) do
     t.string   "preferred_course"
     t.integer  "application_pool_id"
     t.integer  "user_id"
+    t.integer  "active_term"
     t.text     "note"
     t.string   "requester"
     t.datetime "created_at",          null: false

@@ -1,5 +1,5 @@
 class Course < ActiveRecord::Base
-	attr_accessible :cid, :section, :name, :credits, :lecturer_uin, :area, :notes, :description, :ta, :notes, :application_pool_id, :suggestion
+	attr_accessible :cid, :section, :name, :credits, :lecturer_uin, :area, :notes, :description, :ta, :notes, :application_pool_id, :suggestion, :active_term
 
     
 

@@ -11,6 +11,7 @@ class CreateCourses < ActiveRecord::Migration
       t.string :suggestion
       t.integer :application_pool_id
       t.string :description
+      t.integer :active_term
 
       t.timestamps null: false
     end

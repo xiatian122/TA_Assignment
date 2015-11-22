@@ -4,6 +4,5 @@ class ApplicationPool < ActiveRecord::Base
     def self.getAppPoolYearSemester(id)
 	   	@application_pool = ApplicationPool.find(id)
 		return "#{@application_pool.year} #{@application_pool.semester}"
-    
     end
 end

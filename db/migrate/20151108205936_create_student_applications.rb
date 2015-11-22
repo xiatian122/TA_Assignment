@@ -9,6 +9,7 @@ class CreateStudentApplications < ActiveRecord::Migration
       t.string :preferred_course
       t.integer :application_pool_id
       t.integer :user_id
+      t.integer :active_term
       t.text :note
       t.string :requester
       

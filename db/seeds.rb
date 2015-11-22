@@ -13,7 +13,7 @@ User.delete_all()
 StudentApplication.delete_all()
 users = [{:first_name => 'user1', :last_name => "Yang", :uin => '922003095', :email => 'test1@gmail.com', :identity => 'PHD', :start_semester => '2013 Fall', :elpe => '1', :guaranteed => '1', :active => '1' },
           {:first_name => 'user2', :last_name => "Zhao", :uin => '922773022', :email => 'test2@gmail.com', :identity => 'MS', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:first_name => 'user3', :llast_name => "Edward", :uin => '922773023', :email => 'test3@gmail.com', :identity => 'MENG', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
+          {:first_name => 'user3', :last_name => "Edward", :uin => '922773023', :email => 'test3@gmail.com', :identity => 'MENG', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
           {:first_name => 'user4', :last_name => "TT", :uin => '922773024', :email => 'test3@gmail.com', :identity => 'PHD', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
           {:first_name => 'user5', :last_name => "Alex", :uin => '922003096', :email => 'test5@gmail.com', :identity => 'FACULTY', :start_semester => '2000 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
           {:first_name => 'user6', :last_name => "Asada", :uin => '922003097', :email => 'test6@gmail.com', :identity => 'FACULTY', :start_semester => '1989 Spring', :elpe => '0', :guaranteed => '0', :active => '1'}]
@@ -25,19 +25,19 @@ studentapplications = [{
              :advisor => 'Miamia', 
              :gpa => '4.0', :course_taken => 'CSCE-606-601', 
              :course_taed => 'CSCE-629-601', :preferred_area => 'Physics', :preferred_course => 'CSCE629', 
-             :application_pool_id => '1', :user_id => 1
+             :application_pool_id => '1', :user_id => 1, :requester => ""
             },
             {
              :advisor => 'T_Advisor',
              :gpa => '4.0', :course_taken => 'CSCE-633-601', 
              :course_taed => 'CSCE-603-601', :preferred_area => 'Machine Learning', :preferred_course => 'CSCE-603', 
-             :application_pool_id => '1', :user_id => 2
+             :application_pool_id => '1', :user_id => 2, :requester => ""
             },
             {
              :advisor => 'T_Advisor',
              :gpa => '4.0', :course_taken => 'CSCE-633-601', 
              :course_taed => 'CSCE-603-601', :preferred_area => 'Compiler Design', :preferred_course => 'CSCE-603', 
-             :application_pool_id => '1', :user_id => 3
+             :application_pool_id => '1', :user_id => 3, :requester => ""
             }
         ]
 
