@@ -22,7 +22,7 @@ class StudentApplication < ActiveRecord::Base
     @current_student = User.find(self.user_id)
     
     if @current_student.nil?
-      return ""
+      return nil
     else
       return @current_student.name
     end
@@ -48,7 +48,7 @@ class StudentApplication < ActiveRecord::Base
      @current_student = User.find(self.user_id)
     
     if @current_student.nil?
-      return ""
+      return nil
     else
       return @current_student.first_name
     end
@@ -61,7 +61,7 @@ class StudentApplication < ActiveRecord::Base
      @current_student = User.find(self.user_id)
     
     if @current_student.nil?
-      return ""
+      return nil
     else
       return @current_student.last_name
     end

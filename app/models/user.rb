@@ -1,11 +1,14 @@
 class User < ActiveRecord::Base
 	attr_accessible :first_name, :last_name, :uin, :email, :identity, :elpe, :login, :start_semester, :guaranteed, :active
-	
+	#attr_accessible :name
 	
 	
     # (getter) Whole name for user: "first_name last_name" 
     def name
-    return  self.first_name + " " + self.last_name
+        if self.nil? || self.first_name.nil? || self.last_name.nil?
+            return nil
+        end
+       else return  self.first_name + " " + self.last_name
     end
     # (setter) Whole name for user: "first_name last_name" 
     def name=(value)
