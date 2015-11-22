@@ -11,30 +11,30 @@ ApplicationPool.delete_all()
 Course.delete_all()
 User.delete_all()
 StudentApplication.delete_all()
-users = [{:name => 'user1', :uin => '922003095', :email => 'test1@gmail.com', :login => 'login1', :identity => 'student'},
-          {:name => 'user2', :uin => '922773022', :email => 'test2@gmail.com', :login => 'login1', :identity => 'student'},
-          {:name => 'user3', :uin => '922773023', :email => 'test3@gmail.com', :login => 'login1', :identity => 'student'},
-          {:name => 'user4', :uin => '922773024', :email => 'test3@gmail.com', :login => 'login1', :identity => 'student'},
-          {:name => 'user5', :uin => '922003096', :email => 'test5@gmail.com', :login => 'login1', :identity => 'lecturer'},
-          {:name => 'user6', :uin => '922003097', :email => 'test6@gmail.com', :login => 'login1', :identity => 'lecturer'}]
+users = [{:first_name => 'user1', :last_name => "Yang", :uin => '922003095', :email => 'test1@gmail.com', :login => 'login1', :identity => 'PhD'},
+          {:first_name => 'user2', :last_name => "Zhao", :uin => '922773022', :email => 'test2@gmail.com', :login => 'login1', :identity => 'MS'},
+          {:first_name => 'user3', :llast_name => "Edward", :uin => '922773023', :email => 'test3@gmail.com', :login => 'login1', :identity => 'Meng'},
+          {:first_name => 'user4', :last_name => "TT", :uin => '922773024', :email => 'test3@gmail.com', :login => 'login1', :identity => 'student'},
+          {:first_name => 'user5', :last_name => "Alex", :uin => '922003096', :email => 'test5@gmail.com', :login => 'login1', :identity => 'faculty'},
+          {:first_name => 'user6', :last_name => "Asada", :uin => '922003097', :email => 'test6@gmail.com', :login => 'login1', :identity => 'faculty'}]
 users.each do |user|
   User.create!(user)
 end
 
-studentapplications = [{:uin => '922003095', :first_name => 'Ha', :last_name => 'waka' , 
-             :advisor => 'Miamia', :degree => '2', :start_semester => '2015 Fall', 
+studentapplications = [{:uin => '922003095', 
+             :advisor => 'Miamia', :start_semester => '2015 Fall', 
              :gpa => '4.0', :position => '1', :course_assigned => '0', :course_taken => 'CSCE-606-601', 
              :course_taed => 'CSCE-629-601', :preferred_area => 'Physics', :preferred_course => 'CSCE629', 
              :status => '1', :active_term => '20153', :application_pool_id => '1', :user_id => 1
             },
-            {:uin => '922773022', :first_name => 'Testfirst', :last_name => 'Testlast' , 
-             :advisor => 'T_Advisor', :degree => '3', :start_semester => '2012 Fall', 
+            {:uin => '922773022', 
+             :advisor => 'T_Advisor', :start_semester => '2012 Fall', 
              :gpa => '4.0', :position => '3', :course_assigned => '0', :course_taken => 'CSCE-633-601', 
              :course_taed => 'CSCE-603-601', :preferred_area => 'Machine Learning', :preferred_course => 'CSCE-603', 
              :status => '1', :active_term => '20153', :application_pool_id => '1', :user_id => 2
             },
-            {:uin => '922773023', :first_name => 'Jack', :last_name => 'Sparrow' , 
-             :advisor => 'T_Advisor', :degree => '3', :start_semester => '2013 Spring', 
+            {:uin => '922773023',  
+             :advisor => 'T_Advisor', :start_semester => '2013 Spring', 
              :gpa => '4.0', :position => '3', :course_assigned => '0', :course_taken => 'CSCE-633-601', 
              :course_taed => 'CSCE-603-601', :preferred_area => 'Compiler Design', :preferred_course => 'CSCE-603', 
              :status => '1', :active_term => '20153', :application_pool_id => '1', :user_id => 3
