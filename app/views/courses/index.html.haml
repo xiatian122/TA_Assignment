@@ -20,6 +20,8 @@
     .panel.panel-default.remove-margin.pseudo-table-heading
       / .panel-heading Panel heading without title
       .panel-body
+        .col-xs-1
+          %b Semester
         .col-xs-1 
           %b Course ID
         .col-xs-4 
@@ -28,7 +30,7 @@
           %b Confirmed / Designated
         .col-xs-3 
           %b Lecturer
-        .col-xs-2 
+        .col-xs-1 
           %b Operations
 
 .row
@@ -41,11 +43,12 @@
         .panel.panel-default  
           .panel-heading{:role => "tab"}
             .row{"aria-controls" =>"collapse#{course.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{course.id}", :role => "button", :id=> "heading#{course.id}"}
+              .col-xs-1.td=ApplicationPool::getAppPoolYearSemester(course.application_pool_id)
               .col-xs-1.td=course.cid
               .col-xs-4.td=course.name
               .col-xs-2.td="#{@SlotStatus[course.id][:assigned] } / #{@SlotStatus[course.id][:slots] }"
               .col-xs-3.td=course.lecturer
-              .col-xs-2.td
+              .col-xs-1.td
                 %a.btn.btn-default.btn-sm.edit-op-btn{:href=> edit_course_path(course.id) ,"data-toggle" =>"tooltip", "data-placement" => "bottom", "data-title" => "Edit", id:"edit-#{course.id}"}
                   %span.glyphicon.glyphicon-edit
                 
