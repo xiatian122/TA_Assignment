@@ -41,16 +41,7 @@
                 .col-xs-2= studentapplication.uin
                 .col-xs-2= studentapplication.fullName()
                 .col-xs-1= studentapplication.gpa
-                .col-xs-2
-                  - case studentapplication.degree
-                    - when StudentApplication::UNDERGRAD
-                      Undergraduate
-                    - when StudentApplication::MENG
-                      M.Eng
-                    - when StudentApplication::MS
-                      MS
-                    - when StudentApplication::PHD
-                      PHD
+                .col-xs-2= studentapplication.degree
                 .col-xs-1= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
   
   %p Note: TAs without a check book is already assigned as a full TA for another course              
@@ -103,6 +94,50 @@
 
 =link_to "Back to your courses", lecturer_show_path(@user.id)
 
+/ - @studentapplications.each do |studentapplication|
+/   %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
+/     %div{class:"modal-dialog", :role => "document"}
+/       %div{class:"modal-content"}
+/         %div{class:"modal-header"} 
+/           %h2 #{studentapplication.fullName()}'s Application Form
+/         %div{class:"modal-body"}
+/           %table#studentapplication.table.table-striped
+/             %thead
+/               %tr
+/                 %th Field
+/                 %th Info
+/             %tbody
+/               %tr
+/                 %td UIN
+/                 %td= studentapplication.uin
+/               %tr
+/                 %td Name
+/                 %td= studentapplication.fullName()
+/               %tr
+/                 %td Advisor
+/                 %td= studentapplication.advisor
+/               %tr
+/                 %td Degree
+/                 %td
+/                   - case studentapplication.degree
+/                     - when StudentApplication::UNDERGRAD
+/                       Undergraduate
+/                     - when StudentApplication::MENG
+/                       M.Eng
+/                     - when StudentApplication::MS
+/                       MS
+/                     - when StudentApplication::PHD
+/                       PHD
+/               %tr
+/                 %td GPA
+/                 %td= studentapplication.gpa
+/               %tr
+/                 %td Course Taken
+/                 %td= studentapplication.course_taken
+/               %tr
+/                 %td Course TAed
+/                 %td= studentapplication.course_taed
+
 - @studentapplications.each do |studentapplication|
   %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
     %div{class:"modal-dialog", :role => "document"}
@@ -117,26 +152,20 @@
                 %th Info
             %tbody
               %tr
-                %td UIN
-                %td= studentapplication.uin
-              %tr
                 %td Name
                 %td= studentapplication.fullName()
               %tr
-                %td Advisor
-                %td= studentapplication.advisor
+                %td UIN
+                %td= studentapplication.uin
+              %tr
+                %td Email
+                %td= studentapplication.email
               %tr
                 %td Degree
-                %td
-                  - case studentapplication.degree
-                    - when StudentApplication::UNDERGRAD
-                      Undergraduate
-                    - when StudentApplication::MENG
-                      M.Eng
-                    - when StudentApplication::MS
-                      MS
-                    - when StudentApplication::PHD
-                      PHD
+                %td=studentapplication.degree
+              %tr
+                %td Advisor
+                %td= studentapplication.advisor
               %tr
                 %td GPA
                 %td= studentapplication.gpa
@@ -144,5 +173,17 @@
                 %td Course Taken
                 %td= studentapplication.course_taken
               %tr
-                %td Course TAed
+                %td Course TAed Before
                 %td= studentapplication.course_taed
+              %tr
+                %td Prefered Areas
+                %td= studentapplication.preferred_area
+              %tr
+                %td Prefered Courses
+                %td= studentapplication.preferred_course
+
+              / Do not let instructors view student's notes to administrator
+              / E.g. I don't want to TA for this course
+              / %tr
+              /   %td Notes
+              /   %td= studentapplication.note
