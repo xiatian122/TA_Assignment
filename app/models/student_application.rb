@@ -14,7 +14,29 @@ class StudentApplication < ActiveRecord::Base
   PHD = 4
   FACULTY = 5
 
-
+  def destroy
+    if self.requester
+      requesters = self.requester.split(',')
+      requesters.each do |requester|
+        course = Course.find requester
+        newsuggestion = ""
+        suggestionid = course.suggestion.split('/')
+        suggestionid.each do |studentid|
+          ta_id = studentid.split(';')
+          if not self.id.equal?(ta_id[1].to_i)
+            if newsuggestion.length == 0
+              newsuggestion = studentid 
+            else
+              newsuggestion = "/" + studentid
+            end
+          end
+        end
+        course.suggestion = newsuggestion
+        course.save!
+      end
+    end
+    super
+  end
 
   # (Getter) Compose applicant's full name
   def fullName()

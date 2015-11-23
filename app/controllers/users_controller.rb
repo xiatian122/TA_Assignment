@@ -241,7 +241,7 @@ class UsersController < ApplicationController
             @course.suggestion = studentapplication.first_name + ' ' + studentapplication.last_name+ ';' +"#{ta_id}"
           end
           if studentapplication.requester != nil and studentapplication.requester.length != 0
-            studentapplication.requester << ',' + "#{@course.id}"
+            studentapplication.requester = studentapplication.requester + ',' + "#{@course.id}"
           else
             studentapplication.requester = "#{@course.id}"
           end

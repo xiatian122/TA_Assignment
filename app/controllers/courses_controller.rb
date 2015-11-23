@@ -263,7 +263,7 @@ class CoursesController < ApplicationController
 
       #Retrieve requester info
       requesters = studentapplication.requester
-      if requesters
+      if requesters and requesters.length > 0
         requester_for_student = Array.new 
         split_requester = requesters.split(',')
         split_requester.each do |requested_course|

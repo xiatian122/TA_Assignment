@@ -27,6 +27,19 @@
   .col-xs-6
     %p= @user.email
 
+-if not @user.identity == "FACULTY"
+  .row
+    .col-xs-3
+      %p Degree Program:
+    .col-xs-6
+      %p= @user.identity
+
+  .row
+    .col-xs-3
+      %p Start Semester:
+    .col-xs-6
+      %p= @user.start_semester
+
 =link_to 'Edit', edit_user_path(@user)
 
 -if not @studentapplications.empty?
