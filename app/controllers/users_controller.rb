@@ -234,12 +234,12 @@ class UsersController < ApplicationController
       if not new_tas.empty?
         new_tas.each do |ta_id|
           studentapplication = StudentApplication.find(ta_id)
-          if @course.suggestion != nil
+          if @course.suggestion != nil and @course.suggestion.length != 0
             @course.suggestion << '/' + studentapplication.first_name + ' ' + studentapplication.last_name + ';' + "#{ta_id}"
           else
             @course.suggestion = studentapplication.first_name + ' ' + studentapplication.last_name+ ';' +"#{ta_id}"
           end
-          if studentapplication.requester != nil
+          if studentapplication.requester != nil and studentapplication.requester.length != 0
             studentapplication.requester << ',' + "#{@course.id}"
           else
             studentapplication.requester = "#{@course.id}"
@@ -265,7 +265,7 @@ class UsersController < ApplicationController
       @ta = StudentApplication.find_by_id(ta_id[1])
       if @ta.requester != nil
       courserelated = @ta.requester.split(',')
-      @ta.requester = nil
+      @ta.requester = ""
       courserelated.delete("#{id}")
       courserelated.each do |course|
         if @ta.requester != nil

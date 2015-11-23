@@ -267,7 +267,7 @@ class CoursesController < ApplicationController
         requester_for_student = Array.new 
         split_requester = requesters.split(',')
         split_requester.each do |requested_course|
-          r_course = Course.find requested_course
+          r_course = Course.find requested_course.to_i
           requester_for_student << {'Course' => r_course.name, 'Lecturer' => r_course.lecturer}
         end
         info_for_student['requesters'] = requester_for_student
