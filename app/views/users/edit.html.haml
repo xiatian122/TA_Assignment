@@ -1,0 +1,30 @@
+%p#notice=notice
+
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="Edit User Information For #{@user.name}"
+
+%hr
+
+.row
+  .col-md-10.col-md-offset-1
+    = form_for @user, url:{action:"update"}, html:{class:"update_user_form"} do |f|
+      .form-group
+        %label{:for => "user_first_name"} First Name
+        = f.text_field(:first_name, {placeholder:"First Name", class:"form-control"})
+      .form-group
+        %label{:for => "user_last_name"} Last Name
+        = f.text_field(:last_name, {placeholder:"Last Name", class:"form-control"})
+      .form-group
+        %label{:for => "user_email"} Email
+        = f.text_field(:email, {placeholder:"Email", class:"form-control"})
+      .form-group
+        %label{:for => "user_login"} Password
+        = f.text_field(:login, {placeholder:"Password", class:"form-control"})
+      = f.submit("Update", {class:"btn btn-primary"})
+
+%br
+.row
+  .col-xs-1
+  .col-xs-10
+    =link_to 'Back to User Information', user_path(@user)
