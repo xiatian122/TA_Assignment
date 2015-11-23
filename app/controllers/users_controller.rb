@@ -100,6 +100,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @application_pool = ApplicationPool.find(params[:term_id])
     @studentapplication = StudentApplication.new
+    @studentapplication.user_id = @user.id
   end
 
   #Save the newly created student_application
