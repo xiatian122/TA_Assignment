@@ -29,8 +29,10 @@ class CoursesController < ApplicationController
         tasuggestion.each do |ta_info|
           suggestion << ta_info.split(';')[1]
         end
-        suggested_students = StudentApplication.where(id: suggestion)
-        @courses_suggestion[course.id] = suggested_students
+        if suggestion.length > 0
+          suggested_students = StudentApplication.where(id: suggestion)
+          @courses_suggestion[course.id] = suggested_students
+        end
       end
     
 
