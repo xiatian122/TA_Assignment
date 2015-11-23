@@ -92,6 +92,17 @@ class StudentApplication < ActiveRecord::Base
     end
   end
   
+    # (Getter) Get applicant's email
+  def email
+    
+    @current_student = User.find(self.user_id)
+    
+    if @current_student.nil?
+      return ""
+    else
+      return @current_student.email
+    end
+  end
   
   # (Getter) 
   #def position

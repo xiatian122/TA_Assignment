@@ -86,50 +86,6 @@
                           %span{class:"label label-default"}="Under Review"
 
 
-/ %table#studentapplications.table.table-striped
-/   %thead
-/     %tr
-/       %th Student UIN
-/       %th Name
-/       %th GPA
-/       %th Degree Program
-/       %th Application Term
-/       %th Status
-/   - @studentapplications.each do |studentapplication|
-/     %tbody
-/       %tr
-/         %td= studentapplication.uin
-/         %td= studentapplication.fullName()
-/         %td= studentapplication.gpa
-/         %td
-/           - case studentapplication.degree
-/             - when StudentApplication::UNDERGRAD
-/               Undergraduate
-/             - when StudentApplication::MENG
-/               M.Eng
-/             - when StudentApplication::MS
-/               MS
-/             - when StudentApplication::PHD
-/               PHD
-/         %td= ApplicationPool::getAppPoolYearSemester studentapplication.application_pool_id
-/         %td
-/           - case studentapplication.status
-/             - when StudentApplication::UNDER_REVIEW
-/               %span{class:"label label-default"}="Under Review"
-/             - when StudentApplication::TEMP_ASSIGNED
-/               %span{class:"label label-primary"}="Temporary Assigned"
-/             - when StudentApplication::EMAIL_NOTIFIED
-/               %span{class:"label label-primary"}="Email Notified"
-/             - when StudentApplication::STUDENT_CONFIRMED
-/               %span{class:"label label-success"}="Student Confirmed"
-/             - when StudentApplication::STUDENT_REJECTED
-/               %span{class:"label label-warning"}="Student Rejected"
-/             - when StudentApplication::ASSIGNED
-/               %span{class:"label label-success"}="Assigned"
-/             - else
-/               %span{class:"label label-danger"}="Unknown"
-/         %td=link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
-
 - @studentapplications.each do |studentapplication|
   %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
     %div{class:"modal-dialog", :role => "document"}
@@ -144,26 +100,20 @@
                 %th Info
             %tbody
               %tr
-                %td UIN
-                %td= studentapplication.uin
-              %tr
                 %td Name
                 %td= studentapplication.fullName()
               %tr
-                %td Advisor
-                %td= studentapplication.advisor
+                %td UIN
+                %td= studentapplication.uin
+              %tr
+                %td Email
+                %td= studentapplication.email
               %tr
                 %td Degree
-                %td
-                  - case studentapplication.degree
-                    - when StudentApplication::UNDERGRAD
-                      Undergraduate
-                    - when StudentApplication::MENG
-                      M.Eng
-                    - when StudentApplication::MS
-                      MS
-                    - when StudentApplication::PHD
-                      PHD
+                %td=studentapplication.degree
+              %tr
+                %td Advisor
+                %td= studentapplication.advisor
               %tr
                 %td GPA
                 %td= studentapplication.gpa
@@ -171,8 +121,15 @@
                 %td Course Taken
                 %td= studentapplication.course_taken
               %tr
-                %td Course TAed
+                %td Course TAed Before
                 %td= studentapplication.course_taed
               %tr
-                %td Requested by Course
-                %td= studentapplication.requester
+                %td Prefered Areas
+                %td= studentapplication.preferred_area
+              %tr
+                %td Prefered Courses
+                %td= studentapplication.preferred_course
+              %tr
+                %td Notes
+                %td= studentapplication.note
+              

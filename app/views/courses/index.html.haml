@@ -132,26 +132,20 @@
                     %th Info
                 %tbody
                   %tr
-                    %td UIN
-                    %td= student.uin
-                  %tr
                     %td Name
                     %td= student.fullName()
                   %tr
-                    %td Advisor
-                    %td= student.advisor
+                    %td UIN
+                    %td= student.uin
+                  %tr
+                    %td Email
+                    %td= student.email
                   %tr
                     %td Degree
-                    %td
-                      - case student.degree
-                        - when StudentApplication::UNDERGRAD
-                          Undergraduate
-                        - when StudentApplication::MENG
-                          M.Eng
-                        - when StudentApplication::MS
-                          MS
-                        - when StudentApplication::PHD
-                          PHD
+                    %td=student.degree
+                  %tr
+                    %td Advisor
+                    %td= student.advisor
                   %tr
                     %td GPA
                     %td= student.gpa
@@ -159,8 +153,18 @@
                     %td Course Taken
                     %td= student.course_taken
                   %tr
-                    %td Course TAed
+                    %td Course TAed Before
                     %td= student.course_taed
+                  %tr
+                    %td Prefered Areas
+                    %td= student.preferred_area
+                  %tr
+                    %td Prefered Courses
+                    %td= student.preferred_course
+                  %tr
+                    %td Notes
+                    %td= student.note
+
   -if @courses_suggestion[course.id]
     -@courses_suggestion[course.id].each do |student|
       %div{class:"modal fade", "id" => "myModal-suggest-#{course.id}-#{student.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
@@ -176,26 +180,20 @@
                     %th Info
                 %tbody
                   %tr
-                    %td UIN
-                    %td= student.uin
-                  %tr
                     %td Name
                     %td= student.fullName()
                   %tr
-                    %td Advisor
-                    %td= student.advisor
+                    %td UIN
+                    %td= student.uin
+                  %tr
+                    %td Email
+                    %td= student.email
                   %tr
                     %td Degree
-                    %td
-                      - case student.degree
-                        - when StudentApplication::UNDERGRAD
-                          Undergraduate
-                        - when StudentApplication::MENG
-                          M.Eng
-                        - when StudentApplication::MS
-                          MS
-                        - when StudentApplication::PHD
-                          PHD
+                    %td=student.degree
+                  %tr
+                    %td Advisor
+                    %td= student.advisor
                   %tr
                     %td GPA
                     %td= student.gpa
@@ -203,5 +201,14 @@
                     %td Course Taken
                     %td= student.course_taken
                   %tr
-                    %td Course TAed
+                    %td Course TAed Before
                     %td= student.course_taed
+                  %tr
+                    %td Prefered Areas
+                    %td= student.preferred_area
+                  %tr
+                    %td Prefered Courses
+                    %td= student.preferred_course
+                  %tr
+                    %td Notes
+                    %td= student.note

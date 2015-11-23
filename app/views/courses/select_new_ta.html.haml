@@ -44,7 +44,6 @@
                     =check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
                 .col-xs-2
                   %select#position.form-control{:name => "positions[#{studentapplication.id}]", :id => "positions_#{studentapplication.id}"}
-                    %option{:value => nil} 
                     -@student_application_info[studentapplication.id]['assignable_position'].each do |assignable_position|
                       -assignable_position.each do |key, val|
                         %option{:value => key}= "#{val}"
@@ -52,16 +51,7 @@
                 .col-xs-2= studentapplication.uin
                 .col-xs-2= studentapplication.fullName()
                 .col-xs-1= studentapplication.gpa
-                .col-xs-2
-                  - case studentapplication.degree
-                    - when StudentApplication::UNDERGRAD
-                      Undergraduate
-                    - when StudentApplication::MENG
-                      M.Eng
-                    - when StudentApplication::MS
-                      MS
-                    - when StudentApplication::PHD
-                      PHD
+                .col-xs-2=studentapplication.degree
                 .col-xs-1= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
             .panel-collapse.collapse{"aria-labelledby" => "heading#{studentapplication.id}", :role => "tabpanel", :id=> "collapse#{studentapplication.id}"}
               .panel-body
@@ -111,51 +101,7 @@
                               .col-xs-3= student_status['Lecturer']
   = submit_tag 'Assign', :id => 'assign_ta', class:'btn btn-primary'
 
-  / %table#studentapplications.table.table-striped
-  /   %thead
-  /     %tr
-  /       %th Select
-  /       %th Student UIN
-  /       %th Name
-  /       %th GPA
-  /       %th Degree Program
-  /       %th Applied Term
-  /       %th Status
-  /       %th Detail
-  /   - @studentapplications.each do |studentapplication|
-  /     %tbody
-  /       %tr
-  /         %td= check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
-  /         %td= studentapplication.uin
-  /         %td= studentapplication.fullName()
-  /         %td= studentapplication.gpa
-  /         %td
-  /           - case studentapplication.degree
-  /             - when StudentApplication::UNDERGRAD
-  /               Undergraduate
-  /             - when StudentApplication::MENG
-  /               M.Eng
-  /             - when StudentApplication::MS
-  /               MS
-  /             - when StudentApplication::PHD
-  /               PHD
-  /         %td= ApplicationPool::getAppPoolYearSemester studentapplication.application_pool_id
-  /         %td
-  /           - case studentapplication.status
-  /             - when 1
-  /               %span{class:"label label-default"}="Under Review"
-  /             - when 2
-  /               %span{class:"label label-primary"}="Position Assigned"
-  /             - when 3
-  /               %span{class:"label label-success"}="Confirmed"
-  /             - else
-  /               %span{class:"label label-danger"}="Unknown"
-  /         %td= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
-    
-
-/ .row
-/   .col-xs-6=link_to "Assign",assign_new_ta_path(:ids),class:"btn btn-primary"
-
+%br
 %a{href:courses_path+ "#heading#{@course.id}" , class:"back-to-class-list" } Back to courses list
 
 - @studentapplications.each do |studentapplication|
@@ -172,26 +118,20 @@
                 %th Info
             %tbody
               %tr
-                %td UIN
-                %td= studentapplication.uin
-              %tr
                 %td Name
                 %td= studentapplication.fullName()
               %tr
-                %td Advisor
-                %td= studentapplication.advisor
+                %td UIN
+                %td= studentapplication.uin
+              %tr
+                %td Email
+                %td= studentapplication.email
               %tr
                 %td Degree
-                %td
-                  - case studentapplication.degree
-                    - when StudentApplication::UNDERGRAD
-                      Undergraduate
-                    - when StudentApplication::MENG
-                      M.Eng
-                    - when StudentApplication::MS
-                      MS
-                    - when StudentApplication::PHD
-                      PHD
+                %td=studentapplication.degree
+              %tr
+                %td Advisor
+                %td= studentapplication.advisor
               %tr
                 %td GPA
                 %td= studentapplication.gpa
@@ -199,5 +139,15 @@
                 %td Course Taken
                 %td= studentapplication.course_taken
               %tr
-                %td Course TAed
+                %td Course TAed Before
                 %td= studentapplication.course_taed
+              %tr
+                %td Prefered Areas
+                %td= studentapplication.preferred_area
+              %tr
+                %td Prefered Courses
+                %td= studentapplication.preferred_course
+              %tr
+                %td Notes
+                %td= studentapplication.note
+              

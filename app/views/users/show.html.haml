@@ -128,26 +128,20 @@
                 %th Info
             %tbody
               %tr
-                %td UIN
-                %td= val.uin
-              %tr
                 %td Name
                 %td= val.fullName()
               %tr
-                %td Advisor
-                %td= val.advisor
+                %td UIN
+                %td= val.uin
+              %tr
+                %td Email
+                %td= val.email
               %tr
                 %td Degree
-                %td
-                  - case val.degree
-                    - when StudentApplication::UNDERGRAD
-                      Undergraduate
-                    - when StudentApplication::MENG
-                      M.Eng
-                    - when StudentApplication::MS
-                      MS
-                    - when StudentApplication::PHD
-                      PHD
+                %td=val.degree
+              %tr
+                %td Advisor
+                %td= val.advisor
               %tr
                 %td GPA
                 %td= val.gpa
@@ -155,5 +149,15 @@
                 %td Course Taken
                 %td= val.course_taken
               %tr
-                %td Course TAed
+                %td Course TAed Before
                 %td= val.course_taed
+              %tr
+                %td Prefered Areas
+                %td= val.preferred_area
+              %tr
+                %td Prefered Courses
+                %td= val.preferred_course
+              %tr
+                %td Notes
+                %td= val.note
+              
