@@ -1,34 +1,83 @@
 -# file: app/views/users/new_application.html.haml
 
+%p#notice=notice
+
+.row
+  .col-xs-12
+    // We will not hard code 2015 fall here in furture
+    %h1{class:"text-left"}="New TA Application For #{ApplicationPool::getAppPoolYearSemester @application_pool.id}"
+
+%hr
+
+.row
+  .col-xs-12
+    %h2{class:"text-left"}="Basic Information"
+
+.row
+  .col-xs-3
+    %p Name:
+  .col-xs-6
+    %p= @user.name
+
+.row
+  .col-xs-3
+    %p Uin:
+  .col-xs-6
+    %p= @user.uin
+
+.row
+  .col-xs-3
+    %p Email:
+  .col-xs-6
+    %p= @user.email
+
+.row
+  .col-xs-3
+    %p Degree Program:
+  .col-xs-6
+    %p= @user.identity
+
+.row
+  .col-xs-3
+    %p Start Semester:
+  .col-xs-6
+    %p= @user.start_semester
+
+%hr
+
+.row
+  .col-xs-12
+    %h2{class:"text-left"}="TA Application Form"
+
 - utitilies={ semesters:["2015 Spring","2015 Summer","2015 Fall","2016 Spring","2016 Summer","2016 Fall","2017 Spring"]}
 .row
   .col-md-10.col-md-offset-1
     = form_for @studentapplication, url:{action:"create_ta_application", :term_id => @application_pool.id}, html:{class:"new_ta_application_form"} do |f|
       .form-group
-        %label{:for => "student_uin"} UIN
-        = f.text_field(:uin, {placeholder:"Enter your UIN", class:"form-control"})
-      .form-group
-        %label{:for => "student_first_name"} First Name
-        = f.text_field(:first_name, {placeholder:"First Name", class:"form-control"})
-      .form-group
-        %label{:for => "student_last_name"} Last Name
-        = f.text_field(:last_name, {placeholder:"Last Name", class:"form-control"})
-      .form-group
         %label{:for => "student_advisor"} Advisor
         = f.text_field(:advisor, {placeholder:"Name of your advisor ", class:"form-control"})
       .form-group
-        %label{:for => "student_degree"} Degree Program
-        %select#student_degree.form-control{:name => "student_application[degree]"}
-          %option{:value => "1"} Meng
-          %option{:value => "2"} MS
-          %option{:selected => "selected", :value => "3"} PhD
-      / student[start_semester] is string typed
-      .form-group
-        %label{:for => "student_start_semester"} Entering semester
-        %select#student_start_semester.form-control{:name => "student_application[start_semester]"}
-          - utitilies[:semesters].each do |semester_literal|
-            %option{:value => semester_literal}= semester_literal
-      .form-group
         %label{:for => "student_gpa"} GPA
         = f.text_field(:gpa, {placeholder:"Enter your GPA", class:"form-control"})
-      = f.submit("Create", {class:"btn btn-primary", :term_id => @application_pool.id})
+      .form-group
+        %label{:for => "student_course_taken"} Courses Taken
+        = f.text_area(:course_taken, {placeholder:"Enter the courses that you have already taken", class:"form-control"})
+      .form-group
+        %label{:for => "student_course_taed"} Courses TAed before
+        = f.text_area(:course_taed, {placeholder:"Enter the courses that you have TAed before", class:"form-control"})
+      .form-group
+        %label{:for => "student_preferred_area"} Prefered Areas
+        = f.text_area(:preferred_area, {placeholder:"Enter the area that you feel comfortable to TA", class:"form-control"})
+      .form-group
+        %label{:for => "student_preferred_course"} Prefered Courses
+        = f.text_area(:preferred_course, {placeholder:"Enter the courses that you would like to or are able to TA", class:"form-control"})
+      .form-group
+        %label{:for => "student_note"} Notes
+        = f.text_area(:note, {placeholder:"Enter additional notes that is helpful for TA assignment", class:"form-control"})
+      = f.submit("Submit", {class:"btn btn-primary", :term_id => @application_pool.id})
+
+%br
+.row
+  .col-xs-1
+  .col-xs-10
+    =link_to 'Back to User Information', user_path(@user)

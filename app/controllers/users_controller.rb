@@ -13,31 +13,36 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
 
-    #Get all application pools that are currently active
-    @application_pools = ApplicationPool.where(:active => true)
-    @studentapplications = Hash.new
-    @application_status = Hash.new 
+    if @user.identity == "FACULTY"
+      redirect_to lecturer_show_path(@user)
+    else
+      #Get all application pools that are currently active
+      @application_pools = ApplicationPool.where(:active => true)
+      @studentapplications = Hash.new
+      @application_status = Hash.new 
 
-    #For each active application pool, see if this user has applied
-    @application_pools.each do |application_pool|
+      #For each active application pool, see if this user has applied
+      @application_pools.each do |application_pool|
 
-      #If the user has applied, fetch the application form, get matchings, and construct
-      #hashtable for saving its application status
-      if StudentApplication.exists?(application_pool_id: application_pool.id, user_id: @user.id)
-        @studentapplications[application_pool.id] = StudentApplication.find_by(application_pool_id: application_pool.id, user_id: @user.id)
-        matchings = AppCourseMatching.where(student_application_id: @studentapplications[application_pool.id].id)
-        if matchings
-          matchings.each do |match|
-            course = Course.find match.course_id
-            if not match.status == StudentApplication::TEMP_ASSIGNED
-              if not @application_status[application_pool.id]
-                @application_status[application_pool.id] = Array.new
+        #If the user has applied, fetch the application form, get matchings, and construct
+        #hashtable for saving its application status
+        if StudentApplication.exists?(application_pool_id: application_pool.id, user_id: @user.id)
+          @studentapplications[application_pool.id] = StudentApplication.find_by(application_pool_id: application_pool.id, user_id: @user.id)
+          matchings = AppCourseMatching.where(student_application_id: @studentapplications[application_pool.id].id)
+          if matchings
+            matchings.each do |match|
+              course = Course.find match.course_id
+              if not match.status == StudentApplication::TEMP_ASSIGNED
+                if not @application_status[application_pool.id]
+                  @application_status[application_pool.id] = Array.new
+                end
+                @application_status[application_pool.id] << {'Matching_id' => match.id, 'Course' => course.name, 'Position' => match.position, 'Status' => match.status}
               end
-              @application_status[application_pool.id] << {'Matching_id' => match.id, 'Course' => course.name, 'Position' => match.position, 'Status' => match.status}
             end
           end
         end
       end
+      render :show
     end
   end
 
@@ -95,6 +100,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @application_pool = ApplicationPool.find(params[:term_id])
     @studentapplication = StudentApplication.new
+    @studentapplication.user_id = @user.id
   end
 
   #Save the newly created student_application
@@ -229,13 +235,13 @@ class UsersController < ApplicationController
       if not new_tas.empty?
         new_tas.each do |ta_id|
           studentapplication = StudentApplication.find(ta_id)
-          if @course.suggestion != nil
+          if @course.suggestion != nil and @course.suggestion.length != 0
             @course.suggestion << '/' + studentapplication.first_name + ' ' + studentapplication.last_name + ';' + "#{ta_id}"
           else
             @course.suggestion = studentapplication.first_name + ' ' + studentapplication.last_name+ ';' +"#{ta_id}"
           end
-          if studentapplication.requester != nil
-            studentapplication.requester << ',' + "#{@course.id}"
+          if studentapplication.requester != nil and studentapplication.requester.length != 0
+            studentapplication.requester = studentapplication.requester + ',' + "#{@course.id}"
           else
             studentapplication.requester = "#{@course.id}"
           end
@@ -260,7 +266,7 @@ class UsersController < ApplicationController
       @ta = StudentApplication.find_by_id(ta_id[1])
       if @ta.requester != nil
       courserelated = @ta.requester.split(',')
-      @ta.requester = nil
+      @ta.requester = ""
       courserelated.delete("#{id}")
       courserelated.each do |course|
         if @ta.requester != nil

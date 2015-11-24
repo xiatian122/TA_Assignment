@@ -29,8 +29,10 @@ class CoursesController < ApplicationController
         tasuggestion.each do |ta_info|
           suggestion << ta_info.split(';')[1]
         end
-        suggested_students = StudentApplication.where(id: suggestion)
-        @courses_suggestion[course.id] = suggested_students
+        if suggestion.length > 0
+          suggested_students = StudentApplication.where(id: suggestion)
+          @courses_suggestion[course.id] = suggested_students
+        end
       end
     
 
@@ -261,11 +263,11 @@ class CoursesController < ApplicationController
 
       #Retrieve requester info
       requesters = studentapplication.requester
-      if requesters
+      if requesters and requesters.length > 0
         requester_for_student = Array.new 
         split_requester = requesters.split(',')
         split_requester.each do |requested_course|
-          r_course = Course.find requested_course
+          r_course = Course.find requested_course.to_i
           requester_for_student << {'Course' => r_course.name, 'Lecturer' => r_course.lecturer}
         end
         info_for_student['requesters'] = requester_for_student
