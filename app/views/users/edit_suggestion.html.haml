@@ -6,7 +6,9 @@
 
 .divide20
 
-
+%a#uncheck-all{:href => "javascript:void(0);", :class => "btn btn-primary", :role => "button"} Uncheck All
+%br
+%br
 = form_tag submit_ta_suggestion_path, :method => :get, :id => 'tas_form' do
   =hidden_field_tag "courseid", @course.id
   .row
@@ -36,7 +38,10 @@
               .row{"aria-expanded" => true, :id=> "heading#{studentapplication.id}"}
                 .col-xs-1
                   - if @student_application_info[studentapplication.id]['assignable']
-                    =check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
+                    - if @suggestionindex != nil && @suggestionindex.include?("#{studentapplication.id}")
+                      =check_box_tag "ids[#{studentapplication.id}]", true, :id => "ids_#{studentapplication.id}"
+                    - else
+                      =check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
 
                 .col-xs-2= studentapplication.uin
                 .col-xs-2= studentapplication.fullName()
@@ -52,7 +57,7 @@
                     - when StudentApplication::PHD
                       PHD
                 .col-xs-1= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
-  
+                
   %p Note: TAs without a check book is already assigned as a full TA for another course              
   = submit_tag 'Submit Suggestion', :id => 'submit_ta_suggestion', class:'btn btn-primary'
 
@@ -146,3 +151,10 @@
               %tr
                 %td Course TAed
                 %td= studentapplication.course_taed
+                
+:javascript
+$(document).ready(function() {
+  $('#uncheck-all').click(function(){
+    $("#ids_1").attr('checked', false);
+  });
+});
