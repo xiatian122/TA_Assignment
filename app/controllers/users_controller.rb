@@ -164,10 +164,6 @@ class UsersController < ApplicationController
     @matching.save
 
     flash[:notice] = "TA assignment for #{@course.name} is accepted!"
-# <<<<<<< HEAD
-
-# =======
-# >>>>>>> develop
     redirect_to user_path(@user.id)
   end
 
