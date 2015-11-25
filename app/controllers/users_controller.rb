@@ -298,7 +298,9 @@ class UsersController < ApplicationController
     suggestionid.each do |studentid|
       ta_id = studentid.split(';')
       @ta = StudentApplication.find_by_id(ta_id[1])
-      if @ta != nil
+
+      if @ta != nil  # Bowei Liu Nov 25 try resolving
+
         if @ta.requester != nil
         courserelated = @ta.requester.split(',')
         @ta.requester = nil
