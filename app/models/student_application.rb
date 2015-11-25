@@ -41,7 +41,7 @@ class StudentApplication < ActiveRecord::Base
   # (Getter) Compose applicant's full name
   def fullName()
     
-    @current_student = User.find(self.user_id)
+    @current_student = User.find_by_id(self.user_id)
     
     if @current_student.nil?
       return nil
@@ -92,7 +92,7 @@ class StudentApplication < ActiveRecord::Base
   # (Getter) Get applicant's degree
   def degree
     
-    @current_student = User.find(self.user_id)
+    @current_student = User.find_by_id(self.user_id)
     
     if @current_student.nil?
       return ""
