@@ -164,10 +164,6 @@ class UsersController < ApplicationController
     @matching.save
 
     flash[:notice] = "TA assignment for #{@course.name} is accepted!"
-# <<<<<<< HEAD
-
-# =======
-# >>>>>>> develop
     redirect_to user_path(@user.id)
   end
 
@@ -182,13 +178,14 @@ class UsersController < ApplicationController
     redirect_to user_path(@user.id)
   end
 
-  def suggest_ta
+  def edit_suggestion
       @user = User.find params[:id]
       @course = Course.find params[:courseid]
       #@course = Course.find(params[:id])
 
       @student_application_info = Hash.new
-      @student_application_requesters = Hash.new 
+      @student_application_requesters = Hash.new
+      @suggestionindex = Array.new
 
       @studentapplications = StudentApplication.where(application_pool_id: @course.application_pool_id)
 
@@ -225,11 +222,48 @@ class UsersController < ApplicationController
       #Retrieve requester info
       @student_application_info[studentapplication.id] = info_for_student
     end
+    if @course.suggestion != nil
+      coursesuggestion = @course.suggestion.split('/')
+      coursesuggestion.each do |taname|
+        if taname != nil
+          if @suggestionindex != nil
+            @suggestionindex << taname.split(';')[1]
+          else
+            @suggestionindex = taname.split(';')[1]
+          end
+        end
+      end
+    else
+      @suggestionindex = nil
+    end
   end
   
   def submit_ta_suggestion
     id = params[:courseid]
-    @course = Course.find_by_id(id)
+    @course = Course.find_by_id(id) 
+    if @course.suggestion != nil
+    suggestionid = @course.suggestion.split('/')
+    suggestionid.each do |studentid|
+      ta_id = studentid.split(';')
+      @ta = StudentApplication.find_by_id(ta_id[1])
+      if @ta != nil
+        if @ta.requester != nil
+        courserelated = @ta.requester.split(',')
+        @ta.requester = nil
+        courserelated.delete("#{id}")
+        courserelated.each do |course|
+          if @ta.requester != nil
+            @ta.requester << ','+course
+          else
+            @ta.requester = course
+          end
+        end
+        @ta.save!
+        end
+      end
+    end
+    end
+    @course.suggestion = nil
     if params[:ids]
       new_tas = params[:ids].keys
       if not new_tas.empty?
@@ -258,24 +292,26 @@ class UsersController < ApplicationController
   
   def delete_suggestion
     id = params[:courseid]
-    @course = Course.find(id)
+    @course = Course.find_by_id(id)
     if @course.suggestion != nil
     suggestionid = @course.suggestion.split('/')
     suggestionid.each do |studentid|
       ta_id = studentid.split(';')
       @ta = StudentApplication.find_by_id(ta_id[1])
-      if @ta.requester != nil
-      courserelated = @ta.requester.split(',')
-      @ta.requester = ""
-      courserelated.delete("#{id}")
-      courserelated.each do |course|
+      if @ta != nil
         if @ta.requester != nil
-          @ta.requester << ','+course
-        else
-          @ta.requester = course
+        courserelated = @ta.requester.split(',')
+        @ta.requester = nil
+        courserelated.delete("#{id}")
+        courserelated.each do |course|
+          if @ta.requester != nil
+            @ta.requester << ','+course
+          else
+            @ta.requester = course
+          end
         end
-      end
-      @ta.save!
+        @ta.save!
+        end
       end
     end
     end
@@ -311,8 +347,8 @@ class UsersController < ApplicationController
       @ta_status[course.id] = tadata_status
 
       if course.suggestion != nil
-        coursesuggestion = course.suggestion.split('/')
-        coursesuggestion.each do |taname|
+        @coursesuggestion = course.suggestion.split('/')
+        @coursesuggestion.each do |taname|
           if @suggestion[course.id] != nil
             @suggestion[course.id] << '/' + taname.split(';')[0]
           else
