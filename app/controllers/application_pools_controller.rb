@@ -13,7 +13,7 @@ class ApplicationPoolsController < ApplicationController
   	@application_pool = ApplicationPool.create!(params[:application_pool])
   	@application_pool.save!
     #debugger
-    flash[:notice] = "New application pool for #{@application_pool.year} #{@application_pool.semester}  was successfully created."
+    flash[:success] = "New application pool for #{@application_pool.year} #{@application_pool.semester}  was successfully created."
     redirect_to application_pools_path
   end
 
@@ -30,7 +30,7 @@ class ApplicationPoolsController < ApplicationController
   def update
   	@application_pool = ApplicationPool.find params[:id]
     @application_pool.update_attributes!(params[:application_pool])
-    flash[:notice] = "Application pool for #{@application_pool.year} #{@application_pool.semester} was successfully updated."
+    flash[:success] = "Application pool for #{@application_pool.year} #{@application_pool.semester} was successfully updated."
     redirect_to application_pools_path
   end
 end
