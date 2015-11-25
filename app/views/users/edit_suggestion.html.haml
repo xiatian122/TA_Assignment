@@ -58,9 +58,11 @@
                       PHD
                 .col-xs-1= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
                 
-  %p Note: TAs without a check book is already assigned as a full TA for another course              
-  = submit_tag 'Submit Suggestion', :id => 'submit_ta_suggestion', class:'btn btn-primary'
-
+  %p Note: TAs without a check book is already assigned as a full TA for another course
+  - if @suggestionindex == nil
+    = submit_tag 'Submit Suggestion', :id => 'submit_ta_suggestion', class:'btn btn-primary'
+  - else
+    = submit_tag 'Update Suggestion', :id => 'submit_ta_suggestion', class:'btn btn-primary'
   / %table#studentapplications.table.table-striped
   /   %thead
   /     %tr
@@ -155,6 +157,7 @@
 :javascript
 $(document).ready(function() {
   $('#uncheck-all').click(function(){
-    $("#ids_1").attr('checked', false);
+    $(':checkbox').attr('checked', false)
+  end;
   });
 });

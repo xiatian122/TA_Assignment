@@ -40,7 +40,7 @@
         .col-xs-3
           %b Your Suggestion
         .col-xs-4
-          %b Suggest TA
+          %b Operations for Suggestion
 
 .row
   .col-xs-12
@@ -54,14 +54,16 @@
             .row{"aria-controls" =>"collapse#{course.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{course.id}", :role => "button", :id=> "heading#{course.id}"}
               .col-xs-1.td= course.id
               .col-xs-4.td= course.name
-              .col-xs-3.td
-                - if @suggestion[course.id] != nil
-                  = @suggestion[course.id]
-                - else
-                  N/A
-              .col-xs-4.td
-                %a.btn.btn-warning{:href => delete_suggestion_path(:id => @user.id, :courseid => course.id), :role => "button", :onclick => "confirm('This action will delete all your suggestions. If you want to edit suggestion individually, please go to Edit Suggestion')"} Delete Suggestion
-                %a.btn.btn-primary{:href => edit_suggestion_path(:id => @user.id, :courseid => course.id), :role => "button"} Edit
+              - if @suggestion[course.id] != nil
+                .col-xs-3.td= @suggestion[course.id]
+                .col-xs-4.td
+                  %a.btn.btn-warning{:href => delete_suggestion_path(:id => @user.id, :courseid => course.id), :role => "button", :onclick => "confirm('This action will delete all your suggestions. If you want to edit suggestion individually, please go to Edit Suggestion')"} Delete Suggestion
+                  %a.btn.btn-primary{:href => edit_suggestion_path(:id => @user.id, :courseid => course.id), :role => "button"} Edit
+              - else
+                .col-xs-3.td N/A
+                .col-xs-4.td
+                  %a.btn.btn-primary{:href => edit_suggestion_path(:id => @user.id, :courseid => course.id), :role => "button"} Suggest TA
+              
 
           .panel-collapse.collapse{"aria-labelledby" => "heading#{course.id}", :id => "collapse#{course.id}", :role => "tabpanel"}
             .panel-body
