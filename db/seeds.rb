@@ -11,12 +11,12 @@ ApplicationPool.delete_all()
 Course.delete_all()
 User.delete_all()
 StudentApplication.delete_all()
-users = [{:first_name => 'user1', :last_name => "Yang", :uin => '922003095', :email => 'test1@gmail.com', :identity => 'PHD', :start_semester => '2013 Fall', :elpe => '1', :guaranteed => '1', :active => '1' },
-          {:first_name => 'user2', :last_name => "Zhao", :uin => '922773022', :email => 'test2@gmail.com', :identity => 'MS', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:first_name => 'user3', :last_name => "Edward", :uin => '922773023', :email => 'test3@gmail.com', :identity => 'MENG', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:first_name => 'user4', :last_name => "TT", :uin => '922773024', :email => 'test3@gmail.com', :identity => 'PHD', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:first_name => 'user5', :last_name => "Alex", :uin => '922003096', :email => 'test5@gmail.com', :identity => 'FACULTY', :start_semester => '2000 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:first_name => 'user6', :last_name => "Asada", :uin => '922003097', :email => 'test6@gmail.com', :identity => 'FACULTY', :start_semester => '1989 Spring', :elpe => '0', :guaranteed => '0', :active => '1'}]
+users = [{:password => 'password', :password_confirmation => 'password', :first_name => 'user1', :last_name => "Yang", :uin => '922003095', :email => 'test1@gmail.com', :identity => 'PHD', :start_semester => '2013 Fall', :elpe => '1', :guaranteed => '1', :active => '1' },
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'user2', :last_name => "Zhao", :uin => '922773022', :email => 'test2@gmail.com', :identity => 'MS', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'user3', :last_name => "Edward", :uin => '922773023', :email => 'test3@gmail.com', :identity => 'MENG', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'user4', :last_name => "TT", :uin => '922773024', :email => 'test3@gmail.com', :identity => 'PHD', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'user5', :last_name => "Alex", :uin => '922003096', :email => 'test5@gmail.com', :identity => 'FACULTY', :start_semester => '2000 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'user6', :last_name => "Asada", :uin => '922003097', :email => 'test6@gmail.com', :identity => 'FACULTY', :start_semester => '1989 Spring', :elpe => '0', :guaranteed => '0', :active => '1'}]
 users.each do |user|
   User.create!(user)
 end
