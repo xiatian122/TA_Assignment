@@ -1,5 +1,7 @@
 class StudentApplicationsController < ApplicationController
      #  /student_applications
+  load_and_authorize_resource
+
   def index
     @studentapplications = StudentApplication.all
     @student_application_info = Hash.new
@@ -19,7 +21,7 @@ class StudentApplicationsController < ApplicationController
   #  /studentapplications/new
   def new
   # default: render 'new' template
-    @studentapplication = StudentApplication.new
+    # @studentapplication = StudentApplication.new
   end
 
   # POSt /student_applications

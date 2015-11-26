@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get    'login'   => 'sessions#new'
+  post   'login'   => 'sessions#create'
+  delete 'logout'  => 'sessions#destroy'
+
   resources :users
 
   get '/users/:id/new_application' => 'users#new_application', :as => :new_application
@@ -10,7 +14,7 @@ Rails.application.routes.draw do
   get '/users/:id/accept_assignment' => 'users#accept_ta_assignment', :as => :accept_ta_assignment
   get '/users/:id/reject_assignment' => 'users#reject_ta_assignment', :as => :reject_ta_assignment
 
-  get '/users/:id/suggest_ta' => 'users#suggest_ta', :as => :suggest_ta
+  get '/users/:id/edit_suggestion' => 'users#edit_suggestion', :as => :edit_suggestion
   get '/users/:id/submit_ta_suggestion' => 'users#submit_ta_suggestion', :as => :submit_ta_suggestion
   get '/users/(:id)/lecturer_show' => 'users#lecturer_show', :as => :lecturer_show
   get '/users/:id/delete_suggestion' => 'users#delete_suggestion', :as => :delete_suggestion
@@ -21,6 +25,7 @@ Rails.application.routes.draw do
 
 
   root 'static_pages#home'
+  get 'error' => 'static_pages#error'
 
   get ({'help' => 'static_pages#help'})
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151110025439) do
+ActiveRecord::Schema.define(version: 20151125201910) do
 
   create_table "app_course_matchings", force: :cascade do |t|
     t.integer  "student_application_id"
@@ -75,8 +75,9 @@ ActiveRecord::Schema.define(version: 20151110025439) do
     t.string   "elpe"
     t.boolean  "guaranteed"
     t.boolean  "active"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "password_digest"
   end
 
 end

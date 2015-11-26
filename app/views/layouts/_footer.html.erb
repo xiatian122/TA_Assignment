@@ -2,11 +2,13 @@
   Copyright © 2015 TAMU Bazinga
   
   <ul class="f-menu list-inline">
-      <li><%= link_to("Home", root_path)%></li>
-      <li><%= link_to("Application Pools", application_pools_path)%></li>
-      <li><%= link_to("Student Applications", student_applications_path)%></li>
-      <li><%= link_to("Courses", courses_path)%></li>
-      <li><a href="">Support</a></li>
-      <li><a href="">Contact</a></li>
+    <li><%= link_to("Home", root_path)%></li>
+    <% if logged_in? %>
+	    <li><%= link_to("Application Pools", application_pools_path)%></li>
+	    <li><%= link_to("Student Applications", student_applications_path)%></li>
+	    <li><%= link_to("Courses", courses_path)%></li>
+	  <% end %>
+    <li><a href="">Support</a></li>
+    <li><a href="">Contact</a></li>
   </ul>
 </footer>
