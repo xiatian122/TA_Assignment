@@ -5,4 +5,11 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
 
   include CanCan::ControllerAdditions
+
+  rescue_from CanCan::AccessDenied do |exception|
+
+  	flash[:danger] = exception.message
+    redirect_to main_app.error_url
+
+  end
 end

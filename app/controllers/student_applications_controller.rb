@@ -1,5 +1,7 @@
 class StudentApplicationsController < ApplicationController
      #  /student_applications
+  load_and_authorize_resource
+
   def index
     @studentapplications = StudentApplication.all
     @student_application_info = Hash.new

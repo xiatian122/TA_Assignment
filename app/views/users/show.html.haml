@@ -123,8 +123,6 @@
             =link_to('Show', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{application_pool.id}", class:"btn btn-primary btn-xs")+ ' / '  + link_to('Edit', edit_ta_application_path(:id => @user.id, :app_id => @studentapplications[application_pool.id].id), class:"btn btn-primary btn-xs")  + ' / '  + link_to('Withdraw', withdraw_student_application_path(:id => @user.id, :app_id => @studentapplications[application_pool.id].id),class:"btn btn-primary btn-xs", "data-confirm" => "Withdraw application for #{application_pool.year} #{application_pool.semester}?")
 
 
-= link_to 'Back', users_path
-
 - @studentapplications.each do |key, val|
   %div{class:"modal fade", "id" => "myModal-#{key}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
     %div{class:"modal-dialog", :role => "document"}

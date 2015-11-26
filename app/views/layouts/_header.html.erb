@@ -15,6 +15,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <% if logged_in? %>
+          <li class="<%= 'active' if current_page?(user_path(current_user)) %>"><%= link_to("Profile", current_user)%></li>
+
           <% if can? :manage, ApplicationPool %>
             <li class="<%= 'active' if current_page?(application_pools_path) %>"><%= link_to("Application Pools", application_pools_path)%></li>
           <% end %>
@@ -30,7 +32,7 @@
           <% if can? :manage, User %>
             <li class="<%= 'active' if current_page?(users_path) %>"><%= link_to("Users", users_path)%></li>
           <% end %>
-          
+
           <li><%= link_to "Log out", logout_path, method: "delete" %></li>
           
           <li class="dropdown">

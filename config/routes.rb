@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
 
   root 'static_pages#home'
+  get 'error' => 'static_pages#error'
 
   get ({'help' => 'static_pages#help'})
 
