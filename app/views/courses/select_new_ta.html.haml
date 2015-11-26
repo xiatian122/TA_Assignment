@@ -11,6 +11,13 @@
     %p.lead{class:"text-left"}="Professor #{@course.lecturer}'s suggestion for this course is: #{@suggestion}"
 
 = form_tag assign_new_ta_path(@course.id), :method => :get, :id => 'tas_form' do
+  /  The usage of following .hidden is to store semester and year if referer_url is from courses_index and has 
+  / corresponding filter parameters set
+  .hidden
+    - if @semester_and_year["semester"] != nil && @semester_and_year["year"] != nil
+      %input{"name"=>"semester", "value"=>@semester_and_year["semester"], "type"=>"text"}
+      %input{"name"=>"year", "value"=>@semester_and_year["year"], "type"=>"text"}
+  
   .row
     .col-xs-12
       .panel.panel-default.remove-margin.pseudo-table-heading
@@ -102,7 +109,7 @@
   = submit_tag 'Assign', :id => 'assign_ta', class:'btn btn-primary'
 
 %br
-%a{href:courses_path+ "#heading#{@course.id}" , class:"back-to-class-list" } Back to courses list
+%a{href:courses_path({"semester"=>@semester_and_year["semester"], "year"=>@semester_and_year["year"]})+ "#heading#{@course.id}" , class:"back-to-class-list" } Back to courses list
 
 - @studentapplications.each do |studentapplication|
   %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}

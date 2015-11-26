@@ -3,13 +3,26 @@ class CoursesController < ApplicationController
   before_filter :check_for_cancel, :check_for_delete, :only => [:create, :update]
 
 	def index
-    @courses = Course.all
+    flash[:error] = nil
+    if params[:year].present? && params[:semester].present?
+      begin
+        @application_pool_id = ApplicationPool.where(year:params[:year], semester:params[:semester]).first().id
+        @courses = Course.where(application_pool_id:@application_pool_id)
+      rescue
+        @application_pool_id = nil
+        @courses = Course.all
+        params[:year] = nil
+        params[:semester] = nil
+        flash[:error] = "the semester requested could not be found, return all courses instead"
+      end
+    else
+      @application_pool_id = nil
+      @courses = Course.all
+    end
     @courses_ta = Hash.new 
     @courses_suggestion = Hash.new 
     internal_courses_ta = Hash.new  # internal usage
-
     @ta_status = Hash.new
-    
     @courses.each do |course|
       tadata_matching = AppCourseMatching.where(course_id: course.id)
       tadata_ids = Array.new
@@ -23,7 +36,7 @@ class CoursesController < ApplicationController
       @ta_status[course.id] = tadata_status
 
       #add lecturer request students
-      if course.suggestion != nil
+      if course.suggestion != nil && course.suggestion != ""
         suggestion = Array.new
         tasuggestion = course.suggestion.split('/')
         tasuggestion.each do |ta_info|
@@ -224,13 +237,11 @@ class CoursesController < ApplicationController
   end
 
   def select_new_ta
+    @semester_and_year = getSemesterAndYear(request.headers)
     @course = Course.find(params[:id])
-   # byebug
     @student_application_info = Hash.new
     @student_application_requesters = Hash.new 
-
     @studentapplications = StudentApplication.where(application_pool_id: @course.application_pool_id)
-
     @studentapplications.each do |studentapplication|
       @app_course_matching = AppCourseMatching.where(student_application_id: studentapplication.id)
       info_for_student = Hash.new 
@@ -284,8 +295,6 @@ class CoursesController < ApplicationController
         end
       end
     end
-  
-    
   end
 
   def assign_new_ta
@@ -315,7 +324,9 @@ class CoursesController < ApplicationController
       end
     end
     flash[:notice] = "New TA assigned for #{@course.name}"
-    redirect_to(courses_path + "#heading#{id}")
+    # Keep in mind courses_path helper method is quite smart, it knows that 
+    # it needs to not include nil parameters into generated url
+    redirect_to(courses_path("semester"=>params[:semester], "year"=>params[:year]) + "#heading#{id}")
   end
 
   # Email  
