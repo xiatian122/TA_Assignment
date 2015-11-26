@@ -20,7 +20,16 @@ class User < ActiveRecord::Base
        #? self.save!
     end
     
+    def admin?
+      return self.identity == "ADMIN"
+    end
     
-    
+    def student?
+      return self.identity == "PHD" || self.identity == "MS" || self.identity == "MENG"
+    end
+
+    def faculty?
+      return self.identity == "FACULTY"
+    end
 
 end

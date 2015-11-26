@@ -2,6 +2,8 @@ class CoursesController < ApplicationController
   include CoursesHelper
   before_filter :check_for_cancel, :check_for_delete, :only => [:create, :update]
 
+  load_and_authorize_resource
+
 	def index
     @courses = Course.all
     @courses_ta = Hash.new 

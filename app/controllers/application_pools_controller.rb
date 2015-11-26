@@ -1,6 +1,8 @@
 class ApplicationPoolsController < ApplicationController
   before_filter :check_for_cancel, :only => [:create, :update]
 
+  load_and_authorize_resource
+
   def index
   	@application_pools = ApplicationPool.all
   end
