@@ -19,7 +19,7 @@ class StudentApplicationsController < ApplicationController
   #  /studentapplications/new
   def new
   # default: render 'new' template
-    @studentapplication = StudentApplication.new
+    # @studentapplication = StudentApplication.new
   end
 
   # POSt /student_applications

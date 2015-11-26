@@ -19,4 +19,18 @@ module CoursesHelper
 
     return to_be_returned_hash
   end
+
+  def getSemesterAndYear( headers)
+    # Rack::Utils.parse_nested_query
+    referer_url = headers["HTTP_REFERER"]
+    # byebug
+    query = ""
+    if (/courses\?(.+)#?/.match(referer_url) != nil)
+      query = /courses\?(.+)#?/.match(referer_url)[1]
+    end
+    
+    query = Rack::Utils.parse_nested_query(query)
+    return query
+  end
+
 end

@@ -5,9 +5,28 @@
   .col-lg-4{
     img.img-circle{
       text-align: center;
+
     }
   }
 }
+
+.error-message{
+  font-size: 18px;
+  color: red;
+}
+.semester-tab-container{
+  padding-right: 0px;
+}
+.two-buttons-container{
+  padding-left: 0px;
+  .two-buttons{
+    // width: 100%;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    text-align: right;
+  }  
+}
+
 .panel.panel-default.remove-margin.pseudo-table-heading{
   border-radius: 4px 4px 0px 0px;
 }
@@ -19,6 +38,9 @@
       padding-top:0px;
       padding-bottom: 0px;
       line-height: 3;
+      .td:first-child{
+        padding-right: 0px;
+      }
     }
     .row{
       .td + .td{
