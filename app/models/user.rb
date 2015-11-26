@@ -1,7 +1,9 @@
 class User < ActiveRecord::Base
-	attr_accessible :first_name, :last_name, :uin, :email, :identity, :elpe, :login, :start_semester, :guaranteed, :active
+	attr_accessible :first_name, :last_name, :uin, :email, :identity, :elpe, :login, :start_semester, :guaranteed, :active, :password, :password_confirmation
+
 	#attr_accessible :name
 	
+  has_secure_password
 	
     # (getter) Whole name for user: "first_name last_name" 
     def name
@@ -18,7 +20,16 @@ class User < ActiveRecord::Base
        #? self.save!
     end
     
+    def admin?
+      return self.identity == "ADMIN"
+    end
     
-    
+    def student?
+      return self.identity == "PHD" || self.identity == "MS" || self.identity == "MENG"
+    end
+
+    def faculty?
+      return self.identity == "FACULTY"
+    end
 
 end

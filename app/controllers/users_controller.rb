@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+  load_and_authorize_resource
+
   # GET /users
   # GET /users.json
   def index
@@ -62,7 +64,10 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.html { 
+          redirect_to @user 
+          flash[:success]='User was successfully created.' 
+        }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -76,7 +81,10 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { 
+          redirect_to @user
+          flash[:success] = 'User was successfully updated.' 
+        }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -90,7 +98,10 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      format.html { 
+        redirect_to users_url
+        flash[:success] = 'User was successfully destroyed.' 
+      }
       format.json { head :no_content }
     end
   end
@@ -111,7 +122,7 @@ class UsersController < ApplicationController
     @studentapplication.application_pool_id = params[:term_id]
     @studentapplication.user_id = @user.id
     @studentapplication.save
-    flash[:notice] = "#{@studentapplication.fullName()} is created!"
+    flash[:success] = "#{@studentapplication.fullName()} is created!"
     redirect_to user_path(@user.id)
   end
 
@@ -152,7 +163,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @studentapplication = StudentApplication.find(params[:app_id])
     @studentapplication.update_attributes!(params[:student_application])
-    flash[:notice] = "#{@studentapplication.fullName()} is updated!"
+    flash[:success] = "#{@studentapplication.fullName()} is updated!"
     redirect_to user_path(@user.id)
   end
 
@@ -163,7 +174,7 @@ class UsersController < ApplicationController
     @matching.status = StudentApplication::STUDENT_CONFIRMED
     @matching.save
 
-    flash[:notice] = "TA assignment for #{@course.name} is accepted!"
+    flash[:success] = "TA assignment for #{@course.name} is accepted!"
     redirect_to user_path(@user.id)
   end
 
@@ -174,7 +185,7 @@ class UsersController < ApplicationController
     @matching.status = StudentApplication::STUDENT_REJECTED
     @matching.save
 
-    flash[:notice] = "TA assignment for #{@course.name} is rejected!"
+    flash[:info] = "TA assignment for #{@course.name} is rejected!"
     redirect_to user_path(@user.id)
   end
 

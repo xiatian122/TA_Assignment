@@ -2,6 +2,8 @@ class CoursesController < ApplicationController
   include CoursesHelper
   before_filter :check_for_cancel, :check_for_delete, :only => [:create, :update]
 
+  load_and_authorize_resource
+
 	def index
     flash[:error] = nil
     if params[:year].present? && params[:semester].present?
@@ -69,7 +71,7 @@ class CoursesController < ApplicationController
   def create
     @course = Course.create!(params[:course])
     #debugger
-    flash[:notice] = "#{@course.name} was successfully created."
+    flash[:success] = "#{@course.name} was successfully created."
     redirect_to courses_path
   end
 
@@ -109,7 +111,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id
   def process_import
     if params[:code] == "" || params[:url] == ""
-      flash[:notice] = "Please get the code and paste the url before clicking import"
+      flash[:danger] = "Please get the code and paste the url before clicking import"
       redirect_to courses_path + "/0/upload"
       return
     end
@@ -137,7 +139,7 @@ class CoursesController < ApplicationController
     end
   
     if @auth.access_token.nil?
-      flash[:notice] = "Please get the code and paste the url before clicking import"
+      flash[:danger] = "Please get the code and paste the url before clicking import"
       redirect_to courses_path + "/0/upload"
       return
     end
@@ -148,7 +150,7 @@ class CoursesController < ApplicationController
     end
     
     if @ws.nil?
-      flash[:notice] = "Please make sure the code and url correnct: Try Again!"
+      flash[:danger] = "Please make sure the code and url correnct: Try Again!"
       redirect_to courses_path + "/0/upload"
       return
     end
@@ -158,7 +160,7 @@ class CoursesController < ApplicationController
     @col_num = @ws.num_cols
     
     if @col_num % 3 != 0
-      flash[:notice] = "The spreadsheet is wrong: more than 3 columns"
+      flash[:danger] = "The spreadsheet is wrong: more than 3 columns"
       redirect_to courses_path + "/0/upload"
       return
     end
@@ -182,7 +184,7 @@ class CoursesController < ApplicationController
   def update
     @course = Course.find params[:id]
     @course.update_attributes!(params[:course])
-    flash[:notice] = "#{@course.name} was successfully updated."
+    flash[:success] = "#{@course.name} was successfully updated."
     redirect_to courses_path
   end
 
@@ -231,7 +233,10 @@ class CoursesController < ApplicationController
   def destroy
     @course = Course.find(params[:id])
     respond_to do |format|
-      format.html {redirect_to courses_url, notice: "Course #{@course.name} was successfully destroyed"}
+      format.html {
+        redirect_to courses_url
+        flash[:danger] = "Course #{@course.name} was successfully destroyed"
+      }
       format.json {head :no_content}
     end
   end
@@ -323,10 +328,12 @@ class CoursesController < ApplicationController
         end
       end
     end
-    flash[:notice] = "New TA assigned for #{@course.name}"
+
+    flash[:success] = "New TA assigned for #{@course.name}"
     # Keep in mind courses_path helper method is quite smart, it knows that 
     # it needs to not include nil parameters into generated url
     redirect_to(courses_path("semester"=>params[:semester], "year"=>params[:year]) + "#heading#{id}")
+
   end
 
   # Email  
