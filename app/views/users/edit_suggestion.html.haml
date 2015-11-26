@@ -180,24 +180,21 @@
                 %td Course Taken
                 %td= studentapplication.course_taken
               %tr
-/ <<<<<<< HEAD:app/views/users/suggest_ta.html.haml  Bowei Nov 25, try resolving
-/                 %td Course TAed Before
-/                 %td= studentapplication.course_taed
-/               %tr
-/                 %td Prefered Areas
-/                 %td= studentapplication.preferred_area
-/               %tr
-/                 %td Prefered Courses
-/                 %td= studentapplication.preferred_course
-
-/               / Do not let instructors view student's notes to administrator
-/               / E.g. I don't want to TA for this course
-/               / %tr
-/               /   %td Notes
-/               /   %td= studentapplication.note
-/ =======
-                %td Course TAed
+                %td Course TAed Before
                 %td= studentapplication.course_taed
+              %tr
+                %td Prefered Areas
+                %td= studentapplication.preferred_area
+              %tr
+                %td Prefered Courses
+                %td= studentapplication.preferred_course
+
+              / Do not let instructors view student's notes to administrator
+              / E.g. I don't want to TA for this course
+              / %tr
+              /   %td Notes
+              /   %td= studentapplication.note
+
                 
 :javascript
 $(document).ready(function() {
@@ -206,4 +203,3 @@ $(document).ready(function() {
   end;
   });
 });
-/ >>>>>>>>>>> from minjie lu super long name branch
