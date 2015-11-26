@@ -2,14 +2,29 @@ class CoursesController < ApplicationController
   include CoursesHelper
   before_filter :check_for_cancel, :check_for_delete, :only => [:create, :update]
 
+  load_and_authorize_resource
+
 	def index
-    @courses = Course.all
+    flash[:error] = nil
+    if params[:year].present? && params[:semester].present?
+      begin
+        @application_pool_id = ApplicationPool.where(year:params[:year], semester:params[:semester]).first().id
+        @courses = Course.where(application_pool_id:@application_pool_id)
+      rescue
+        @application_pool_id = nil
+        @courses = Course.all
+        params[:year] = nil
+        params[:semester] = nil
+        flash[:error] = "the semester requested could not be found, return all courses instead"
+      end
+    else
+      @application_pool_id = nil
+      @courses = Course.all
+    end
     @courses_ta = Hash.new 
     @courses_suggestion = Hash.new 
     internal_courses_ta = Hash.new  # internal usage
-
     @ta_status = Hash.new
-    
     @courses.each do |course|
       tadata_matching = AppCourseMatching.where(course_id: course.id)
       tadata_ids = Array.new
@@ -23,7 +38,7 @@ class CoursesController < ApplicationController
       @ta_status[course.id] = tadata_status
 
       #add lecturer request students
-      if course.suggestion != nil
+      if course.suggestion != nil && course.suggestion != ""
         suggestion = Array.new
         tasuggestion = course.suggestion.split('/')
         tasuggestion.each do |ta_info|
@@ -56,7 +71,7 @@ class CoursesController < ApplicationController
   def create
     @course = Course.create!(params[:course])
     #debugger
-    flash[:notice] = "#{@course.name} was successfully created."
+    flash[:success] = "#{@course.name} was successfully created."
     redirect_to courses_path
   end
 
@@ -96,7 +111,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id
   def process_import
     if params[:code] == "" || params[:url] == ""
-      flash[:notice] = "Please get the code and paste the url before clicking import"
+      flash[:danger] = "Please get the code and paste the url before clicking import"
       redirect_to courses_path + "/0/upload"
       return
     end
@@ -124,7 +139,7 @@ class CoursesController < ApplicationController
     end
   
     if @auth.access_token.nil?
-      flash[:notice] = "Please get the code and paste the url before clicking import"
+      flash[:danger] = "Please get the code and paste the url before clicking import"
       redirect_to courses_path + "/0/upload"
       return
     end
@@ -135,7 +150,7 @@ class CoursesController < ApplicationController
     end
     
     if @ws.nil?
-      flash[:notice] = "Please make sure the code and url correnct: Try Again!"
+      flash[:danger] = "Please make sure the code and url correnct: Try Again!"
       redirect_to courses_path + "/0/upload"
       return
     end
@@ -145,7 +160,7 @@ class CoursesController < ApplicationController
     @col_num = @ws.num_cols
     
     if @col_num % 3 != 0
-      flash[:notice] = "The spreadsheet is wrong: more than 3 columns"
+      flash[:danger] = "The spreadsheet is wrong: more than 3 columns"
       redirect_to courses_path + "/0/upload"
       return
     end
@@ -169,7 +184,7 @@ class CoursesController < ApplicationController
   def update
     @course = Course.find params[:id]
     @course.update_attributes!(params[:course])
-    flash[:notice] = "#{@course.name} was successfully updated."
+    flash[:success] = "#{@course.name} was successfully updated."
     redirect_to courses_path
   end
 
@@ -218,19 +233,20 @@ class CoursesController < ApplicationController
   def destroy
     @course = Course.find(params[:id])
     respond_to do |format|
-      format.html {redirect_to courses_url, notice: "Course #{@course.name} was successfully destroyed"}
+      format.html {
+        redirect_to courses_url
+        flash[:danger] = "Course #{@course.name} was successfully destroyed"
+      }
       format.json {head :no_content}
     end
   end
 
   def select_new_ta
+    @semester_and_year = getSemesterAndYear(request.headers)
     @course = Course.find(params[:id])
-   # byebug
     @student_application_info = Hash.new
     @student_application_requesters = Hash.new 
-
     @studentapplications = StudentApplication.where(application_pool_id: @course.application_pool_id)
-
     @studentapplications.each do |studentapplication|
       @app_course_matching = AppCourseMatching.where(student_application_id: studentapplication.id)
       info_for_student = Hash.new 
@@ -284,8 +300,6 @@ class CoursesController < ApplicationController
         end
       end
     end
-  
-    
   end
 
   def assign_new_ta
@@ -314,24 +328,24 @@ class CoursesController < ApplicationController
         end
       end
     end
-    flash[:notice] = "New TA assigned for #{@course.name}"
-    redirect_to(courses_path + "#heading#{id}")
+
+    flash[:success] = "New TA assigned for #{@course.name}"
+    # Keep in mind courses_path helper method is quite smart, it knows that 
+    # it needs to not include nil parameters into generated url
+    redirect_to(courses_path("semester"=>params[:semester], "year"=>params[:year]) + "#heading#{id}")
+
   end
 
   # Email  
   def email_ta_notification
-    @matching = AppCourseMatching.where("student_application_id = ? and course_id = ?", params[:ta_id], params[:id]).first
+    @matching = AppCourseMatching.where("student_application_id = ? and course_id = ?", params[:student_application_id], params[:id]).first
     @matching.status = StudentApplication::EMAIL_NOTIFIED
     @matching.save!
-
-    @studentapplication = StudentApplication.find(params[:ta_id])
-    # @studentapplication.status = StudentApplication::EMAIL_NOTIFIED
-    # @studentapplication.save!
-
+    @studentapplication = StudentApplication.find(params[:student_application_id])
     @user = User.find_by(:uin => @studentapplication.uin)
     ## Sent mail to @user
     UserNotifier.send_ta_notification(@user).deliver_now
-    render json:{"ta_id"=>params[:ta_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}
+    render json:{"student_application_id"=>params[:student_application_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}
   end
 
   # Confirm courses/confirm_ta/:id/:ta_id

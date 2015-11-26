@@ -1,5 +1,3 @@
-%p#notice=notice
-
 .row
   .col-xs-12
     %h1{class:"text-left"}="Edit User Information For #{@user.name}"
@@ -19,8 +17,11 @@
         %label{:for => "user_email"} Email
         = f.text_field(:email, {placeholder:"Email", class:"form-control"})
       .form-group
-        %label{:for => "user_login"} Password
-        = f.text_field(:login, {placeholder:"Password", class:"form-control"})
+        %label{:for => "user_password"} Password
+        = f.password_field(:password, {placeholder:"Password", class:"form-control"})
+      .form-group
+        %label{:for => "user_password_confirmation"} Password Confirmation
+        = f.password_field(:password_confirmation, {placeholder:"Password confirmation", class:"form-control"})
       = f.submit("Update", {class:"btn btn-primary"})
 
 %br
