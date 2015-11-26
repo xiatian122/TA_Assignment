@@ -320,18 +320,14 @@ class CoursesController < ApplicationController
 
   # Email  
   def email_ta_notification
-    @matching = AppCourseMatching.where("student_application_id = ? and course_id = ?", params[:ta_id], params[:id]).first
+    @matching = AppCourseMatching.where("student_application_id = ? and course_id = ?", params[:student_application_id], params[:id]).first
     @matching.status = StudentApplication::EMAIL_NOTIFIED
     @matching.save!
-
-    @studentapplication = StudentApplication.find(params[:ta_id])
-    # @studentapplication.status = StudentApplication::EMAIL_NOTIFIED
-    # @studentapplication.save!
-
+    @studentapplication = StudentApplication.find(params[:student_application_id])
     @user = User.find_by(:uin => @studentapplication.uin)
     ## Sent mail to @user
     UserNotifier.send_ta_notification(@user).deliver_now
-    render json:{"ta_id"=>params[:ta_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}
+    render json:{"student_application_id"=>params[:student_application_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}
   end
 
   # Confirm courses/confirm_ta/:id/:ta_id
