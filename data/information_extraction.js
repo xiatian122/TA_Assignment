@@ -28,15 +28,39 @@ function cloneObject(obj) {
  
     return temp;
 }
+/*
+  {
+    cid: "CSCE110",
+    name: "PROGRAMMING I",
+    section: "601",
+    lecturer_uin: "922003096",
+    area: "Theory",
+    credits: 3,
+    :application_pool_id => '1',
+    suggestion: "",
+    notes: ""
+  }
+*/
 
+function getRandomNumberStr ( n ){
+
+  return Math.floor( (0.1 + Math.random() *0.9)  * Math.pow(10,n)).toString();
+}
 
 fs.readFile('./courses_summary.html', 'utf8', function fileReadCB(err, data) {
   if (err) throw err;
   var courses = [];
-  var dummy_course = {cid:'CSCE629',name:'Introduction to Algorithms',lecturer:'ABC',
-             insemail:'test@test.com', area:'Theory', description:'2015 Fall', 
-             ta:'N/A',credits:3, notes:''
-            }
+  var dummy_course = {
+    cid:'CSCE629',
+    name:'Introduction to Algorithms',
+    section:"601",
+    lecturer_uin:"922003096",         
+    area:'Theory', 
+    credits:3, 
+    application_pool_id:1,
+    suggestion:'',
+    notes:''
+  };
   var courses_summary = data;
   var course_names = [];
   var course_numbers = [];
@@ -53,26 +77,26 @@ fs.readFile('./courses_summary.html', 'utf8', function fileReadCB(err, data) {
 
   });
   var i = 0;
-  for (i=0; i<course_names.length; i++){
+  for (i = 0; i < course_names.length; i++){
     var temp_course = cloneObject(dummy_course);
     temp_course['cid']="CSCE"+course_numbers[i];
-    temp_course['name']=course_names[i]
+    temp_course['name']=course_names[i];
+    temp_course['section'] = getRandomNumberStr(3);
+    temp_course['lecturer_uin'] = getRandomNumberStr(9);
     courses.push(temp_course);
-
   }
   var wstream = fs.createWriteStream('output.txt');
   var to_be_output = JSON.stringify(courses, null, '  ' );
   to_be_output = to_be_output.replace(/\"cid\"/gm,'cid');
   to_be_output = to_be_output.replace(/\"name\"/gm,'name');
-  to_be_output = to_be_output.replace(/\"lecturer\"/gm,'lecturer');
-  to_be_output = to_be_output.replace(/\"insemail\"/gm,'insemail');
+  to_be_output = to_be_output.replace(/\"section\"/gm,'section');
+  to_be_output = to_be_output.replace(/\"lecturer_uin\"/gm,'lecturer_uin');
   to_be_output = to_be_output.replace(/\"area\"/gm,'area');
-  to_be_output = to_be_output.replace(/\"description\"/gm,'description');
-  to_be_output = to_be_output.replace(/\"ta\"/gm,'ta');
-  to_be_output = to_be_output.replace(/\"notes\"/gm,'notes');
   to_be_output = to_be_output.replace(/\"credits\"/gm,'credits');
+  to_be_output = to_be_output.replace(/\"application_pool_id\"/gm,'application_pool_id');
+  to_be_output = to_be_output.replace(/\"suggestion\"/gm,'suggestion');
+  to_be_output = to_be_output.replace(/\"notes\"/gm,'notes');
   wstream.write(to_be_output);
   wstream.end()
   
-
 });

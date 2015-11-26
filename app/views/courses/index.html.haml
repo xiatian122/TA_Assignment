@@ -86,7 +86,7 @@
                                   %span{class:"label label-success"}="Assigned"
                                 - else
                                   %span{class:"label label-danger"}="Unknown"
-                            .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta.id), {:class=>"email-link", "data-target"=>"#tali-#{course.id}-#{ta.id}"}) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id),{:class=>"confirm-link","data-target"=> "#tali-#{course.id}-#{ta.id}"}) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id), {:class => "delete-link", "data-target"=> "#tali-#{course.id}-#{ta.id}"})
+                            .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id, :student_application_id => ta.id), {:class=>"email-link", "data-target"=>"#tali-#{course.id}-#{ta.id}"}) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id),{:class=>"confirm-link","data-target"=> "#tali-#{course.id}-#{ta.id}"}) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id), {:class => "delete-link", "data-target"=> "#tali-#{course.id}-#{ta.id}"})
                   - else
                     %p No TA assigned yet for this course
                   - if @courses_suggestion.has_key?(course.id)
