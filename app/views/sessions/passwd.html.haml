@@ -1,0 +1,18 @@
+- provide(:title, "Log in")
+.row
+  .col-xs-12
+    // We will not hard code 2015 fall here in furture
+    %h1{class:"text-center"}="Get your temporal password via email"
+
+.row
+  .col-md-6.col-md-offset-3
+    = form_for(:session, url: passwd_path) do |f|
+      = f.label :uin
+      = f.text_field :uin, class: 'form-control'
+      %br
+      = f.label :first_name
+      = f.password_field :first_name, class: 'form-control'
+      %br
+      = f.submit "Get Password", class: "btn btn-primary btn-block"
+      %br
+      %br

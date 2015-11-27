@@ -5,7 +5,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string :last_name
       t.string :uin
       t.string :email
-      t.string :login
       t.string :identity
       t.string :start_semester
       t.string :elpe
