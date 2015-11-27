@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get    'login'   => 'sessions#new'
   post   'login'   => 'sessions#create'
+  get    'passwd'=> 'sessions#passwd'
+  post   'passwd'=> 'sessions#reset_passwd'
   delete 'logout'  => 'sessions#destroy'
 
   resources :users

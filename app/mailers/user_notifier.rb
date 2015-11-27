@@ -8,9 +8,9 @@ class UserNotifier < ApplicationMailer
 	end
 	
 	# send dynamic login password to 
-	def send_login_password(user)
+	def send_login_password(user, passwd)
 		@user = user
-		@user.login = SecureRandom.hex
+		@user.password = passwd #SecureRandom.hex(10)
 		@user.save!
 		mail( :to => @user.email, subject: "Welcome to CSE TA Assignment System! Your initial password!")
 	end
