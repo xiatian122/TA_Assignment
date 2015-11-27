@@ -69,7 +69,6 @@ ActiveRecord::Schema.define(version: 20151125201910) do
     t.string   "last_name"
     t.string   "uin"
     t.string   "email"
-    t.string   "login"
     t.string   "identity"
     t.string   "start_semester"
     t.string   "elpe"
