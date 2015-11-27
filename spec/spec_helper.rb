@@ -16,6 +16,28 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+# Bowei added http://stackoverflow.com/questions/10121835/how-do-i-simulate-a-login-with-rspec
+# please refer app/controllers/helpers/sessions_helper.rb  written by Yang Chen
+module SpecTestHelper   
+  def login_admin
+    login(:ADMIN)
+  end
+
+  def login(identity)
+    # following means if 
+    user = User.where(:identity => identity.to_s).first if identity.is_a?(Symbol)
+    request.session[:user_id] = user.id
+  end
+
+  def current_user
+    User.find(request.session[:user_id])
+  end
+
+  def log_out
+    session.delete(:user_id)
+  end
+end
+
 RSpec.configure do |config|
   # ## Mock Framework
   #
@@ -58,4 +80,8 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/v/3-0/docs
   config.infer_spec_type_from_file_location!
+
+  # added by Bowei, To get this working in your tests, 
+  # you have to manually insert the user information into the session. Here's part of what we use at work:
+  config.include SpecTestHelper, :type => :controller
 end

@@ -64,7 +64,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'launchy'
-  gem 'rspec-rails', '~> 2.99'
+  gem 'rspec-rails', '~> 3.0'
   gem 'simplecov'
 end
 

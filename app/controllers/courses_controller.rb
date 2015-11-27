@@ -96,6 +96,7 @@ class CoursesController < ApplicationController
       :application_version => '1.0.0'
     )
     @auth = @client.authorization
+    # Bowei Liu: @Xia Tian, I would like to suggest put sensitive info into system environment variables 
     @auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
     @auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
     @auth.scope =
@@ -241,6 +242,7 @@ class CoursesController < ApplicationController
     end
   end
 
+  # need to do this at behavior test
   def select_new_ta
     @semester_and_year = getSemesterAndYear(request.headers)
     @course = Course.find(params[:id])
@@ -302,6 +304,7 @@ class CoursesController < ApplicationController
     end
   end
 
+  # need to do this at behavior test
   def assign_new_ta
     id = params[:id]
     @course = Course.find(id)
@@ -348,7 +351,8 @@ class CoursesController < ApplicationController
     render json:{"student_application_id"=>params[:student_application_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}
   end
 
-  # Confirm courses/confirm_ta/:id/:ta_id
+  # need to do this at behavior test
+  # Confirm:  get courses/confirm_ta/:id/:ta_id
   def confirm_ta
     @matching = AppCourseMatching.where("student_application_id = ? and course_id = ?", params[:ta_id], params[:id]).first
     @matching.status = StudentApplication::ASSIGNED
@@ -360,6 +364,7 @@ class CoursesController < ApplicationController
     render json:{"ta_id"=>params[:ta_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"confirm"}
   end
 
+  # need to do this at behavior test
   # Delete courses/delete_ta
   def delete_ta
     @course = Course.find params[:id]
