@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rails_helper'
 include RSpec::Mocks::ExampleMethods
-describe CoursesController do
+RSpec.describe CoursesController, :type => :controller do
   before(:each) do
     admin = {
       :password => 'password', 
@@ -19,6 +19,19 @@ describe CoursesController do
     User.create!(admin)
     # debugger
     login_admin  # this method is defined in module SpecTestHelper  at file : "spec_helper.rb"
+
+    real_course = {
+      cid: "CSCE110",
+      name: "PROGRAMMING I",
+      section: "823",
+      lecturer_uin: "922003096",
+      area: "Theory",
+      credits: 3,
+      application_pool_id: 1,
+      suggestion: "",
+      notes: ""
+    }
+    Course.create!(real_course)
 
     @doubled_course = instance_double("Course", {
       cid: "CSCE110",
@@ -42,7 +55,6 @@ describe CoursesController do
       suggestion: "",
       notes: ""
     })
-
   end
 
   it 'when I go to the edit page for the course (instance of Course ), expect response to be success' do
@@ -57,9 +69,9 @@ describe CoursesController do
 
 
   it 'when I updated course information, response should be redirect to courses' do
-    doubled_course2 = instance_double("Course", {
+    course2 = {
       cid: "CSCE110",
-      name: "PROGRAMMING I",
+      name: "ABCDEFG",
       section: "444",
       lecturer_uin: "913001011",
       area: "Introduction",
@@ -67,12 +79,9 @@ describe CoursesController do
       application_pool_id: 1,
       suggestion: "",
       notes: ""
-    })
-    allow(@doubled_course).to receive(:update_attributes!)
-    allow(Course).to receive(:find).and_return(@doubled_course)
-    post(:update, {:id => '3', :course => doubled_course2})
+    }
+    post(:update, {:id => '1', :course => course2})
     expect(response).to redirect_to(courses_path)
-
   end
 
   it "when I new a course" do 
@@ -81,11 +90,10 @@ describe CoursesController do
   end
 
   # detailed test of index should be done in Behaviror Test
-  it "when browse index" do   
+  it "when browse index show all courses" do   
     get :index
     expect(response).to render_template(:index)
-    expect("PROGRAMMING I").to be_present
-    expect("CSCE110").to be_present
+    expect(response.body).to eq("")
   end
 
   it "when I logged out, I should have no access to edit course page" do
@@ -94,6 +102,4 @@ describe CoursesController do
     get :edit, {:id=> '3'}
     expect(response.status).not_to eql 200
   end
-
-
 end

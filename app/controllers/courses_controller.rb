@@ -339,6 +339,7 @@ class CoursesController < ApplicationController
 
   end
 
+  # Need to ask Xia Tian how to test this
   # Email  
   def email_ta_notification
     @matching = AppCourseMatching.where("student_application_id = ? and course_id = ?", params[:student_application_id], params[:id]).first
@@ -352,7 +353,7 @@ class CoursesController < ApplicationController
   end
 
   # need to do this at behavior test
-  # Confirm:  get courses/confirm_ta/:id/:ta_id
+  # Confirm get: courses/confirm_ta/:id/:ta_id
   def confirm_ta
     @matching = AppCourseMatching.where("student_application_id = ? and course_id = ?", params[:ta_id], params[:id]).first
     @matching.status = StudentApplication::ASSIGNED

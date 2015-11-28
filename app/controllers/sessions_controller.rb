@@ -21,7 +21,6 @@ class SessionsController < ApplicationController
   # Generate a random password and pass to the user
   def reset_passwd
     @user = User.find_by(uin: params[:session][:uin])
-
     if !@user.nil? && @user.first_name.downcase ==  params[:session][:first_name].to_s.downcase
       UserNotifier.send_login_password(@user, SecureRandom.hex(10)).deliver_now
       flash[:success] = "Password has been sent to your email address!"
