@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   get '/courses/(:id)/confirm_ta' => 'courses#confirm_ta', :as => :confirm_ta, :action => :confirm_ta
   get '/courses/(:id)/drop_all' => 'courses#drop_all', :as => :drop_all, :action => :drop_all
   
-  get '/courses/(:id)/upload' => 'courses#upload', :as => :upload, :action => :upload
+  get '/courses/:id/upload/' => 'courses#upload', :as => :upload, :action => :upload
   get '/courses/(:id)/process_import' => 'courses#process_import', :as => :process_import, :action => :process_import
   
   resources :application_pools

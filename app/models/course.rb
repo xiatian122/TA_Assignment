@@ -28,5 +28,16 @@ class Course < ActiveRecord::Base
         end
     end
     
+    # Destroy method for a course: Destroy related matching as well
+    def destroy
+        # destroy related matchings
+        if !self.nil?
+            @related_matchings = AppCourseMatching.where(:course_id => self.cid)
+            @related_matchings.destroy_all
+        end
+        #destroy itself
+        super
+    end
+    
 
 end
