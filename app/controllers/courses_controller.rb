@@ -62,7 +62,14 @@ class CoursesController < ApplicationController
   #  /courses/new
   def new
   # default: render 'new' template
-    @course = Course.new
+  #byebug
+    @application_pool_id = params[:id] 
+    if !@application_pool_id.nil?
+      @course = Course.new(:application_pool_id => @application_pool_id)
+    else
+      flash[:danger] = "Please click on one semester tab before create new course!"
+      redirect_to courses_path
+    end
   end
   
 
@@ -89,28 +96,31 @@ class CoursesController < ApplicationController
   
   # GET /courses/:id
   def upload
-    ## :id == 0 => initial visit creates the variable
-    ##if params[:id] == 0 && @client.nil?
-    @client = Google::APIClient.new(
-      :application_name => 'bazinga',
-      :application_version => '1.0.0'
-    )
-    @auth = @client.authorization
-    # Bowei Liu: @Xia Tian, I would like to suggest put sensitive info into system environment variables 
-    @auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
-    @auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
-    @auth.scope =
-      "https://www.googleapis.com/auth/drive " +
-      "https://spreadsheets.google.com/feeds/"
-    @auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
-    @auth_uri = @auth.authorization_uri.to_s
-    ##end
-   
-      
+    
+    @application_pool_id = params[:pool_id]
+    if !@application_pool_id.nil?
+      @client = Google::APIClient.new(
+        :application_name => 'bazinga',
+        :application_version => '1.0.0'
+      )
+      @auth = @client.authorization
+      # Bowei Liu: @Xia Tian, I would like to suggest put sensitive info into system environment variables 
+      @auth.client_id = CONSTANTS['google_client_id']
+      @auth.client_secret = CONSTANTS['google_client_secret']
+      @auth.scope = CONSTANTS['google_client_scope']
+        
+      @auth.redirect_uri = CONSTANTS['google_verify_redirect_uri']
+      @auth_uri = @auth.authorization_uri.to_s
+    else
+      flash[:danger] = "Please click on one semester tab before Import new courses!"
+      redirect_to courses_path
+    end
+    
   end
   
   # GET /courses/:id
   def process_import
+    
     if params[:code] == "" || params[:url] == ""
       flash[:danger] = "Please get the code and paste the url before clicking import"
       redirect_to courses_path + "/0/upload"
@@ -123,13 +133,17 @@ class CoursesController < ApplicationController
       :application_version => '1.0.0'
     )
     @auth = @client.authorization
-    @auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
-    @auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
-    @auth.scope =
-      "https://www.googleapis.com/auth/drive " +
-      "https://spreadsheets.google.com/feeds/"
-    @auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+    #@auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
+    #@auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
+    #@auth.scope =
+    #  "https://www.googleapis.com/auth/drive " +
+    #  "https://spreadsheets.google.com/feeds/"
+    #@auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
     
+    @auth.client_id = CONSTANTS['google_client_id']
+    @auth.client_secret = CONSTANTS['google_client_secret']
+    @auth.scope = CONSTANTS['google_client_scope']
+    @auth.redirect_uri = CONSTANTS['google_verify_redirect_uri']
     
     @auth.code = params[:code]
     @url = params[:url]
@@ -156,6 +170,7 @@ class CoursesController < ApplicationController
       return
     end
 
+    
     ## Process data in spread sheet: By default, the sheet is 3 cols with column names [course_id, course_title, instructor]
     @row_num = @ws.num_rows - 1
     @col_num = @ws.num_cols
@@ -198,14 +213,11 @@ class CoursesController < ApplicationController
   def check_for_delete
     if params[:commit] == "Delete"
       ## delete the course
-      # 
+      
       @course = Course.find(params[:id])
 
-      if @course.exist? && !@course.nil?
+      if !@course.nil?
         @course.destroy!
-        ### Destroy app_course_matching associated with the course
-        ### Remains to be solved
-        # byebug
       else
         returnflash[:notice] = "The course does not exist! Refresh again!"
       end
@@ -215,18 +227,8 @@ class CoursesController < ApplicationController
   
   # GET /courses/#drop_all
   def drop_all
-    @course_num = params[:id]
-    @courses = Course.all
-    @course_app_ids = @courses.uniq.select(:application_pool_id).where.not(:application_pool_id => nil)
-    @appcoursematchings = AppCourseMatching.includes(:courses).where("app_course_matchings.application_pool_id = ?")
-    if @courses.exists? && !@courses.nil?
-      @courses.destroy_all
-      #byebug
-      ### Destroy all associated appcoursematching
-      #if @appcoursematchings.exists? && !@appcoursematchings.nil?
-      #  @appcoursematchings.destroy_all
-      #end
-    end
+    Course.destroy_all
+    
     redirect_to courses_path
   end
 
