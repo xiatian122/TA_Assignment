@@ -133,12 +133,7 @@ class CoursesController < ApplicationController
       :application_version => '1.0.0'
     )
     @auth = @client.authorization
-    #@auth.client_id = "904291423134-kgkglhfmvetflo32ns1phk9fd55gsfvo.apps.googleusercontent.com"
-    #@auth.client_secret = "fgzHd_4rZ0jQjjEOW5pvZ4RM"
-    #@auth.scope =
-    #  "https://www.googleapis.com/auth/drive " +
-    #  "https://spreadsheets.google.com/feeds/"
-    #@auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+
     
     @auth.client_id = CONSTANTS['google_client_id']
     @auth.client_secret = CONSTANTS['google_client_secret']
@@ -214,7 +209,7 @@ class CoursesController < ApplicationController
     if params[:commit] == "Delete"
       ## delete the course
       
-      @course = Course.find(params[:id])
+      @course = Course.find(params[:pool_id])
 
       if !@course.nil?
         @course.destroy!
@@ -349,8 +344,9 @@ class CoursesController < ApplicationController
     @matching.save!
     @studentapplication = StudentApplication.find(params[:student_application_id])
     @user = User.find_by(:uin => @studentapplication.uin)
+    @msg = ""
     ## Sent mail to @user
-    UserNotifier.send_ta_notification(@user).deliver_now
+    UserNotifier.send_ta_notification(@user, @msg).deliver_now
     render json:{"student_application_id"=>params[:student_application_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}
   end
 
