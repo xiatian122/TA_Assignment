@@ -22,10 +22,14 @@ class UsersController < ApplicationController
       @application_pools = ApplicationPool.where(:active => true)
       @studentapplications = Hash.new
       @application_status = Hash.new 
+      @available_application_pool = false
 
       #For each active application pool, see if this user has applied
       @application_pools.each do |application_pool|
-
+        if application_pool.canApply
+          @available_application_pool = true
+        end  
+        
         #If the user has applied, fetch the application form, get matchings, and construct
         #hashtable for saving its application status
         if StudentApplication.exists?(application_pool_id: application_pool.id, user_id: @user.id)
@@ -43,6 +47,7 @@ class UsersController < ApplicationController
             end
           end
         end
+        
       end
       render :show
     end

@@ -103,25 +103,32 @@
   .col-xs-12
     %h2{class:"text-left"}="Current Active Application Window"
 
-%table#userapplications.table.table-striped
-  %thead
-    %tr
-      %th Year
-      %th Semester
-      %th Due Date
-      %th Action
-  %tbody
-    -@application_pools.each do |application_pool|
+-if @available_application_pool
+  %table#userapplications.table.table-striped
+    %thead
       %tr
-        %td= application_pool.year
-        %td= application_pool.semester
-        %td= application_pool.deadline
-        %td 
-          -if not @studentapplications.has_key?(application_pool.id)
-            =link_to('Apply', new_application_path(:id => @user.id, :term_id => application_pool.id), class:"btn btn-primary btn-xs")
-          -else
-            =link_to('Show', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{application_pool.id}", class:"btn btn-primary btn-xs")+ ' / '  + link_to('Edit', edit_ta_application_path(:id => @user.id, :app_id => @studentapplications[application_pool.id].id), class:"btn btn-primary btn-xs")  + ' / '  + link_to('Withdraw', withdraw_student_application_path(:id => @user.id, :app_id => @studentapplications[application_pool.id].id),class:"btn btn-primary btn-xs", "data-confirm" => "Withdraw application for #{application_pool.year} #{application_pool.semester}?")
+        %th Year
+        %th Semester
+        %th Due Date
+        %th Action
+    %tbody
+      -@application_pools.each do |application_pool|
+        -if application_pool.canApply
+          %tr
+            %td= application_pool.year
+            %td= application_pool.semester
+            %td= application_pool.deadline
+            %td 
+              -if not @studentapplications.has_key?(application_pool.id)
+                =link_to('Apply', new_application_path(:id => @user.id, :term_id => application_pool.id), class:"btn btn-primary btn-xs")
+              -else
+                =link_to('Show', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{application_pool.id}", class:"btn btn-primary btn-xs")+ ' / '  + link_to('Edit', edit_ta_application_path(:id => @user.id, :app_id => @studentapplications[application_pool.id].id), class:"btn btn-primary btn-xs")  + ' / '  + link_to('Withdraw', withdraw_student_application_path(:id => @user.id, :app_id => @studentapplications[application_pool.id].id),class:"btn btn-primary btn-xs", "data-confirm" => "Withdraw application for #{application_pool.year} #{application_pool.semester}?")
+-else
+  %tr
+    %td No TA application is available
 
+%br
+%br
 
 - @studentapplications.each do |key, val|
   %div{class:"modal fade", "id" => "myModal-#{key}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
