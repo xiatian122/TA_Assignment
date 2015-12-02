@@ -85,7 +85,7 @@ function courseIndexRelevant (){
     var student_full_name = $this_li.find(".ta-full-name-link").text();
     $("#email-form").attr("data-target", $this.data("target"));
     $("#email-form").attr("action", $this.attr("href"));
-    $("#email-body").find("textarea[name=email_body]").val(student_full_name + ":\nyou have been assigned TA");
+    $("#email-body").find("textarea[name=email_body_user_input]").val(student_full_name + ":\n  you have been assigned TA for course:\n\n" + $this.data("course-str"));
     $("#email-body").find("input[name=student_application_id]").val($this.data("student_application_id"));
     $("#email-shared-editor-modal").modal("show");
   });
@@ -93,8 +93,8 @@ function courseIndexRelevant (){
   $("#email-form").submit(function onFormSubmission (event){
     event.preventDefault();
     $form = $(this);
-    $form.find("button[type=submit]").html('<i class="fa fa-spinner fa-spin"></i>  sending...');
-    var text_area_data = $form.find("textarea[name=email_body]").val().replace(/(\r)?\n/, "<br/>");
+    $form.find("button[type=submit]").html('<i class="fa fa-spinner fa-spin"></i> sending...');
+    var text_area_data = $form.find("textarea[name=email_body_user_input]").val().replace(/(\r)?\n/g, "<br/>").replace(/\s/g, "&nbsp;");
     $form.find("textarea[name=email_body]").val(text_area_data);
     $.ajax({
         url: $form.attr("action"),

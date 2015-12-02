@@ -97,7 +97,7 @@
                                   %span{class:"label label-success"}="Assigned"
                                 - else
                                   %span{class:"label label-danger"}="Unknown"
-                            .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id), {:class=>"email-link", "data-target"=>"#tali-#{course.id}-#{ta.id}", "data-student_application_id"=> ta.id}) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id),{:class=>"confirm-link","data-target"=> "#tali-#{course.id}-#{ta.id}"}) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id), {:class => "delete-link", "data-target"=> "#tali-#{course.id}-#{ta.id}"})
+                            .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id), {:class=>"email-link", "data-target"=>"#tali-#{course.id}-#{ta.id}", "data-student_application_id"=> ta.id, "data-course-str" => course.cid + " " + course.name}) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id),{:class=>"confirm-link","data-target"=> "#tali-#{course.id}-#{ta.id}"}) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id), {:class => "delete-link", "data-target"=> "#tali-#{course.id}-#{ta.id}"})
                   - else
                     %p No TA assigned yet for this course
                   - if @courses_suggestion.has_key?(course.id)
@@ -133,7 +133,8 @@
           %h4#myModalLabel.modal-title Confirmation Email of TA Assignment
         .modal-body#email-body
           %input.hidden{:type=>"text", :name=>"student_application_id"}
-          %textarea.form-control{:rows => "4", :name => "email_body"}
+          %textarea.form-control{:rows => "4", :name => "email_body_user_input"}
+          %textarea.hidden{:name => "email_body"}
         .modal-footer
           %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
           %button.btn.btn-primary{:type => "submit", :id=>"email-send-btn"} Send
