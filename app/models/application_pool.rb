@@ -10,4 +10,8 @@ class ApplicationPool < ActiveRecord::Base
 			return "#{@application_pool.year} #{@application_pool.semester}"
 		end
     end
+
+    def canApply
+    	return DateTime.now.utc < self.deadline.utc
+    end
 end
