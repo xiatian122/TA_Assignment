@@ -344,7 +344,7 @@ class CoursesController < ApplicationController
     @matching.save!
     @studentapplication = StudentApplication.find(params[:student_application_id])
     @user = User.find_by(:uin => @studentapplication.uin)
-    @msg = ""
+    @msg = params[:email_body]
     ## Sent mail to @user
     UserNotifier.send_ta_notification(@user, @msg).deliver_now
     render json:{"student_application_id"=>params[:student_application_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}

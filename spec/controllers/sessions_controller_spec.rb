@@ -46,12 +46,12 @@ RSpec.describe SessionsController , :type => :controller do
 
     describe "POST create" do
       # prepare mocks and stubs 
-      it "has correct credentials" do
+      it "supplied correct credentials" do
         post 'create',  {:session => {:uin => "111111111", :password => "password" }}
         expect(response).to redirect_to(user_path(:id => 7))
       end
 
-      it "provide incorrect credentials" do
+      it "supplied incorrect credentials" do
         post 'create',  {:session => {:uin => "111111111", :password => "wrong_psw" }}
         expect(response).to render_template(:new)
         expect(flash[:danger]).to be_present
