@@ -39,3 +39,7 @@ for teamwork git usage guideline
 
 Google Drive Configuration:
 https://github.com/gimite/google-drive-ruby
+
+
+The template to import users and courses:
+https://drive.google.com/folderview?id=0B36XEbwNaVAsNUpsZWU1TlhDN2M&usp=sharing
