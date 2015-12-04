@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   get '/users/modify/uploadusers' => 'users#uploadusers', :as => :uploadusers
   get '/users/modify/process_user_import' => 'users#process_user_import', :as => :process_user_import
 
-  post '/users/modify/email_user' => 'users#email_user', :as => :email_user
+  post '/users/modify/email_user' => 'users#email_user', :as => :email_user, :action => :email_user
 
   root 'static_pages#home'
   get 'error' => 'static_pages#error'
