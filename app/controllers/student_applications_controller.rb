@@ -24,7 +24,7 @@ class StudentApplicationsController < ApplicationController
     # @studentapplication = StudentApplication.new
   end
 
-  # POSt /student_applications
+  # POST /student_applications
   def create
     @studentapplication = StudentApplication.create!(params[:student_application])
     #TODO, modify this part code, so it automatically gives correct active_term literal
