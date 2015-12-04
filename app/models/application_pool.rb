@@ -14,4 +14,13 @@ class ApplicationPool < ActiveRecord::Base
     def canApply
     	return DateTime.now.utc < self.deadline.utc
     end
+
+    def self.isActive(id)
+    	if not id
+    		return false
+    	else
+            @application_pool = ApplicationPool.find(id)
+    		return @application_pool.active
+    	end
+    end
 end

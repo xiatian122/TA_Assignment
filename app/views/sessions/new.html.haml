@@ -1,4 +1,5 @@
 - provide(:title, "Log in")
+
 .row
   .col-xs-12
     // We will not hard code 2015 fall here in furture
@@ -15,8 +16,10 @@
       %br
       = f.submit "Log in", class: "btn btn-primary btn-block"
       %br
-      %br
+
 
 .row
-  .col-xs-6
+  .col-xs-6.col-md-offset-3
     %a.text-warning{:href => "/passwd"} Forget Password
+
+%br

@@ -327,6 +327,8 @@ class UsersController < ApplicationController
     #TODO: purge requester information
 
     @studentapplication.destroy
+
+    flash[:success] = "TA application is withdrawed!"
     redirect_to user_path(@user.id)
   end
 
