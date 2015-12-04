@@ -10,7 +10,7 @@ class CoursesController < ApplicationController
       begin
         @application_pool_id = ApplicationPool.where(year:params[:year], semester:params[:semester]).first().id
         @courses = Course.where(application_pool_id:@application_pool_id)
-      rescue
+      rescue Exception
         @application_pool_id = nil
         @courses = Course.all
         params[:year] = nil

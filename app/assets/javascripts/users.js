@@ -22,29 +22,29 @@ function userIndexRelevant (){
     }
   }
 
-  $('.edit-op-btn').click(function(e){
-    e.stopPropagation();
-  });
+  //$('.edit-op-btn').click(function(e){
+  //  e.stopPropagation();
+ // });
 
   // console.log(window.location.hash);
   // console.log(window.location.href);
 
-  if (window.location.hash){
-    var anchor = window.location.hash;
-    console.log(anchor);
-    if(anchor.match(/^#heading\d+$/)){
-      anchor = anchor.replace("heading","collapse");
-      console.log(anchor);  // #heading1
-      if (!$(anchor).hasClass('in')) {
-        console.log("here");  
-        $(anchor).collapse('toggle');
-      }
-      else {
-        $(anchor).collapse('toggle');
-        $(anchor).collapse('toggle');
-      }
-    }
-  }
+  // if (window.location.hash){
+  //   var anchor = window.location.hash;
+  //   console.log(anchor);
+  //   if(anchor.match(/^#heading\d+$/)){
+  //     anchor = anchor.replace("heading","collapse");
+  //     console.log(anchor);  // #heading1
+  //     if (!$(anchor).hasClass('in')) {
+  //       console.log("here");  
+  //       $(anchor).collapse('toggle');
+  //     }
+  //     else {
+  //       $(anchor).collapse('toggle');
+  //       $(anchor).collapse('toggle');
+  //     }
+  //   }
+  // }
   // Bowei: I understand this piece of code is weired, but I have to close this accordian before go to new link,
   // I have to update the  Bootstrap event manager that this accordian has been closed, 
   // otherwise, if use click back to courses, the accordian cannot be expanded, due to bootstrap event manager will
@@ -62,6 +62,7 @@ function userIndexRelevant (){
     $("#email-form").attr("action", $this.attr("href"));
     //$("#email-body").find("textarea[name=email_body_user_input]").val(student_full_name + ":\n  you have been assigned TA for course:\n\n" + $this.data("course-str"));
     //$("#email-body").find("input[name=student_application_id]").val($this.data("student_application_id"));
+    $("#myModalLabel").html("Email to: " + $this.data("user_name") + " [" + $this.data("user_identity") + "]"); // 你试一下这个
     $("#email-shared-editor-modal").modal("show");
   });
 
@@ -91,21 +92,8 @@ function userIndexRelevant (){
 }
 
 $(document).on("page:change", function (){
-  if ($(".courses.index").length > 0){
-    courseIndexRelevant();
-  }
-  if ($(".courses.select_new_ta").length > 0){
-
-    (function (){
-      $("input, select,option").click(function (e){
-        e.stopPropagation();
-      })
-      $("a[href=#myModal]").click(function (e){
-        console.log("link clicked")
-        e.stopPropagation();
-        $($(this).data("target")).modal("show")
-      });
-    })();
+  if ($(".users.index").length > 0){
+    userIndexRelevant();
   }
 });
   
