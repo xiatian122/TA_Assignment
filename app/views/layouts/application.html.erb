@@ -9,14 +9,21 @@
 </head>
 <!--http://brandonhilkert.com/blog/organizing-javascript-in-rails-application-with-turbolinks-->
 <body class="<%= controller_name %> <%= action_name %>">
-  <%= render 'layouts/header' %>
-  <div class='container'>
-    <% flash.each do |message_type, message| %>
-        <div class="alert alert-<%= message_type %>"><%= message %></div>
-      <% end %>
-    <%= yield %>
-  </div>
 
-  <%= render 'layouts/footer' %>
+  <div id="wrap">
+    <%= render 'layouts/header' %>
+
+  
+    <div id='main' class='container clear-top'>
+      <% flash.each do |message_type, message| %>
+          <div class="alert alert-<%= message_type %>"><%= message %></div>
+        <% end %>
+      <%= yield %>
+    </div>
+  
+
+    <%= render 'layouts/footer' %>
+  </div>
+  
 </body>
 </html>
