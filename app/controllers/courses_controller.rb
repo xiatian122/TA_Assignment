@@ -128,6 +128,15 @@ class CoursesController < ApplicationController
     end
     
     @application_pool_id = params[:app_id]
+    @current_application = []
+    
+    begin
+    @current_application = ApplicationPool.find(@application_pool_id)
+    rescue Exception
+    flash[:danger] = "The application is not in the pool!"
+    redirect_to courses_path
+    return
+    end
 
     ## Establish Google connection
     @client = Google::APIClient.new(
@@ -163,7 +172,7 @@ class CoursesController < ApplicationController
     
     if @ws.nil?
       flash[:danger] = "Please make sure the code and url correnct: Try Again!"
-      redirect_to courses_path + "/modify/upload"
+      redirect_to course_path
       return
     end
 
@@ -227,8 +236,25 @@ class CoursesController < ApplicationController
   
   # GET /courses/#drop_all
   def drop_all
-    Course.destroy_all
     
+    @application_pool_id = params[:pool_id]
+    @current_application = []
+    if @application_pool_id.nil?
+      flash[:danger] = "Please select the semester that you want to drop"
+    else
+      begin
+      @current_application = ApplicationPool.find(@application_pool_id)
+      rescue Exception
+      returnflash[:error] = "The semester cannot be found!"
+      end
+      if (@current_application.active == true)
+        Course.destroy_all(application_pool_id: @application_pool_id)
+      else
+        flash[:danger] = "The semester is not active!"
+        redirect_to courses_path
+        return
+      end
+    end
     redirect_to courses_path
   end
 
