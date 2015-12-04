@@ -22,9 +22,10 @@ Rails.application.routes.draw do
   get '/users/:id/delete_suggestion' => 'users#delete_suggestion', :as => :delete_suggestion
 
   
-  get '/users/:id/uploadusers' => 'users#uploadusers', :as => :uploadusers
-  get '/users/:id/process_user_import' => 'users#process_user_import', :as => :process_user_import
+  get '/users/modify/uploadusers' => 'users#uploadusers', :as => :uploadusers
+  get '/users/modify/process_user_import' => 'users#process_user_import', :as => :process_user_import
 
+  post '/users/modify/email_user' => 'users#email_user', :as => :email_user, :action => :email_user
 
   root 'static_pages#home'
   get 'error' => 'static_pages#error'
@@ -52,7 +53,7 @@ Rails.application.routes.draw do
   get '/courses/modify/drop_all' => 'courses#drop_all', :as => :drop_all, :action => :drop_all
   
   get '/courses/modify/upload/' => 'courses#upload', :as => :upload, :action => :upload
-  get '/courses/modify/process_import' => 'courses#process_import', :as => :process_import, :action => :process_import
+  get '/courses/modify/process_course_import' => 'courses#process_course_import', :as => :process_course_import, :action => :process_course_import
   
   resources :application_pools
   #root :to => redirect('/students')
