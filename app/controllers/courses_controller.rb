@@ -118,15 +118,17 @@ class CoursesController < ApplicationController
     
   end
   
-  # GET /courses/:id
-  def process_import
+  # GET /courses/modify/process_course_import
+  def process_course_import
     
     if params[:code] == "" || params[:url] == ""
       flash[:danger] = "Please get the code and paste the url before clicking import"
-      redirect_to courses_path + "/0/upload"
+      redirect_to courses_path + "/modify/upload"
       return
     end
-      
+    
+    @application_pool_id = params[:app_id]
+
     ## Establish Google connection
     @client = Google::APIClient.new(
       :application_name => 'bazinga',
@@ -150,7 +152,7 @@ class CoursesController < ApplicationController
   
     if @auth.access_token.nil?
       flash[:danger] = "Please get the code and paste the url before clicking import"
-      redirect_to courses_path + "/0/upload"
+      redirect_to courses_path + "/modify/upload"
       return
     end
     @my_session = GoogleDrive.login_with_oauth(@auth.access_token)
@@ -161,7 +163,7 @@ class CoursesController < ApplicationController
     
     if @ws.nil?
       flash[:danger] = "Please make sure the code and url correnct: Try Again!"
-      redirect_to courses_path + "/0/upload"
+      redirect_to courses_path + "/modify/upload"
       return
     end
 
@@ -170,9 +172,9 @@ class CoursesController < ApplicationController
     @row_num = @ws.num_rows - 1
     @col_num = @ws.num_cols
     
-    if @col_num % 3 != 0
-      flash[:danger] = "The spreadsheet is wrong: more than 3 columns"
-      redirect_to courses_path + "/0/upload"
+    if @col_num != 6
+      flash[:danger] = "The spreadsheet is wrong: more than 6 columns"
+      redirect_to courses_path + "/modify/upload"
       return
     end
     
@@ -181,9 +183,12 @@ class CoursesController < ApplicationController
     
     (1..@row_num).each do |i|
       @data << Course.new(
-        :cid      => @ws[i+1, 1],
-        :name     => @ws[i+1, 2],
-        :lecturer => @ws[i+1, 3]
+        :cid      => "CSCE" +  @ws[i+1, 1],
+        :section     => @ws[i+1, 2],
+        :name => @ws[i+1, 3],
+        :area => @ws[i+1, 4],
+        :lecturer_uin => @ws[i+1, 5],
+        :application_pool_id => @application_pool_id
         )
     end
     Course.import @data

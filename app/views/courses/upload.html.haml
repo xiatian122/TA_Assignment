@@ -12,7 +12,7 @@
    
 .row
   .col-md-1.col-md-offset-1
-    %form.form-horizontal{:action => "/process_import", :method => "GET", :role => "form"}
+    %form.form-horizontal{:action => "/courses/modify/process_course_import", :method => "GET", :role => "form"}
       .form-group
         %label.col-sm-2.control-label{:for => "google_code"} Paste the Google code by press the above button
         .col-sm-10
@@ -23,7 +23,7 @@
           %input#url.form-control{:name => "url", :type => "text"}/
       .form-group
         .col-sm-offset-2.col-sm-10
-          %button.btn.btn-default{:type => "submit"} Import
+          %button.btn.btn-default{:type => "submit", :name => "app_id", :value => @application_pool_id} Import
       
 
       

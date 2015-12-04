@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.all.order(:identity, :uin)
     
   end
 
@@ -51,6 +51,138 @@ class UsersController < ApplicationController
       end
       render :show
     end
+  end
+  
+  
+  # GET /users/modify/uploadusers
+  def uploadusers
+    
+    @client = Google::APIClient.new(
+      :application_name => 'bazinga',
+      :application_version => '1.0.0'
+    )
+    @auth = @client.authorization
+    # Bowei Liu: @Xia Tian, I would like to suggest put sensitive info into system environment variables 
+    @auth.client_id = CONSTANTS['google_client_id']
+    @auth.client_secret = CONSTANTS['google_client_secret']
+    @auth.scope = CONSTANTS['google_client_scope']
+      
+    @auth.redirect_uri = CONSTANTS['google_verify_redirect_uri']
+    @auth_uri = @auth.authorization_uri.to_s
+
+  end
+  
+  # GET /users/modify/process_user_import
+  def process_user_import
+  
+     if params[:code] == "" || params[:url] == ""
+      flash[:danger] = "Please get the code and paste the url before clicking import"
+      redirect_to users_path + "/modify/uploadusers"
+      return
+    end
+    
+
+    ## Establish Google connection
+    @client = Google::APIClient.new(
+      :application_name => 'bazinga',
+      :application_version => '1.0.0'
+    )
+    @auth = @client.authorization
+
+    
+    @auth.client_id = CONSTANTS['google_client_id']
+    @auth.client_secret = CONSTANTS['google_client_secret']
+    @auth.scope = CONSTANTS['google_client_scope']
+    @auth.redirect_uri = CONSTANTS['google_verify_redirect_uri']
+    
+    @auth.code = params[:code]
+    @url = params[:url]
+    
+    begin
+      @auth.fetch_access_token!
+    rescue Exception
+    end
+  
+    if @auth.access_token.nil?
+      flash[:danger] = "Please get the code and paste the url before clicking import"
+      redirect_to users_path + "/modify/uploadusers"
+      return
+    end
+    @my_session = GoogleDrive.login_with_oauth(@auth.access_token)
+    begin
+      @ws = @my_session.spreadsheet_by_url(@url).worksheets[0]
+    rescue Exception
+    end
+    
+    if @ws.nil?
+      flash[:danger] = "Please make sure the code and url correnct: Try Again!"
+      redirect_to users_path + "/modify/uploadusers"
+      return
+    end
+
+    
+    
+    @row_num = @ws.num_rows - 1
+    @col_num = @ws.num_cols
+    
+    
+    @data = []
+    @name_parts = []
+    @current_user = []
+    
+    if @col_num == 4
+     (1..@row_num).each do |i|
+       
+        ## Split name into first_name & last_name
+        @name_parts = @ws[i+1, 2].split(" ")
+        @first_name = @name_parts[0]
+        
+        ## Deals with Middle Name
+        if @name_parts.size == 3
+          @last_name = @name_parts[1] + " " + @name_parts[2]
+        else
+          @last_name = @name_parts[1]          
+        end
+        
+        ## Find the data if it exists, if exist update
+        @current_user = User.find_by(:uin => @ws[i+1, 1])
+        
+        if @current_user.nil?
+        
+          @data << User.new(
+            :uin      => @ws[i+1, 1],
+            :first_name => @first_name,
+            :last_name  => @last_name,
+            :email    => @ws[i+1, 3],
+            :identity => @ws[i+1, 4].upcase,
+            :password => "password",
+            :password_confirmation => "password"
+            )
+        else
+          @current_user.first_name = @first_name
+          @current_user.last_name = @last_name
+          @current_user.email = @ws[i+1, 3]
+          @current_user.identity = @ws[i+1, 4].upcase
+          @current_user.save!
+        end
+      end
+      User.import @data
+    else
+      flash[:danger] = "The spreadsheet is wrong: not 4 columns"
+      redirect_to users_path + "/modify/uploadusers"
+      return
+    end
+    redirect_to users_path
+  end
+  
+  # POST /users/modify/email_user
+  def email_user
+    
+    #@user = User.find_by(:uin => uin)
+   # @msg = params[:email_body]
+    ## Sent mail to @user
+    UserNotifier.send_ta_notification(@user, @msg).deliver_now
+    render json:{"student_application_id"=>params[:student_application_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}
   end
 
   # GET /users/new
