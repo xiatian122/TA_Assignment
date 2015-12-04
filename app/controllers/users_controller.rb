@@ -216,12 +216,12 @@ class UsersController < ApplicationController
   
   # POST /users/modify/email_user
   def email_user
-    
-    #@user = User.find_by(:uin => uin)
-   # @msg = params[:email_body]
+    @uin = params[:uin]
+    @user = User.find_by(:uin => @uin)
+    @msg = params[:email_body]
     ## Sent mail to @user
     UserNotifier.send_ta_notification(@user, @msg).deliver_now
-    render json:{"student_application_id"=>params[:student_application_id], "course_id"=>params[:id], "status"=>"success", "operation"=>"email"}
+    render json:{"uin"=>@user.uin, "user_name"=>@user.name, "status"=>"success", "operation"=>"email"}
   end
 
   # GET /users/new

@@ -19,3 +19,4 @@
 //= require bootstrap-switch
 
 //= require courses
+//= require users

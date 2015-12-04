@@ -22,20 +22,20 @@
         %td= user.uin
         %td= user.email
         %td= user.identity
-        %td= link_to('Email', email_user_path(:uin => user.uin), {:class=>"email-link"}) 
+        %td= link_to('Email', email_user_path(:uin => user.uin), {:class=>"email-link", "data-user_name"=> user.name, "data-user_identity" => user.identity}) 
         -# , "data-student_application_id"=> ta.id, "data-course-str" => course.cid + " " + course.name})
         %td= link_to 'Show', user
         %td= link_to 'Edit', edit_user_path(user)
         %td= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }
         
-%email-shared-editor-modal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+#email-shared-editor-modal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
   .modal-dialog{:role => "document"}
     .modal-content
       %form{"action" => "", "method" => "post", :id=>"email-form"}
         .modal-header
           %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
             %span{"aria-hidden" => "true"} &times;
-          %h4#myModalLabel.modal-title Confirmation Email of TA Assignment
+          %h4#myModalLabel.modal-title 
         .modal-body#email-body
           %input.hidden{:type=>"text", :name=>"student_application_id"}
           %textarea.form-control{:rows => "4", :name => "email_body_user_input"}
