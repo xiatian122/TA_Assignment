@@ -167,6 +167,45 @@ class UsersController < ApplicationController
         end
       end
       User.import @data
+    elsif @col_num == 5
+      (1..@row_num).each do |i|
+       
+        ## Split name into first_name & last_name
+        @name_parts = @ws[i+1, 2].split(" ")
+        @first_name = @name_parts[0]
+        
+        ## Deals with Middle Name
+        if @name_parts.size == 3
+          @last_name = @name_parts[1] + " " + @name_parts[2]
+        else
+          @last_name = @name_parts[1]          
+        end
+        
+        ## Find the data if it exists, if exist update
+        @current_user = User.find_by(:uin => @ws[i+1, 1])
+        
+        if @current_user.nil?
+        
+          @data << User.new(
+            :uin      => @ws[i+1, 1],
+            :first_name => @first_name,
+            :last_name  => @last_name,
+            :email    => @ws[i+1, 3],
+            :identity => @ws[i+1, 4].upcase,
+            :elpe     => @ws[i+1, 5],
+            :password => "password",
+            :password_confirmation => "password"
+            )
+        else
+          @current_user.first_name = @first_name
+          @current_user.last_name = @last_name
+          @current_user.email = @ws[i+1, 3]
+          @current_user.identity = @ws[i+1, 4].upcase
+          @current_user.elpe = @ws[i+1, 5]
+          @current_user.save!
+        end
+      end
+      User.import @data
     else
       flash[:danger] = "The spreadsheet is wrong: not 4 columns"
       redirect_to users_path + "/modify/uploadusers"
