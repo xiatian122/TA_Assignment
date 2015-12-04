@@ -24,7 +24,7 @@ class StudentApplicationsController < ApplicationController
     # @studentapplication = StudentApplication.new
   end
 
-  # POSt /student_applications
+  # POST /student_applications
   def create
     @studentapplication = StudentApplication.create!(params[:student_application])
     #TODO, modify this part code, so it automatically gives correct active_term literal
@@ -68,7 +68,7 @@ class StudentApplicationsController < ApplicationController
    flash[:notice] = "#{@studentapplication.first_name}\'s Application was withdrawed."
    redirect_to student_applications_path(@studentapplication)
   end
-
+  # GET '/users/:id/accept_assignment'
   def accept_assignment
     @studentapplication = StudentApplication.find params[:id]
     @studentapplication.status = StudentApplication::STUDENT_CONFIRMED

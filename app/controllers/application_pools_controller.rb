@@ -23,6 +23,7 @@ class ApplicationPoolsController < ApplicationController
   	@application_pool = ApplicationPool.find params[:id]
   end
 
+  # Bowei: did not find corresponding route
   def check_for_cancel
     if params[:commit] == "Cancel"
       redirect_to application_pools_path
