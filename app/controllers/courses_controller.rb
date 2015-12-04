@@ -21,6 +21,13 @@ class CoursesController < ApplicationController
       @application_pool_id = nil
       @courses = Course.all
     end
+
+    @application_pools = ApplicationPool.where(active: true)
+    @available_semesters = Array.new 
+    @application_pools.each do |app_pool|
+      @available_semesters << {'semester' => app_pool.semester, 'year' => app_pool.year}
+    end
+
     @courses_ta = Hash.new 
     @courses_suggestion = Hash.new 
     internal_courses_ta = Hash.new  # internal usage
