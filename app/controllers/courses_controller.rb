@@ -214,10 +214,20 @@ class CoursesController < ApplicationController
   
   # PATCH /courses/:id
   def update
-    @course = Course.find params[:id]
-    @course.update_attributes!(params[:course])
-    flash[:success] = "#{@course.name} was successfully updated."
-    redirect_to courses_path
+    lecturer_name = params[:course][:lecturer].split(' ')
+    lecturer_fname = lecturer_name[0]
+    lecturer_lname = lecturer_name[1]
+    lecturer = User.find_by_last_name_and_first_name(lecturer_lname ,lecturer_fname)
+    if lecturer != nil && lecturer.identity == "FACULTY"
+      @course = Course.find params[:id]
+      @course.lecturer_uin = lecturer.uin
+      @course.update_attributes!(params[:course])
+      flash[:success] = "#{@course.name} was successfully updated."
+      redirect_to courses_path
+    else
+      flash[:warning] = "Professor #{params[:course][:lecturer]} was not found"
+      redirect_to courses_path
+    end
   end
 
   def check_for_cancel
@@ -230,7 +240,7 @@ class CoursesController < ApplicationController
     if params[:commit] == "Delete"
       ## delete the course
       
-      @course = Course.find(params[:pool_id])
+      @course = Course.find(params[:id])
 
       if !@course.nil?
         @course.destroy!
@@ -267,7 +277,7 @@ class CoursesController < ApplicationController
 
   # DELETE /courses/:id
   def destroy
-    @course = Course.find(params[:id])
+    @course = Course.find_by_id(params[:id])
     respond_to do |format|
       format.html {
         redirect_to courses_url
