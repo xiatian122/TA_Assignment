@@ -240,7 +240,7 @@ class CoursesController < ApplicationController
     if params[:commit] == "Delete"
       ## delete the course
       
-      @course = Course.find(params[:pool_id])
+      @course = Course.find(params[:id])
 
       if !@course.nil?
         @course.destroy!
