@@ -286,8 +286,13 @@ class UsersController < ApplicationController
   def new_application
     @user = User.find(params[:id])
     @application_pool = ApplicationPool.find(params[:term_id])
-    @studentapplication = StudentApplication.new
-    @studentapplication.user_id = @user.id
+    if not @application_pool.canApply
+      flash[:danger] = "Deadline has passed!"
+      redirect_to user_path @user.id
+    else
+      @studentapplication = StudentApplication.new
+      @studentapplication.user_id = @user.id
+    end
   end
 
   #Save the newly created student_application
