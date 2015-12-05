@@ -40,11 +40,12 @@
 
 =link_to 'Edit', edit_user_path(@user)
 
--if not @studentapplications.empty?
-  %hr
-  .row
-    .col-xs-12
-      %h2{class:"text-left"}="Assignment Status"
+%hr
+.row
+  .col-xs-12
+    %h2{class:"text-left"}="Assignment Status"
+
+-if not @application_pools.empty?
   -@application_pools.each do |application_pool|
     -if not @studentapplications.has_key?(application_pool.id)
       .row
@@ -95,6 +96,8 @@
             -if status['Status'] == StudentApplication::EMAIL_NOTIFIED
               .col-xs-2
                 =link_to('Accept', accept_ta_assignment_path(:id => @user.id, :match_id => status['Matching_id'])) + ' / ' + link_to('Reject', reject_ta_assignment_path(:match_id => status['Matching_id']))
+-else
+  %p No assignment status is available
 
 
 
