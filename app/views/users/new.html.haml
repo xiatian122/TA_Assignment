@@ -29,6 +29,17 @@
           %option{:value => "MS", :selected => @user.identity == "MS"} MS
           %option{:value => "MENG", :selected => @user.identity == "MENG"} MENG
       .form-group
+        %label{:for => "user_start_semester"} Start Semester
+        = f.text_field(:start_semester, {placeholder:"Enter the Start Semester of the user", class:"form-control"})
+      .form-group
+        %label{:for => "user_elpe"} ELPE
+        = f.text_field(:elpe, {placeholder:"Enter the ELPE grade of the user", class:"form-control"})
+      .form-group
+        %label{:for => "user_guaranteed"} Guaranteed for TA
+        %select#user_guaranteed.form-control{:name => "user[guaranteed]"}
+          %option{:value => true, :selected => @user.guaranteed == true} Yes
+          %option{:value => false, :selected => @user.guaranteed == false} No
+      .form-group
         %label{:for => "user_password"} Password
         = f.password_field(:password, {placeholder:"Enter the password", class:"form-control"})
       .form-group
