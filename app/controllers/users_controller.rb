@@ -236,13 +236,13 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    @user = User.new(user_params)
+    @user = User.new(params[:user])
 
     respond_to do |format|
       if @user.save
         format.html { 
           redirect_to @user 
-          flash[:success]='User was successfully created.' 
+          flash[:success]="User #{@user.name} was successfully created."
         }
         format.json { render :show, status: :created, location: @user }
       else
@@ -255,11 +255,12 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    @user = User.find params[:id]
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(params[:user])
         format.html { 
-          redirect_to @user
-          flash[:success] = 'User was successfully updated.' 
+          flash[:success] = "User #{@user.name} was successfully updated."
+          redirect_to @user          
         }
         format.json { render :show, status: :ok, location: @user }
       else

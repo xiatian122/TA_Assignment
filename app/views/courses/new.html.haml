@@ -1,12 +1,21 @@
 -# file: app/views/courses/new.html.haml
 
-- utitilies={ semesters:["2015 Spring","2015 Summer","2015 Fall","2016 Spring","2016 Summer","2016 Fall","2017 Spring"]}
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="Create New Course For #{ApplicationPool::getAppPoolYearSemester @application_pool_id}"
+
+%hr
+
 .row
   .col-md-10.col-md-offset-1
     = form_for @course, url:{action:"create"}, html:{class:"new_course_form"} do |f|
+      =hidden_field_tag :application_pool_id, @application_pool_id
       .form-group
         %label{:for => "course_id"} Course ID
-        = f.text_field(:cid, {placeholder:"Enter Course ID: Only One ID is allowed: e.g. CSCE629-601", class:"form-control"})
+        = f.text_field(:cid, {placeholder:"Enter Course ID: Only One ID is allowed: e.g. CSCE629", class:"form-control"})
+      .form-group
+        %label{:for => "course_section"} Section
+        = f.text_field(:section, {placeholder:"Enter the Course Section", class:"form-control"})
       .form-group
         %label{:for => "course_name"} Course Name
         = f.text_field(:name, {placeholder:"Course Name: e.g. Software Engineering", class:"form-control"})
@@ -14,12 +23,12 @@
         %label{:for => "credits"} Credits
         = f.text_field(:credits, {placeholder:"Course Credits: 1 - 6", class:"form-control"})
       .form-group
-        %label{:for => "instructor"} Instructor
-        = f.text_field(:lecturer, {placeholder:"Instructor's Name", class:"form-control"})
+        %label{:for => "instructor"} Lecturer UIN
+        = f.text_field(:lecturer_uin, {placeholder:"Lecturer's UIN", class:"form-control"})
       .form-group
-        %label{:for => "instructor_email"} Instructor's Email
-        = f.text_field(:insemail, {placeholder:"Instructor's Email", class:"form-control"})
-      .form-group
-        %label{:for => "course_description"} Course Description
-        = f.text_area(:description, {placeholder:"Input Course Description here...", class:"form-control", rows:"8"})
+        %label{:for => "course_area"} Area
+        %select#course_area.form-control{:name => "course[area]"}
+          %option{:value => "Theory", :selected => @course.area == "Theory"} Theory
+          %option{:value => "System", :selected => @course.area == "System"} System
+          %option{:value => "Artificial Intelligence", :selected => @course.area == "Artificial Intelligence"} Artificial Intelligence
       = f.submit("Create", {class:"btn btn-primary"})

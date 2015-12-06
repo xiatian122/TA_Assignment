@@ -31,4 +31,15 @@ class User < ActiveRecord::Base
       return self.identity.to_s == "FACULTY"
     end
 
+    def destroy
+      #delete related student applications, courses
+      @related_courses = Course.where(lecturer_uin: self.uin)
+      @related_courses.destroy_all
+
+      @related_student_applications = StudentApplication.where(user_id: self.id)
+      @related_student_applications.destroy_all
+
+      super
+    end
+
 end

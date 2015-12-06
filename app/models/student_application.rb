@@ -18,7 +18,8 @@ class StudentApplication < ActiveRecord::Base
     if self.requester
       requesters = self.requester.split(',')
       requesters.each do |requester|
-        course = Course.find requester
+        course = Course.find_by requester
+        
         newsuggestion = ""
         suggestionid = course.suggestion.split('/')
         suggestionid.each do |studentid|
@@ -33,6 +34,7 @@ class StudentApplication < ActiveRecord::Base
         end
         course.suggestion = newsuggestion
         course.save!
+        
       end
     end
     super
