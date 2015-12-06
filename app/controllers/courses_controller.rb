@@ -233,6 +233,31 @@ class CoursesController < ApplicationController
       ## delete the course
       
       @course = Course.find(params[:id])
+      
+      if @course.suggestion != nil
+      suggestionid = @course.suggestion.split('/')
+      suggestionid.each do |studentid|
+        ta_id = studentid.split(';')
+        @ta = StudentApplication.find_by_id(ta_id[1])
+  
+        if @ta != nil  # Bowei Liu Nov 25 try resolving
+  
+          if @ta.requester != nil
+          courserelated = @ta.requester.split(',')
+          @ta.requester = nil
+          courserelated.delete("#{params[:id]}")
+          courserelated.each do |course|
+            if @ta.requester != nil
+              @ta.requester << ','+course
+            else
+              @ta.requester = course
+            end
+          end
+          @ta.save!
+          end
+        end
+      end
+      end
 
       if !@course.nil?
         @course.destroy!
