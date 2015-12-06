@@ -13,11 +13,9 @@ Scenario: edit one course
   Then I should see "PROGRAMMING I"
   When I follow "edit-1"
   Then I should see "Course ID"
-  Then I should see "Advisor"
   When I fill in the following:
-    | course[credits]  | 3                     |
-    | course[lecturer] | Shaoming Huang        |
-    | course[insemail] | bowei_liu@ymail.com   |
+    | course[credits]      | 3                     |
+    | course[lecturer_uin] | 623007741             |
   When I press "Update"
   Then I should be on the course home page
   Then I should see "Shaoming Huang"
