@@ -29,6 +29,24 @@ module NavigationHelpers
 
     when /^page for selecting TA for course_id \d+$/
       '/courses/'+ page_name.match(/\d+/)[0] +'/select_new_ta'
+    
+    when /^the information page for Tian Xia$/
+      '/users/4'
+      
+    when /^submit my application\s?page$/
+      '/users/4/new_application'
+      
+    when /^the information page for Chen Yang$/
+      '/users/1'
+      
+    when /^the information page for Duncan Walker$/
+      '/users/6/lecturer_show'
+      
+    when /^submit my suggestion\s?page$/
+      '/users/6/edit_suggestion'
+      
+    
+      
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
