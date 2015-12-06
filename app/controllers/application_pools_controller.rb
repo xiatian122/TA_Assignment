@@ -1,5 +1,5 @@
 class ApplicationPoolsController < ApplicationController
-  before_filter :check_for_cancel, :only => [:create, :update]
+  before_filter :check_for_cancel, :check_for_delete, :only => [:create, :update]
 
   load_and_authorize_resource
 
@@ -36,4 +36,19 @@ class ApplicationPoolsController < ApplicationController
     flash[:success] = "Application pool for #{@application_pool.year} #{@application_pool.semester} was successfully updated."
     redirect_to application_pools_path
   end
+
+  def check_for_delete
+    if params[:commit] == "Delete"
+      ## delete the application pool      
+      @application_pool = ApplicationPool.find params[:id]
+
+      if !@application_pool.nil?
+        @application_pool.destroy!
+      else
+        returnflash[:notice] = "The application pool does not exist! Refresh again!"
+      end
+      redirect_to application_pools_path
+    end
+  end
+
 end
