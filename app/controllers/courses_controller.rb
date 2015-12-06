@@ -70,9 +70,9 @@ class CoursesController < ApplicationController
   def new
   # default: render 'new' template
   #byebug
-    @application_pool_id = params[:id] 
+    @application_pool_id = params[:pool_id] 
     if !@application_pool_id.nil?
-      @course = Course.new(:application_pool_id => @application_pool_id)
+      @course = Course.new(application_pool_id: params[:pool_id])
     else
       flash[:danger] = "Please click on one semester tab before create new course!"
       redirect_to courses_path
@@ -84,6 +84,8 @@ class CoursesController < ApplicationController
   # POSt /courses
   def create
     @course = Course.create!(params[:course])
+    @course.application_pool_id = params[:application_pool_id]
+    @course.save!
     #debugger
     flash[:success] = "#{@course.name} was successfully created."
     redirect_to courses_path
