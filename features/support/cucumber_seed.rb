@@ -66,7 +66,7 @@ module CucumberSeeder
         area: "Theory",
         credits: 3,
         application_pool_id: 1,
-        suggestion: "",
+        suggestion: "Wei Zhao;1",
         notes: ""
       },
       {

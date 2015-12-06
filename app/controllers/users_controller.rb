@@ -433,6 +433,7 @@ class UsersController < ApplicationController
     end
   end
   
+  #Submit_ta_suggestion will delete the previous suggestion information and submit the new one
   def submit_ta_suggestion
     id = params[:courseid]
     @course = Course.find_by_id(id) 
@@ -458,6 +459,7 @@ class UsersController < ApplicationController
       end
     end
     end
+    # suggestion attribute of courses are strings in the form "ta_name1;ta_id1/ta_name2;ta_id2..." 
     @course.suggestion = nil
     if params[:ids]
       new_tas = params[:ids].keys
