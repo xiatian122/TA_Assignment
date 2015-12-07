@@ -37,8 +37,8 @@
         .form-group
           %label{:for => "user_guaranteed"} Guaranteed for TA
           %select#user_guaranteed.form-control{:name => "user[guaranteed]"}
-            %option{:value => true, :selected => @user.guaranteed == true} Yes
-            %option{:value => false, :selected => @user.guaranteed == false} No
+            %option{:value => :true, :selected => @user.guaranteed} Yes
+            %option{:value => :false, :selected => @user.guaranteed == false} No
       -if current_user.id == @user.id
         .form-group
           %label{:for => "user_password"} Password

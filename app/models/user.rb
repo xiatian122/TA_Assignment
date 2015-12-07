@@ -42,4 +42,17 @@ class User < ActiveRecord::Base
       super
     end
 
+    def self.guaranteeForTA?(id)
+      if not id
+        return "N/A1"
+      else
+        @user = User.find_by id
+        if @user
+          return @user.guaranteed?
+        else
+          return "N/A2"
+        end
+      end
+    end
+
 end
