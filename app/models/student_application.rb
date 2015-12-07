@@ -56,7 +56,7 @@ class StudentApplication < ActiveRecord::Base
   # (Getter) Get applicant's uin
   def uin
     
-    @current_student = User.find_by(self.user_id)
+    @current_student = User.find(self.user_id)
     
     if @current_student.nil?
       return ""
