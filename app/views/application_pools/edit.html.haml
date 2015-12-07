@@ -29,3 +29,4 @@
           $("[id='application_pool_active']").bootstrapSwitch();
       = f.submit("Update", {class:"btn btn-primary"})
       = f.submit("Cancel", {class:"btn btn-primary"})
+      = f.submit("Delete", class:"btn btn-danger", data: { confirm: "This will also delete all related courses and student applictions. Do you still want to delete this application pool?"})

@@ -23,4 +23,21 @@ class ApplicationPool < ActiveRecord::Base
     		return @application_pool.active
     	end
     end
+
+    # Destroy method for a application pool: Destroy related course, student application, matching as well
+    def destroy
+        # destroy related matchings
+        
+        @related_matchings = AppCourseMatching.where(application_pool_id: self.id)
+        @related_matchings.destroy_all
+
+        @related_courses = Course.where(application_pool_id: self.id)
+        @related_courses.destroy_all
+
+        @related_student_applications = StudentApplication.where(application_pool_id: self.id)
+        @related_student_applications.destroy_all
+       
+        #destroy itself
+        super
+    end
 end

@@ -1,7 +1,11 @@
 -# file: app/views/courses/edit.html.haml
 
 
-- utitilies={ semesters:["2015 Spring","2015 Summer","2015 Fall","2016 Spring","2016 Summer","2016 Fall","2017 Spring"]}
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="Edit Course #{@course.name}"
+
+%hr
         
 .row
   .col-md-10.col-md-offset-1
@@ -10,26 +14,23 @@
         %label{:for => "course_cid"} Course ID
         = f.text_field(:cid, {placeholder:"Enter the course ID", class:"form-control"})
       .form-group
+        %label{:for => "course_section"} Section
+        = f.text_field(:section, {placeholder:"Enter the Course Section", class:"form-control"})
+      .form-group
         %label{:for => "course_name"} Course Name
-        = f.text_field(:name, {placeholder:"Enter the course name", class:"form-control"})
+        = f.text_field(:name, {placeholder:"Course Name: e.g. Software Engineering", class:"form-control"})
       .form-group
         %label{:for => "credis"} Credits
         = f.text_field(:credits, {placeholder:"Enter Credits of the course", class:"form-control"})
       .form-group
-        %label{:for => "course_lecturer"} Lecturer
-        = f.text_field(:lecturer, {placeholder:"Lecturer Name", class:"form-control"})
-      .form-group
-        %label{:for => "course_insemail"} Advisor
-        = f.text_field(:insemail, {placeholder:"Instructor's Email", class:"form-control"})
+        %label{:for => "course_lecturer"} Lecturer UIN
+        = f.text_field(:lecturer_uin, {placeholder:"Lecturer UIN", class:"form-control"})
       .form-group
         %label{:for => "course_area"} Area
         %select#course_area.form-control{:name => "course[area]"}
           %option{:value => "Theory", :selected => @course.area == "Theory"} Theory
           %option{:value => "System", :selected => @course.area == "System"} System
           %option{:value => "Artificial Intelligence", :selected => @course.area == "Artificial Intelligence"} Artificial Intelligence
-      .form-group
-        %label{:for => "course_description"} Course Description
-        = f.text_field(:description, {placeholder:"Course Description", class:"form-control"})
       / / student[start_semester] is string typed
       / .form-group
       /   %label{:for => "student_start_semester"} Entering semester

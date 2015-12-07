@@ -236,13 +236,13 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    @user = User.new(user_params)
+    @user = User.new(params[:user])
 
     respond_to do |format|
       if @user.save
         format.html { 
           redirect_to @user 
-          flash[:success]='User was successfully created.' 
+          flash[:success]="User #{@user.name} was successfully created."
         }
         format.json { render :show, status: :created, location: @user }
       else
@@ -255,11 +255,12 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    @user = User.find params[:id]
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(params[:user])
         format.html { 
-          redirect_to @user
-          flash[:success] = 'User was successfully updated.' 
+          flash[:success] = "User #{@user.name} was successfully updated."
+          redirect_to @user          
         }
         format.json { render :show, status: :ok, location: @user }
       else
@@ -286,8 +287,13 @@ class UsersController < ApplicationController
   def new_application
     @user = User.find(params[:id])
     @application_pool = ApplicationPool.find(params[:term_id])
-    @studentapplication = StudentApplication.new
-    @studentapplication.user_id = @user.id
+    if not @application_pool.canApply
+      flash[:danger] = "Deadline has passed!"
+      redirect_to user_path @user.id
+    else
+      @studentapplication = StudentApplication.new
+      @studentapplication.user_id = @user.id
+    end
   end
 
   #Save the newly created student_application
@@ -427,6 +433,7 @@ class UsersController < ApplicationController
     end
   end
   
+  #Submit_ta_suggestion will delete the previous suggestion information and submit the new one
   def submit_ta_suggestion
     id = params[:courseid]
     @course = Course.find_by_id(id) 
@@ -452,6 +459,7 @@ class UsersController < ApplicationController
       end
     end
     end
+    # suggestion attribute of courses are strings in the form "ta_name1;ta_id1/ta_name2;ta_id2..." 
     @course.suggestion = nil
     if params[:ids]
       new_tas = params[:ids].keys
@@ -561,7 +569,7 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:name, :uin, :email, :password,
-                                   :password_confirmation)
+                                   :password_confirmation, :guaranteed)
     end
     
 end

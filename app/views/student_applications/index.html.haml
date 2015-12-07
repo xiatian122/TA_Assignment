@@ -21,6 +21,8 @@
           %b GPA
         .col-xs-2
           %b Degree Program
+        .col-xs-1
+          %b Guarantee
         .col-xs-2
           %b Application Term
         .col-xs-1 
@@ -37,6 +39,7 @@
                   .col-xs-2= studentapplication.fullName()
                   .col-xs-1= studentapplication.gpa
                   .col-xs-2= studentapplication.degree
+                  .col-xs-1= studentapplication.guaranteeTA()
                   .col-xs-2= ApplicationPool::getAppPoolYearSemester studentapplication.application_pool_id
                   .col-xs-1= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
               .panel-collapse.collapse{"aria-labelledby" => "heading#{studentapplication.id}", :role => "tabpanel", :id=> "collapse#{studentapplication.id}"}

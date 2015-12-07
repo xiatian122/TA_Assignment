@@ -31,4 +31,28 @@ class User < ActiveRecord::Base
       return self.identity.to_s == "FACULTY"
     end
 
+    def destroy
+      #delete related student applications, courses
+      @related_courses = Course.where(lecturer_uin: self.uin)
+      @related_courses.destroy_all
+
+      @related_student_applications = StudentApplication.where(user_id: self.id)
+      @related_student_applications.destroy_all
+
+      super
+    end
+
+    def self.guaranteeForTA?(id)
+      if not id
+        return "N/A1"
+      else
+        @user = User.find_by id
+        if @user
+          return @user.guaranteed?
+        else
+          return "N/A2"
+        end
+      end
+    end
+
 end

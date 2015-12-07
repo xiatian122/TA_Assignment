@@ -70,9 +70,9 @@ class CoursesController < ApplicationController
   def new
   # default: render 'new' template
   #byebug
-    @application_pool_id = params[:id] 
+    @application_pool_id = params[:pool_id] 
     if !@application_pool_id.nil?
-      @course = Course.new(:application_pool_id => @application_pool_id)
+      @course = Course.new(application_pool_id: params[:pool_id])
     else
       flash[:danger] = "Please click on one semester tab before create new course!"
       redirect_to courses_path
@@ -84,6 +84,8 @@ class CoursesController < ApplicationController
   # POSt /courses
   def create
     @course = Course.create!(params[:course])
+    @course.application_pool_id = params[:application_pool_id]
+    @course.save!
     #debugger
     flash[:success] = "#{@course.name} was successfully created."
     redirect_to courses_path
@@ -214,20 +216,10 @@ class CoursesController < ApplicationController
   
   # PATCH /courses/:id
   def update
-    lecturer_name = params[:course][:lecturer].split(' ')
-    lecturer_fname = lecturer_name[0]
-    lecturer_lname = lecturer_name[1]
-    lecturer = User.find_by_last_name_and_first_name(lecturer_lname ,lecturer_fname)
-    if lecturer != nil && lecturer.identity == "FACULTY"
-      @course = Course.find params[:id]
-      @course.lecturer_uin = lecturer.uin
-      @course.update_attributes!(params[:course])
-      flash[:success] = "#{@course.name} was successfully updated."
-      redirect_to courses_path
-    else
-      flash[:warning] = "Professor #{params[:course][:lecturer]} was not found"
-      redirect_to courses_path
-    end
+    @course = Course.find params[:id]
+    @course.update_attributes!(params[:course])
+    flash[:success] = "#{@course.name} was successfully updated."
+    redirect_to courses_path
   end
 
   def check_for_cancel
@@ -241,6 +233,31 @@ class CoursesController < ApplicationController
       ## delete the course
       
       @course = Course.find(params[:id])
+      
+      if @course.suggestion != nil
+      suggestionid = @course.suggestion.split('/')
+      suggestionid.each do |studentid|
+        ta_id = studentid.split(';')
+        @ta = StudentApplication.find_by_id(ta_id[1])
+  
+        if @ta != nil  # Bowei Liu Nov 25 try resolving
+  
+          if @ta.requester != nil
+          courserelated = @ta.requester.split(',')
+          @ta.requester = nil
+          courserelated.delete("#{params[:id]}")
+          courserelated.each do |course|
+            if @ta.requester != nil
+              @ta.requester << ','+course
+            else
+              @ta.requester = course
+            end
+          end
+          @ta.save!
+          end
+        end
+      end
+      end
 
       if !@course.nil?
         @course.destroy!
