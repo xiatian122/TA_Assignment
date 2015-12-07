@@ -63,7 +63,7 @@ class CoursesController < ApplicationController
         internal_courses_ta[course.id][i] = tadata[i].attributes
       end      
     end
-    @SlotStatus = getSlotStatusForAllCourses(internal_courses_ta)
+    @SlotStatus = getSlotStatusForAllCourses(@ta_status)
   end
 
   #  /courses/new

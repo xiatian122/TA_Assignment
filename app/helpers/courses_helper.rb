@@ -1,6 +1,6 @@
 module CoursesHelper
 
-  def getSlotStatusForAllCourses( courses_ta_hash)
+  def getSlotStatusForAllCourses( ta_status)
     courses = Course.all
     to_be_returned_hash = Hash.new()
     # initializing
@@ -8,10 +8,11 @@ module CoursesHelper
       to_be_returned_hash[course.id] = {assigned: 0, slots:0}
     end
     # populating
-    courses_ta_hash.each do |course_id, ta_array|
-      to_be_returned_hash[course_id][:slots] = ta_array.length()
-      ta_array.each do |ta_hash|
-        if ta_hash["status"] == 6
+    ta_status.each_pair do |course_id, ta_hash|
+      to_be_returned_hash[course_id][:slots] = ta_hash.size()
+      ta_hash.each_pair do |ta_id, single_ta_status_hash|
+        # byebug
+        if (single_ta_status_hash["status"] >= 4)
           to_be_returned_hash[course_id][:assigned] = to_be_returned_hash[course_id][:assigned]  + 1
         end
       end
