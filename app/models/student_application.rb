@@ -56,7 +56,7 @@ class StudentApplication < ActiveRecord::Base
   # (Getter) Get applicant's uin
   def uin
     
-    @current_student = User.find_by(self.user_id)
+    @current_student = User.find_by_id(self.user_id)
     
     if @current_student.nil?
       return ""
@@ -69,7 +69,7 @@ class StudentApplication < ActiveRecord::Base
   # (Getter) Get applicant's first name
   def first_name
     
-     @current_student = User.find(self.user_id)
+     @current_student = User.find_by_id(self.user_id)
     
     if @current_student.nil?
       return nil
@@ -82,7 +82,7 @@ class StudentApplication < ActiveRecord::Base
   # (Getter) Get applicant's last name
   def last_name
     
-     @current_student = User.find(self.user_id)
+     @current_student = User.find_by_id(self.user_id)
     
     if @current_student.nil?
       return nil
@@ -107,7 +107,7 @@ class StudentApplication < ActiveRecord::Base
   # (Getter) Get applicant's start_semester
   def start_semester
     
-    @current_student = User.find(self.user_id)
+    @current_student = User.find_by_id(self.user_id)
     
     if @current_student.nil?
       return ""
@@ -119,7 +119,7 @@ class StudentApplication < ActiveRecord::Base
     # (Getter) Get applicant's email
   def email
     
-    @current_student = User.find(self.user_id)
+    @current_student = User.find_by_id(self.user_id)
     
     if @current_student.nil?
       return ""
@@ -128,11 +128,20 @@ class StudentApplication < ActiveRecord::Base
     end
   end
   
-  # (Getter) 
-  #def position
+  def guaranteeTA()
+    @applicant = User.find_by_id(self.user_id)
     
+    if not @applicant
+      return "N/A"
+    else
+      if @applicant.guaranteed
+        return "YES"
+      else
+        return "NO"
+      end
+    end
     
-  #end
+  end
   
   
   #  :course_assigned,

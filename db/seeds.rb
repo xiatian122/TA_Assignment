@@ -11,13 +11,13 @@ ApplicationPool.delete_all()
 Course.delete_all()
 User.delete_all()
 StudentApplication.delete_all()
-users = [{:password => 'password', :password_confirmation => 'password', :first_name => 'Chen', :last_name => "Yang", :uin => '922003095', :email => 'tianxia1992@gmail.com', :identity => 'PHD', :start_semester => '2013 Fall', :elpe => '1', :guaranteed => '1', :active => '1' },
-          {:password => 'password', :password_confirmation => 'password', :first_name => 'Wei', :last_name => "Zhao", :uin => '922773022', :email => 'tianxia1992@gmail.com', :identity => 'MS', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:password => 'password', :password_confirmation => 'password', :first_name => 'Mingjie', :last_name => "Lu", :uin => '922773023', :email => 'tianxia1992@gmail.com', :identity => 'MENG', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:password => 'password', :password_confirmation => 'password', :first_name => 'Tian', :last_name => "Xia", :uin => '922773024', :email => 'tianxia1992@gmail.edu', :identity => 'PHD', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:password => 'password', :password_confirmation => 'password', :first_name => 'Shaoming', :last_name => "Huang", :uin => '623007741', :email => 'jeff@cse.tamu.com', :identity => 'FACULTY', :start_semester => '2000 Fall', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:password => 'password', :password_confirmation => 'password', :first_name => 'Duncan', :last_name => "Walker", :uin => '623007756', :email => 'tianxia1992@gmail.com', :identity => 'FACULTY', :start_semester => '1989 Spring', :elpe => '0', :guaranteed => '0', :active => '1'},
-          {:password => 'password', :password_confirmation => 'password', :first_name => 'Master', :last_name => "Shifu!", :uin => '000000000', :email => 'tianxia1992@gmail.com', :identity => 'ADMIN', :start_semester => '1989 Spring', :elpe => '0', :guaranteed => '0', :active => '1'}]
+users = [{:password => 'password', :password_confirmation => 'password', :first_name => 'Chen', :last_name => "Yang", :uin => '922003095', :email => 'tianxia1992@gmail.com', :identity => 'PHD', :start_semester => '2013 Fall', :elpe => '1', :guaranteed => true, :active => '1' },
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'Wei', :last_name => "Zhao", :uin => '922773022', :email => 'tianxia1992@gmail.com', :identity => 'MS', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => false, :active => '1'},
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'Mingjie', :last_name => "Lu", :uin => '922773023', :email => 'tianxia1992@gmail.com', :identity => 'MENG', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => false, :active => '1'},
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'Tian', :last_name => "Xia", :uin => '922773024', :email => 'tianxia1992@gmail.edu', :identity => 'PHD', :start_semester => '2012 Fall', :elpe => '0', :guaranteed => false, :active => '1'},
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'Shaoming', :last_name => "Huang", :uin => '623007741', :email => 'jeff@cse.tamu.com', :identity => 'FACULTY', :start_semester => '2000 Fall', :elpe => '0', :guaranteed => false, :active => '1'},
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'Duncan', :last_name => "Walker", :uin => '623007756', :email => 'tianxia1992@gmail.com', :identity => 'FACULTY', :start_semester => '1989 Spring', :elpe => '0', :guaranteed => false, :active => '1'},
+          {:password => 'password', :password_confirmation => 'password', :first_name => 'Master', :last_name => "Shifu!", :uin => '000000000', :email => 'tianxia1992@gmail.com', :identity => 'ADMIN', :start_semester => '1989 Spring', :elpe => '0', :guaranteed => false, :active => '1'}]
 users.each do |user|
   User.create!(user)
 end
@@ -26,7 +26,7 @@ studentapplications = [{
              :advisor => 'Miamia', 
              :gpa => '4.0', :course_taken => 'CSCE-606-601', 
              :course_taed => 'CSCE-629-601', :preferred_area => 'Physics', :preferred_course => 'CSCE629', 
-             :application_pool_id => '2', :user_id => 1, :requester => ""
+             :application_pool_id => '1', :user_id => 1, :requester => ""
             },
             {
              :advisor => 'T_Advisor',
