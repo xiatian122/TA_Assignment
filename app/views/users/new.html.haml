@@ -37,8 +37,8 @@
       .form-group
         %label{:for => "user_guaranteed"} Guaranteed for TA
         %select#user_guaranteed.form-control{:name => "user[guaranteed]"}
-          %option{:value => true, :selected => @user.guaranteed == true} Yes
-          %option{:value => false, :selected => @user.guaranteed == false} No
+          %option{:value => :true, :selected => @user.guaranteed == true} Yes
+          %option{:value => :false, :selected => @user.guaranteed == false} No
       .form-group
         %label{:for => "user_password"} Password
         = f.password_field(:password, {placeholder:"Enter the password", class:"form-control"})
