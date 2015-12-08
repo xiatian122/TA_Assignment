@@ -1,31 +1,21 @@
--# file: app/views/courses/upload.html.haml
-
-%p#notice=notice
+-# file: app/views/courses/modify/upload.html.haml
 
 .row
   .col-xs-12
     // We will not hard code 2015 fall here in furture
     %h1{class:"text-left"}="Import Course Table from Google Spreadsheet "
-    
-
-.row
-  .col-xs-6
-    %a.btn.btn-large.btn-primary{:href => @auth_uri, :target => "_blank"} Get Google Code
    
 .row
-  .col-md-1.col-md-offset-1
-    %form.form-horizontal{:action => "process_import", :method => "GET", :role => "form"}
+  .col-md-10.col-md-offset-1
+    %form.form-horizontal{:action => "/courses/modify/process_course_import", :method => "GET", :role => "form"}
       .form-group
-        %label.col-sm-2.control-label{:for => "google_code"} Paste the Google code by press the above button
-        .col-sm-10
-          %input#code.form-control{:name => "code", :type => "text"}/
+        %a.btn.btn-large.btn-primary{:href => @auth_uri, :target => "_blank"} Get Google Code
       .form-group
-        %label.col-sm-2.control-label{:for => "spreadsheet_url"} Paste the url of the Spreadsheet
-        .col-sm-10
-          %input#url.form-control{:name => "url", :type => "text"}/
+        %label.control-label{:for => "google_code"} Paste the Google code by press the above button
+        %input#code.form-control{:name => "code", :type => "text"}/
       .form-group
-        .col-sm-offset-2.col-sm-10
-          %button.btn.btn-default{:type => "submit"} Import
-      
-
-      
+        %label.control-label{:for => "spreadsheet_url"} Paste the url of the Spreadsheet
+        %input#url.form-control{:name => "url", :type => "text"}/
+      .form-group
+        %br
+        %button.btn.btn-default{:type => "submit", :name => "app_id", :value => @application_pool_id} Import

@@ -1,0 +1,157 @@
+.row
+  .col-xs-12
+    %h1.text-left
+      Welcome! Professor #{@lecturer.name}
+%hr
+.row
+  .col-xs-12
+    %h2.text-left Basic Information
+.row
+  .col-xs-3
+    %p Name:
+  .col-xs-6
+    %p= @user.name
+.row
+  .col-xs-3
+    %p Uin:
+  .col-xs-6
+    %p= @user.uin
+.row
+  .col-xs-3
+    %p Email:
+  .col-xs-6
+    %p= @user.email
+=link_to "Edit", edit_user_path(@user)
+
+%hr
+.row
+  .col-xs-12
+    %h2.text-left Course Information
+.row
+  .col-xs-12
+    .panel.panel-default.remove-margin.pseudo-table-heading
+      /
+        \.panel-heading Panel heading without title
+      .panel-body
+        .col-xs-1
+          %b Course ID
+        .col-xs-4
+          %b Course Name
+        .col-xs-3
+          %b Your Suggestion
+        .col-xs-4
+          %b Operations for Suggestion
+
+.row
+  .col-xs-12
+    #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
+
+      - @courselist.each do |course|
+        -if ApplicationPool::isActive course.application_pool_id
+
+          .panel.panel-default
+            .panel-heading{:role => "tab"}
+              /.row{"aria-controls" => "showtadetail#{course.id}", "aria-expanded" => "true", :id => "heading#{course.id}"}
+              .row{"aria-controls" =>"collapse#{course.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{course.id}", :role => "button", :id=> "heading#{course.id}"}
+                .col-xs-1.td= course.cid
+                .col-xs-4.td= course.name
+                - if @suggestion[course.id] != nil
+                  .col-xs-3.td= @suggestion[course.id]
+                  .col-xs-4.td
+                    %a.btn.btn-warning{:href => delete_suggestion_path(:id => @user.id, :courseid => course.id), :role => "button", :onclick => "confirm('This action will delete all your suggestions. If you want to edit suggestion individually, please go to Edit Suggestion')"} Delete Suggestion
+                    %a.btn.btn-primary{:href => edit_suggestion_path(:id => @user.id, :courseid => course.id), :role => "button"} Edit
+                - else
+                  .col-xs-3.td N/A
+                  .col-xs-4.td
+                    %a.btn.btn-primary{:href => edit_suggestion_path(:id => @user.id, :courseid => course.id), :role => "button"} Suggest TA
+                
+
+            .panel-collapse.collapse{"aria-labelledby" => "heading#{course.id}", :id => "collapse#{course.id}", :role => "tabpanel"}
+              .panel-body
+                .row
+                  .col-xs-10.col-xs-offset-1
+                    %u1.list-group
+                    - if @courses_ta[course.id].length() > 0
+                      .row
+                        %b Current Assigned TA
+                      .row 
+                        - @courses_ta[course.id].each do |ta|
+                          %li.list-group-item
+                            .row
+                              .col-xs-3
+                                %a{"data-target" => "#myModal-#{course.id}-#{ta.id}", "data-toggle" => "modal"}
+                                  = ta.fullName()
+                              .col-xs-3
+                                - case @ta_status[course.id][ta.id]['position']
+                                  -when AppCourseMatching::FULLTA
+                                  Full TA
+                                  -when AppCourseMatching::HALFTA
+                                  Half TA
+                              .col-xs-4
+                                - case @ta_status[course.id][ta.id]['status']
+                                - when StudentApplication::UNDER_REVIEW
+                                  %span.label.label-default Under Review
+                                - when StudentApplication::TEMP_ASSIGNED
+                                  %span.label.label-primary Temporary Assigned
+                                - when StudentApplication::EMAIL_NOTIFIED
+                                  %span.label.label-primary Email Notified
+                                - when StudentApplication::STUDENT_CONFIRMED
+                                  %span.label.label-success Student Confirmed
+                                - when StudentApplication::STUDENT_REJECTED
+                                  %span.label.label-warning Student Rejected
+                                - when StudentApplication::ASSIGNED
+                                  %span.label.label-success Assigned
+                                - else
+                                  %span.label.label-danger Unknown
+                    - else
+                      .col-xs-10.col-xs-offset-1
+                        .list-group
+                          .list-group-item
+                            %p No TA assigned yet for this course
+
+- @courselist.each do |course|
+  - if @courses_ta[course.id]
+    - @courses_ta[course.id].each do |student|
+      .modal.fade{"aria-labelledby" => "myModalLabel", :id => "myModal-#{course.id}-#{student.id}", :role => "dialog", :tabindex => "-1"}
+        .modal-dialog{:role => "document"}
+          .modal-content
+            .modal-header
+              %h2
+                = student.fullName()+"'s Application Form"
+                .modal-body
+                  %table#student.table.table-striped
+                    %thead
+                      %tr
+                        %th Field
+                        %th Info
+                    %tbody
+                      %tr
+                        %td UIN
+                        %td= student.uin
+                      %tr
+                        %td Name
+                        %td= student.fullName()
+                      %tr
+                        %td Advisor
+                        %td= student.advisor
+                      %tr
+                        %td Degree
+                        %td
+                          - case student.degree
+                          - when StudentApplication::UNDERGRAD
+                            Undergraduate
+                          - when StudentApplication::MENG
+                            M.Eng
+                          - when StudentApplication::MS
+                            MS
+                          - when StudentApplication::PHD
+                            PHD
+                          %tr
+                            %td GPA
+                            %td= student.gpa
+                          %tr
+                            %td Course Taken
+                            %td= student.course_taken
+                          %tr
+                            %td Course TAed
+                            %td= student.course_taed

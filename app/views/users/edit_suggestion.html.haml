@@ -1,0 +1,204 @@
+
+.row
+  .col-xs-12
+    %h1{class:"text-left"}="Your suggestion for #{@course.name}"
+
+.divide20
+
+%a#uncheck-all{:href => "javascript:void(0);", :class => "btn btn-primary", :role => "button"} Uncheck All
+%br
+%br
+= form_tag submit_ta_suggestion_path, :method => :get, :id => 'tas_form' do
+  =hidden_field_tag "courseid", @course.id
+  .row
+    .col-xs-12
+      .panel.panel-default.remove-margin.pseudo-table-heading
+        / .panel-heading Panel heading without title
+        .panel-body
+          .col-xs-1 
+            %b Select
+          .col-xs-2
+            %b Student UIN
+          .col-xs-2
+            %b Name
+          .col-xs-1
+            %b GPA
+          .col-xs-2
+            %b Degree Program
+          .col-xs-1 
+            %b Detail
+  .row
+    .col-xs-12
+      #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
+
+        - @studentapplications.each do |studentapplication|
+          .panel.panel-default  
+            .panel-heading{:role => "tab"}
+              .row{"aria-expanded" => true, :id=> "heading#{studentapplication.id}"}
+                .col-xs-1
+                  - if @student_application_info[studentapplication.id]['assignable']
+                    - if @suggestionindex != nil && @suggestionindex.include?("#{studentapplication.id}")
+                      =check_box_tag "ids[#{studentapplication.id}]", true, :id => "ids_#{studentapplication.id}"
+                    - else
+                      =check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
+
+                .col-xs-2= studentapplication.uin
+                .col-xs-2= studentapplication.fullName()
+                .col-xs-1= studentapplication.gpa
+                .col-xs-2= studentapplication.degree
+                .col-xs-1= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
+                
+  %p Note: TAs without a check book is already assigned as a full TA for another course
+  - if @suggestionindex == nil || @suggestionindex == []
+    = submit_tag 'Submit Suggestion', :id => 'submit_ta_suggestion', class:'btn btn-primary'
+  - else
+    = submit_tag 'Update Suggestion', :id => 'submit_ta_suggestion', class:'btn btn-primary'
+  / %table#studentapplications.table.table-striped
+  /   %thead
+  /     %tr
+  /       %th Select
+  /       %th Student UIN
+  /       %th Name
+  /       %th GPA
+  /       %th Degree Program
+  /       %th Applied Term
+  /       %th Status
+  /       %th Detail
+  /   - @studentapplications.each do |studentapplication|
+  /     %tbody
+  /       %tr
+  /         %td= check_box_tag "ids[#{studentapplication.id}]", :id => "ids_#{studentapplication.id}"
+  /         %td= studentapplication.uin
+  /         %td= studentapplication.fullName()
+  /         %td= studentapplication.gpa
+  /         %td
+  /           - case studentapplication.degree
+  /             - when StudentApplication::UNDERGRAD
+  /               Undergraduate
+  /             - when StudentApplication::MENG
+  /               M.Eng
+  /             - when StudentApplication::MS
+  /               MS
+  /             - when StudentApplication::PHD
+  /               PHD
+  /         %td= ApplicationPool::getAppPoolYearSemester studentapplication.application_pool_id
+  /         %td
+  /           - case studentapplication.status
+  /             - when 1
+  /               %span{class:"label label-default"}="Under Review"
+  /             - when 2
+  /               %span{class:"label label-primary"}="Position Assigned"
+  /             - when 3
+  /               %span{class:"label label-success"}="Confirmed"
+  /             - else
+  /               %span{class:"label label-danger"}="Unknown"
+  /         %td= link_to 'Detail', "#myModal", "data-toggle" => "modal",  "data-target" => "#myModal-#{studentapplication.id}"
+    
+
+/ .row
+/   .col-xs-6=link_to "Assign",assign_new_ta_path(:ids),class:"btn btn-primary"
+
+=link_to "Back to your courses", lecturer_show_path(@user.id)
+
+/ - @studentapplications.each do |studentapplication|
+/   %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
+/     %div{class:"modal-dialog", :role => "document"}
+/       %div{class:"modal-content"}
+/         %div{class:"modal-header"} 
+/           %h2 #{studentapplication.fullName()}'s Application Form
+/         %div{class:"modal-body"}
+/           %table#studentapplication.table.table-striped
+/             %thead
+/               %tr
+/                 %th Field
+/                 %th Info
+/             %tbody
+/               %tr
+/                 %td UIN
+/                 %td= studentapplication.uin
+/               %tr
+/                 %td Name
+/                 %td= studentapplication.fullName()
+/               %tr
+/                 %td Advisor
+/                 %td= studentapplication.advisor
+/               %tr
+/                 %td Degree
+/                 %td
+/                   - case studentapplication.degree
+/                     - when StudentApplication::UNDERGRAD
+/                       Undergraduate
+/                     - when StudentApplication::MENG
+/                       M.Eng
+/                     - when StudentApplication::MS
+/                       MS
+/                     - when StudentApplication::PHD
+/                       PHD
+/               %tr
+/                 %td GPA
+/                 %td= studentapplication.gpa
+/               %tr
+/                 %td Course Taken
+/                 %td= studentapplication.course_taken
+/               %tr
+/                 %td Course TAed
+/                 %td= studentapplication.course_taed
+
+- @studentapplications.each do |studentapplication|
+  %div{class:"modal fade", "id" => "myModal-#{studentapplication.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
+    %div{class:"modal-dialog", :role => "document"}
+      %div{class:"modal-content"}
+        %div{class:"modal-header"} 
+          %h2 #{studentapplication.fullName()}'s Application Form
+        %div{class:"modal-body"}
+          %table#studentapplication.table.table-striped
+            %thead
+              %tr
+                %th Field
+                %th Info
+            %tbody
+              %tr
+                %td Name
+                %td= studentapplication.fullName()
+              %tr
+                %td UIN
+                %td= studentapplication.uin
+              %tr
+                %td Email
+                %td= studentapplication.email
+              %tr
+                %td Degree
+                %td=studentapplication.degree
+              %tr
+                %td Advisor
+                %td= studentapplication.advisor
+              %tr
+                %td GPA
+                %td= studentapplication.gpa
+              %tr
+                %td Course Taken
+                %td= studentapplication.course_taken
+              %tr
+                %td Course TAed Before
+                %td= studentapplication.course_taed
+              %tr
+                %td Prefered Areas
+                %td= studentapplication.preferred_area
+              %tr
+                %td Prefered Courses
+                %td= studentapplication.preferred_course
+
+              / Do not let instructors view student's notes to administrator
+              / E.g. I don't want to TA for this course
+              / %tr
+              /   %td Notes
+              /   %td= studentapplication.note
+
+                
+:javascript
+$(document).ready(function() {
+  $('#uncheck-all').click(function(){
+    $(':checkbox').attr('checked', false)
+  end;
+  });
+});

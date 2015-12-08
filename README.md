@@ -35,5 +35,11 @@ http://code.tutsplus.com/tutorials/focusing-on-a-team-workflow-with-git--cms-225
 for teamwork git usage guideline
 
 
+[capybara-cheat-sheet](https://www.launchacademy.com/codecabulary/learn-test-driven-development/rspec/capybara-cheat-sheet)
+
 Google Drive Configuration:
 https://github.com/gimite/google-drive-ruby
+
+
+The template to import users and courses:
+https://drive.google.com/folderview?id=0B36XEbwNaVAsNUpsZWU1TlhDN2M&usp=sharing

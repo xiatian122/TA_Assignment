@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get    'login'   => 'sessions#new'
+  post   'login'   => 'sessions#create'
+  get    'passwd'=> 'sessions#passwd'
+  post   'passwd'=> 'sessions#reset_passwd'
+  delete 'logout'  => 'sessions#destroy'
+
   resources :users
 
   get '/users/:id/new_application' => 'users#new_application', :as => :new_application
@@ -9,10 +15,20 @@ Rails.application.routes.draw do
 
   get '/users/:id/accept_assignment' => 'users#accept_ta_assignment', :as => :accept_ta_assignment
   get '/users/:id/reject_assignment' => 'users#reject_ta_assignment', :as => :reject_ta_assignment
-  get '/users/(:id)/suggest_ta' => 'users#suggest_ta', :as => :suggest_ta
-  get '/users/(:id)/submit_ta_suggestion' => 'users#submit_ta_suggestion', :as => :submit_ta_suggestion
+
+  get '/users/:id/edit_suggestion' => 'users#edit_suggestion', :as => :edit_suggestion
+  get '/users/:id/submit_ta_suggestion' => 'users#submit_ta_suggestion', :as => :submit_ta_suggestion
+  get '/users/(:id)/lecturer_show' => 'users#lecturer_show', :as => :lecturer_show
+  get '/users/:id/delete_suggestion' => 'users#delete_suggestion', :as => :delete_suggestion
+
+  
+  get '/users/modify/uploadusers' => 'users#uploadusers', :as => :uploadusers
+  get '/users/modify/process_user_import' => 'users#process_user_import', :as => :process_user_import
+
+  post '/users/modify/email_user' => 'users#email_user', :as => :email_user, :action => :email_user
 
   root 'static_pages#home'
+  get 'error' => 'static_pages#error'
 
   get ({'help' => 'static_pages#help'})
 
@@ -22,22 +38,24 @@ Rails.application.routes.draw do
   #get '/students/(:id)/withdraw_application' => 'students#withdraw_application', :as => :withdraw_application
   #get '/students/(:id)/accept_assignment' => 'students#accept_assignment', :as => :accept_assignment
   #get '/students/(:id)/reject_assignment' => 'students#reject_assignment', :as => :reject_assignment
-  resources :student_applications
-  get '/student_applications/(:id)/withdraw_application' => 'student_applications#withdraw_application', :as => :withdraw_application
-  get '/student_applications/(:id)/accept_assignment' => 'student_applications#accept_assignment', :as => :accept_assignment
-  get '/student_applications/(:id)/reject_assignment' => 'student_applications#reject_assignment', :as => :reject_assignment
+  #resources :student_applications
+  get 'student_applications' => 'student_applications#index'
+  # get '/student_applications/(:id)/withdraw_application' => 'student_applications#withdraw_application', :as => :withdraw_application
+  # get '/student_applications/(:id)/accept_assignment' => 'student_applications#accept_assignment', :as => :accept_assignment
+  # get '/student_applications/(:id)/reject_assignment' => 'student_applications#reject_assignment', :as => :reject_assignment
+  
   resources :courses
 
   get '/courses/(:id)/select_new_ta' => 'courses#select_new_ta', :as => :select_new_ta
   get '/courses/(:id)/assign_new_ta' => 'courses#assign_new_ta', :as => :assign_new_ta
 
   get '/courses/(:id)/delete_ta' => 'courses#delete_ta', :as => :delete_ta, :action => :delete_ta
-  get '/courses/(:id)/email_ta_notification' => 'courses#email_ta_notification', :as => :email_ta_notification, :action => :email_ta_notification
+  post '/courses/(:id)/email_ta_notification' => 'courses#email_ta_notification', :as => :email_ta_notification, :action => :email_ta_notification
   get '/courses/(:id)/confirm_ta' => 'courses#confirm_ta', :as => :confirm_ta, :action => :confirm_ta
-  get '/courses/(:id)/drop_all' => 'courses#drop_all', :as => :drop_all, :action => :drop_all
+  get '/courses/modify/drop_all' => 'courses#drop_all', :as => :drop_all, :action => :drop_all
   
-  get '/courses/(:id)/upload' => 'courses#upload', :as => :upload, :action => :upload
-  get '/courses/(:id)/process_import' => 'courses#process_import', :as => :process_import, :action => :process_import
+  get '/courses/modify/upload/' => 'courses#upload', :as => :upload, :action => :upload
+  get '/courses/modify/process_course_import' => 'courses#process_course_import', :as => :process_course_import, :action => :process_course_import
   
   resources :application_pools
   #root :to => redirect('/students')

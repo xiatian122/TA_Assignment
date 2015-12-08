@@ -36,7 +36,9 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
+
+gem 'cancancan', '~> 1.10'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
@@ -47,11 +49,10 @@ gem 'haml'
 gem 'protected_attributes'
 # to use attr_accessible
 
-gem 'bootstrap-datepicker-rails'
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
-
-
+gem "bootstrap-switch-rails"
+gem 'font-awesome-sass', '~> 4.4.0'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -63,7 +64,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'launchy'
-  gem 'rspec-rails', '~> 2.99'
+  gem 'rspec-rails', '~> 3.0'
   gem 'simplecov'
 end
 

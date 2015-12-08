@@ -41,6 +41,20 @@ When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
   with_scope(parent) { When "#{step}:", table_or_string }
 end
 
+When /^(?:|I )log in as ADMIN$/ do
+    visit path_to("the login page")
+    fill_in("Uin", :with => "000000000")
+    fill_in("Password", :with => "password")
+    click_button("Log in")
+end
+
+When /^(?:|I )log in as Professor Duncan$/ do
+    visit path_to("the login page")
+    fill_in("Uin", :with => "623007756")
+    fill_in("Password", :with => "password")
+    click_button("Log in")
+end
+
 Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
@@ -264,4 +278,8 @@ end
 
 Then /^show me the page$/ do
   save_and_open_page
+end
+
+When /^I confirm popup$/ do
+  page.driver.browser.accept_js_confirm    
 end

@@ -1,17 +1,30 @@
 -# file: app/views/courses/index.html.haml
 
-%p#notice=notice
+/ %p#notice=notice
+/ -if flash[:error]
+/   %p.error-message=flash[:error]
+
 
 .row
   .col-xs-12
     // We will not hard code 2015 fall here in furture
-    %h1{class:"text-left"}="2015 Fall Course Overview "
-
+    %h1{class:"text-left"}=ApplicationPool.getAppPoolYearSemester(@application_pool_id) + " Courses Overview"
 .row
-  .col-xs-6
-    =link_to "New Course",new_course_path,class:"btn btn-primary"
-    =link_to "Import",upload_path(:id => 0),class:"btn btn-primary"
-   
+  .col-xs-9.semester-tab-container
+    %ul.nav.nav-tabs
+      - @available_semesters.each do | semester_hash|
+        -if (params[:semester] == semester_hash["semester"]  && params[:year] == semester_hash["year"])
+          %li{"role"=>"presentation", :class => "active"}
+            %a{ "href"=> courses_path( {"semester"=>semester_hash["semester"],"year"=>semester_hash["year"] } ) }=semester_hash["year"] + " " + semester_hash["semester"]
+        -else
+          %li{"role"=>"presentation", :class => ""}
+            %a{"href"=> courses_path({"semester"=>semester_hash["semester"],"year"=>semester_hash["year"]})}=semester_hash["year"] + " " + semester_hash["semester"]
+
+  .col-xs-3.two-buttons-container
+    .two-buttons
+      =link_to "New Course",new_course_path(:pool_id => @application_pool_id),class:"btn btn-primary"
+      =link_to "Import Course",upload_path(:pool_id => @application_pool_id),class:"btn btn-primary"
+
 
 .divide20
 
@@ -20,6 +33,8 @@
     .panel.panel-default.remove-margin.pseudo-table-heading
       / .panel-heading Panel heading without title
       .panel-body
+        .col-xs-1
+          %b Semester
         .col-xs-1 
           %b Course ID
         .col-xs-4 
@@ -28,7 +43,7 @@
           %b Confirmed / Designated
         .col-xs-3 
           %b Lecturer
-        .col-xs-2 
+        .col-xs-1 
           %b Operations
 
 .row
@@ -41,11 +56,12 @@
         .panel.panel-default  
           .panel-heading{:role => "tab"}
             .row{"aria-controls" =>"collapse#{course.id}", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", "data-target" => "#collapse#{course.id}", :role => "button", :id=> "heading#{course.id}"}
-              .col-xs-1.td=course.id
+              .col-xs-1.td=ApplicationPool::getAppPoolYearSemester(course.application_pool_id)
+              .col-xs-1.td=course.cid
               .col-xs-4.td=course.name
               .col-xs-2.td="#{@SlotStatus[course.id][:assigned] } / #{@SlotStatus[course.id][:slots] }"
               .col-xs-3.td=course.lecturer
-              .col-xs-2.td
+              .col-xs-1.td
                 %a.btn.btn-default.btn-sm.edit-op-btn{:href=> edit_course_path(course.id) ,"data-toggle" =>"tooltip", "data-placement" => "bottom", "data-title" => "Edit", id:"edit-#{course.id}"}
                   %span.glyphicon.glyphicon-edit
                 
@@ -62,7 +78,7 @@
                         %li.list-group-item{id:"tali-#{course.id}-#{ta.id}"}
                           .row
                             .col-xs-2
-                              %a{ "data-toggle" => "modal",  "data-target" => "#myModal-#{course.id}-#{ta.id}"}=ta.fullName()
+                              %a.ta-full-name-link{ "data-toggle" => "modal",  "data-target" => "#myModal-#{course.id}-#{ta.id}"}=ta.fullName()
                             .col-xs-2
                               -case @ta_status[course.id][ta.id]['position']
                                 -when AppCourseMatching::FULLTA
@@ -85,9 +101,23 @@
                                   %span{class:"label label-success"}="Assigned"
                                 - else
                                   %span{class:"label label-danger"}="Unknown"
-                            .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id, :ta_id => ta.id), {:class=>"email-link", "data-target"=>"#tali-#{course.id}-#{ta.id}"}) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id),{:class=>"confirm-link","data-target"=> "#tali-#{course.id}-#{ta.id}"}) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id), {:class => "delete-link", "data-target"=> "#tali-#{course.id}-#{ta.id}"})
+                            .col-xs-5=link_to('Email', email_ta_notification_path(:id => course.id), {:class=>"email-link", "data-target"=>"#tali-#{course.id}-#{ta.id}", "data-student_application_id"=> ta.id, "data-course-str" => course.cid + " " + course.name}) +' / ' + link_to('Confirm', confirm_ta_path(:id => course.id, :ta_id => ta.id),{:class=>"confirm-link","data-target"=> "#tali-#{course.id}-#{ta.id}"}) +' / ' +link_to('Delete', delete_ta_path(:id => course.id, :ta_id => ta.id), {:class => "delete-link", "data-target"=> "#tali-#{course.id}-#{ta.id}"})
                   - else
-                    %p No TA assigned yet for this course    
+                    %p No TA assigned yet for this course
+                  - if @courses_suggestion.has_key?(course.id)
+                    %p Requested students:
+                    %ul.list-group
+
+                      -@courses_suggestion[course.id].each do |ta|
+
+                        %li.list-group-item{id:"tali-#{course.id}-#{ta.id}"}
+                          .row
+                            .col-xs-2
+                              %a{ "data-toggle" => "modal",  "data-target" => "#myModal-suggest-#{course.id}-#{ta.id}"}=ta.fullName()
+                  - else
+                    %p No TA requested yet by this lecturer
+                            
+
               .divide30
               .row
                 .col-xs-1.col-xs-offset-10
@@ -95,10 +125,25 @@
 
 .row
   .col-xs-6
-    =link_to("Drop All",drop_all_path(:id => 0),class:"btn btn-danger")
+    =link_to("Drop All",drop_all_path(:pool_id => @application_pool_id),class:"btn btn-danger")
 
+#email-shared-editor-modal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog{:role => "document"}
+    .modal-content
+      %form{"action" => "", "method" => "post", :id=>"email-form"}
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} &times;
+          %h4#myModalLabel.modal-title Confirmation Email of TA Assignment
+        .modal-body#email-body
+          %input.hidden{:type=>"text", :name=>"student_application_id"}
+          %textarea.form-control{:rows => "4", :name => "email_body_user_input"}
+          %textarea.hidden{:name => "email_body"}
+        .modal-footer
+          %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
+          %button.btn.btn-primary{:type => "submit", :id=>"email-send-btn"} Send
 
-// BOWEI TODO: This will introduce performance issue when in production.
+// BOWEI TODO: This really will introduce performance issue when in production.
 - @courses.each do |course|
   -if @courses_ta[course.id]
     -@courses_ta[course.id].each do |student|
@@ -115,26 +160,20 @@
                     %th Info
                 %tbody
                   %tr
-                    %td UIN
-                    %td= student.uin
-                  %tr
                     %td Name
                     %td= student.fullName()
                   %tr
-                    %td Advisor
-                    %td= student.advisor
+                    %td UIN
+                    %td= student.uin
+                  %tr
+                    %td Email
+                    %td= student.email
                   %tr
                     %td Degree
-                    %td
-                      - case student.degree
-                        - when StudentApplication::UNDERGRAD
-                          Undergraduate
-                        - when StudentApplication::MENG
-                          M.Eng
-                        - when StudentApplication::MS
-                          MS
-                        - when StudentApplication::PHD
-                          PHD
+                    %td=student.degree
+                  %tr
+                    %td Advisor
+                    %td= student.advisor
                   %tr
                     %td GPA
                     %td= student.gpa
@@ -142,5 +181,62 @@
                     %td Course Taken
                     %td= student.course_taken
                   %tr
-                    %td Course TAed
+                    %td Course TAed Before
                     %td= student.course_taed
+                  %tr
+                    %td Prefered Areas
+                    %td= student.preferred_area
+                  %tr
+                    %td Prefered Courses
+                    %td= student.preferred_course
+                  %tr
+                    %td Notes
+                    %td= student.note
+
+  -if @courses_suggestion[course.id]
+    -@courses_suggestion[course.id].each do |student|
+      %div{class:"modal fade", "id" => "myModal-suggest-#{course.id}-#{student.id}", "tabindex" => "-1", "role" => "dialog",  "aria-labelledby" => "myModalLabel"}
+        %div{class:"modal-dialog", :role => "document"}
+          %div{class:"modal-content"}
+            %div{class:"modal-header"} 
+              %h2 #{student.fullName()}'s Application Form
+            %div{class:"modal-body"}
+              %table#student.table.table-striped
+                %thead
+                  %tr
+                    %th Field
+                    %th Info
+                %tbody
+                  %tr
+                    %td Name
+                    %td= student.fullName()
+                  %tr
+                    %td UIN
+                    %td= student.uin
+                  %tr
+                    %td Email
+                    %td= student.email
+                  %tr
+                    %td Degree
+                    %td=student.degree
+                  %tr
+                    %td Advisor
+                    %td= student.advisor
+                  %tr
+                    %td GPA
+                    %td= student.gpa
+                  %tr
+                    %td Course Taken
+                    %td= student.course_taken
+                  %tr
+                    %td Course TAed Before
+                    %td= student.course_taed
+                  %tr
+                    %td Prefered Areas
+                    %td= student.preferred_area
+                  %tr
+                    %td Prefered Courses
+                    %td= student.preferred_course
+                  %tr
+                    %td Notes
+                    %td= student.note
